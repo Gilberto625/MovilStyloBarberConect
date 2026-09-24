@@ -1,0 +1,34 @@
+# VARIABLES DE ENTORNO
+.env
+.env.local
+
+# PYTHON / DJANGO
+__pycache__/
+*.py[cod]
+*.log
+venv/
+.venv/
+db.sqlite3
+
+# NODE / ANGULAR
+node_modules/
+dist/
+.angular/
+
+# FLUTTER
+.dart_tool/
+build/
+.flutter-plugins
+.flutter-plugins-dependencies
+
+# VISUAL STUDIO CODE
+.vscode/
+
+# INTELLIJ / ANDROID STUDIO
+.idea/
+
+# WINDOWS
+Thumbs.db
+
+# MACOS
+.DS_Store
