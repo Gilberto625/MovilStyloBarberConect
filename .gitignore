@@ -1,0 +1,51 @@
+# VARIABLES DE ENTORNO
+.env
+.env.local
+
+# FLUTTER / DART
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub-cache/
+.pub/
+build/
+coverage/
+*.iml
+.idea/
+.vscode/
+
+# ANDROID
+**/android/.gradle
+**/android/captures/
+**/android/local.properties
+**/android/**/GeneratedPluginRegistrant.java
+**/android/key.properties
+*.jks
+*.keystore
+
+# SYMBOLS / OBFUSCATION
+build/app/outputs/
+debug-info/
+**/debug-info/
+build/symbols/
+**/symbols/
+*.symbols
+*.map.json
+app.*.symbols
+
+# Generated obfuscation / mapping dumps
+**/mapping.txt
+**/seeds.txt
+**/unused.txt
+
+# OS
+.DS_Store
+Thumbs.db
+
+# PYTHON / NODE (por si se mezclan artefactos del workspace)
+__pycache__/
+*.py[cod]
+node_modules/
+dist/
+.angular/

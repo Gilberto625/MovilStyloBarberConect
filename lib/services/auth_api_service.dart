@@ -1,0 +1,108 @@
+import '../core/errors/app_exception.dart';
+import '../core/network/api_client.dart';
+import '../models/auth_models.dart';
+
+class AuthApiService {
+  AuthApiService(this._api);
+
+  final ApiClient _api;
+
+  Future<LoginResult> login({
+    required String email,
+    required String password,
+  }) async {
+    final raw = await _api.post(
+      '/login/',
+      auth: false,
+      body: {'email': email.trim(), 'password': password},
+    );
+    if (raw is! Map) {
+      throw ApiException('Respuesta de login inválida.');
+    }
+    final map = Map<String, dynamic>.from(raw);
+    if (map['ok'] == false) {
+      throw ApiException(
+        (map['error'] ?? 'No se pudo iniciar sesión.').toString(),
+      );
+    }
+    if (map['requires2fa'] == true) {
+      return LoginRequires2FA(
+        tempToken: (map['tempToken'] ?? '').toString(),
+        destino: (map['destino'] ?? '').toString(),
+        mensaje: (map['mensaje'] ?? 'Te enviamos un código de verificación.')
+            .toString(),
+      );
+    }
+    final access = (map['access'] ?? '').toString();
+    final refresh = (map['refresh'] ?? '').toString();
+    final userRaw = map['usuario'];
+    if (access.isEmpty || refresh.isEmpty || userRaw is! Map) {
+      throw ApiException('Login incompleto: faltan tokens o usuario.');
+    }
+    return LoginSuccess(
+      access: access,
+      refresh: refresh,
+      user: AuthUser.fromJson(Map<String, dynamic>.from(userRaw)),
+    );
+  }
+
+  Future<LoginSuccess> verify2fa({
+    required String tempToken,
+    required String codigo,
+  }) async {
+    final raw = await _api.post(
+      '/login/2fa/verificar/',
+      auth: false,
+      body: {'tempToken': tempToken, 'codigo': codigo.trim()},
+    );
+    if (raw is! Map) {
+      throw ApiException('Respuesta 2FA inválida.');
+    }
+    final map = Map<String, dynamic>.from(raw);
+    if (map['ok'] == false) {
+      throw ApiException((map['error'] ?? 'Código inválido.').toString());
+    }
+    final access = (map['access'] ?? '').toString();
+    final refresh = (map['refresh'] ?? '').toString();
+    final userRaw = map['usuario'];
+    if (access.isEmpty || refresh.isEmpty || userRaw is! Map) {
+      throw ApiException('Verificación 2FA incompleta.');
+    }
+    return LoginSuccess(
+      access: access,
+      refresh: refresh,
+      user: AuthUser.fromJson(Map<String, dynamic>.from(userRaw)),
+    );
+  }
+
+  Future<void> solicitarCodigo2fa({required String tempToken}) async {
+    final raw = await _api.post(
+      '/login/2fa/solicitar-codigo/',
+      auth: false,
+      body: {'tempToken': tempToken},
+    );
+    if (raw is Map && raw['ok'] == false) {
+      throw ApiException(
+        (raw['error'] ?? 'No se pudo reenviar el código.').toString(),
+      );
+    }
+  }
+
+  Future<AuthUser> me() async {
+    final raw = await _api.get('/auth/me/');
+    if (raw is! Map) throw ApiException('Respuesta /auth/me inválida.');
+    return AuthUser.fromJson(Map<String, dynamic>.from(raw));
+  }
+
+  Future<PerfilDto> perfil() async {
+    final raw = await _api.get('/perfil/');
+    if (raw is! Map) throw ApiException('Respuesta de perfil inválida.');
+    final map = Map<String, dynamic>.from(raw);
+    final perfil = map['perfil'];
+    if (perfil is Map) {
+      return PerfilDto.fromJson(Map<String, dynamic>.from(perfil));
+    }
+    // Compat: some payloads may be flat.
+    return PerfilDto.fromJson(map);
+  }
+}
