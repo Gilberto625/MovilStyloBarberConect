@@ -1,0 +1,48 @@
+rules:
+  - id: flutter-dangerous-bad-certificate-callback
+    languages:
+      - dart
+    severity: ERROR
+    message: Do not bypass TLS validation with badCertificateCallback. Use certificate pinning or the platform trust store.
+    pattern-either:
+      - pattern: |
+          $CLIENT.badCertificateCallback = ...
+      - pattern: |
+          badCertificateCallback: ...
+    metadata:
+      category: security
+      technology:
+        - flutter
+        - android
+
+  - id: flutter-token-print
+    languages:
+      - dart
+    severity: ERROR
+    message: Do not print or debug-log access tokens, refresh tokens, or Authorization headers.
+    patterns:
+      - pattern-either:
+          - pattern: print($VALUE)
+          - pattern: debugPrint($VALUE)
+      - metavariable-regex:
+          metavariable: $VALUE
+          regex: (?i).*(token|authorization|bearer|jwt|refresh).*
+    metadata:
+      category: security
+      technology:
+        - flutter
+
+  - id: android-cleartext-release-config
+    languages:
+      - generic
+    severity: ERROR
+    message: Do not enable cleartext traffic in the release Android manifest.
+    paths:
+      include:
+        - android/app/src/main/AndroidManifest.xml
+        - android/app/src/release/AndroidManifest.xml
+    pattern: android:usesCleartextTraffic="true"
+    metadata:
+      category: security
+      technology:
+        - android
