@@ -6,8 +6,10 @@ import '../views/client/client_home_view.dart';
 import '../views/guest/catalog_list_views.dart';
 import '../views/guest/guest_home_view.dart';
 import '../views/secretary/secretary_home_view.dart';
+import '../views/splash/splash_view.dart';
 
 class AppRoutes {
+  static const splash = '/splash';
   static const guestHome = '/';
   static const servicios = '/servicios';
   static const productos = '/productos';
@@ -19,6 +21,11 @@ class AppRoutes {
 
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
+      case splash:
+        return MaterialPageRoute(
+          builder: (_) => const SplashGate(),
+          settings: settings,
+        );
       case guestHome:
         return MaterialPageRoute(
           builder: (_) => const GuestHomeView(),

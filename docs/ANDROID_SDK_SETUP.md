@@ -5,7 +5,7 @@ Estado actual: **Android SDK no instalado**, `ANDROID_HOME` / `ANDROID_SDK_ROOT`
 
 Flutter y Java 17 sí están disponibles. No se instaló nada de forma global (requiere tu autorización).
 
-## Opción recomendada — Android Studio
+## Opción recomendada — Android Studio hola
 
 1. Descarga e instala: https://developer.android.com/studio  
 2. En el asistente inicial marca:
