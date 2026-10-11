@@ -13,7 +13,8 @@ void main() {
         .singleWhere((widget) => widget.text.toPlainText().contains('Stylo'));
     expect(brand.text.toPlainText(), 'Stylo Barber');
     expect(find.text('BARBERÍA'), findsOneWidget);
-    expect(find.byType(CircularProgressIndicator), findsOneWidget);
+    expect(find.text('Cargando'), findsOneWidget);
+    expect(find.byType(LinearProgressIndicator), findsOneWidget);
   }
 
   testWidgets('splash fits phone, tablet and landscape', (tester) async {
