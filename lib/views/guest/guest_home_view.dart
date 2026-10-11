@@ -24,7 +24,15 @@ class _GuestHomeViewState extends State<GuestHomeView> {
 
   @override
   Widget build(BuildContext context) {
+    final screen = MediaQuery.sizeOf(context);
+    final wide = screen.width >= 700;
+    final short = screen.height < 520;
+    final heroHeight = short
+        ? 200.0
+        : (screen.width * (wide ? 0.34 : 0.62)).clamp(230.0, 320.0);
+
     return Scaffold(
+      backgroundColor: AppColors.guestBg,
       body: SafeArea(
         child: Consumer<HomeGuestViewModel>(
           builder: (context, vm, _) {
@@ -62,40 +70,53 @@ class _GuestHomeViewState extends State<GuestHomeView> {
                   ),
                   const SizedBox(height: 20),
                   Container(
-                    height: 220,
+                    height: heroHeight,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
+                      borderRadius: BorderRadius.circular(wide ? 28 : 20),
                       gradient: const LinearGradient(
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
                         colors: [
-                          Color(0xFF101A16),
+                          Color(0xFF16211C),
                           Color(0xFF0A100E),
                           Color(0xFF1A1510),
                         ],
                       ),
-                      border: Border.all(color: AppColors.border),
+                      border: Border.all(
+                        color: AppColors.gold.withValues(alpha: 0.35),
+                      ),
                     ),
-                    padding: const EdgeInsets.all(20),
+                    padding: EdgeInsets.all(wide ? 28 : 20),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          c.nombreNegocio,
+                          c.nombreNegocio.toUpperCase(),
                           style: TextStyle(
                             color: AppColors.gold.withValues(alpha: 0.9),
-                            letterSpacing: 1.2,
+                            letterSpacing: wide ? 2.2 : 1.4,
+                            fontSize: wide ? 14 : 12,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
-                        const SizedBox(height: 8),
+                        SizedBox(height: short ? 6 : 10),
+                        Container(
+                          width: wide ? 72 : 48,
+                          height: 1,
+                          color: AppColors.gold.withValues(alpha: 0.8),
+                        ),
+                        SizedBox(height: short ? 8 : 12),
                         Text(
                           'Tu Estilo,\nNuestra Pasión',
                           style: Theme.of(context).textTheme.headlineMedium
-                              ?.copyWith(height: 1.15),
+                              ?.copyWith(
+                                height: 1.12,
+                                fontSize: wide ? 40 : (short ? 26 : 32),
+                              ),
                         ),
                         const Spacer(),
                         SizedBox(
-                          width: double.infinity,
+                          width: wide ? 240 : double.infinity,
                           child: ElevatedButton(
                             onPressed: () =>
                                 Navigator.pushNamed(context, AppRoutes.login),
