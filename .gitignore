@@ -26,6 +26,7 @@ coverage/
 
 # SYMBOLS / OBFUSCATION
 build/app/outputs/
+build_debug_log.txt
 debug-info/
 **/debug-info/
 build/symbols/
