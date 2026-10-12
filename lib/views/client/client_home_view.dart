@@ -42,7 +42,7 @@ class _ClientHomeShellState extends State<ClientHomeShell> {
     final pages = [
       _ClientHomeTab(onAgendar: () => _open(2), onCitas: () => _open(1)),
       const _ClientCitasTab(),
-      const _ClientAgendarTab(),
+      _ClientAgendarTab(onBooked: () => _open(1)),
       const _ClientPerfilTab(),
     ];
     return Theme(
@@ -333,11 +333,13 @@ class _ClientCitasTab extends StatelessWidget {
         onRetry: vm.loadMisCitas,
       );
     }
-    final groups = <String, List<CitaDto>>{};
-    for (final cita in vm.citas) {
-      groups.putIfAbsent(cita.fecha, () => []).add(cita);
-    }
-    final fechas = groups.keys.toList()..sort();
+    const cerradas = {'cancelada', 'completada', 'no_asistio'};
+    final proximas = vm.citas
+        .where((c) => !cerradas.contains(c.estado))
+        .toList();
+    final historial = vm.citas
+        .where((c) => cerradas.contains(c.estado))
+        .toList();
     return ListView(
       padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
       children: [
@@ -345,24 +347,59 @@ class _ClientCitasTab extends StatelessWidget {
           StatusBanner(message: vm.errorMessage!, isError: true),
           const SizedBox(height: 12),
         ],
-        for (final fecha in fechas) ...[
-          Padding(
-            padding: const EdgeInsets.only(top: 8, bottom: 8),
-            child: Text(
-              fecha,
-              style: const TextStyle(
-                color: AppColors.gold,
-                fontWeight: FontWeight.w700,
-                letterSpacing: 0.4,
-              ),
-            ),
-          ),
-          for (final c in groups[fecha]!) ...[
-            _CitaCard(cita: c),
-            const SizedBox(height: 10),
-          ],
+        if (proximas.isNotEmpty) ...[
+          const _CitasHeading('Próximas'),
+          ..._citasPorFecha(proximas),
+        ],
+        if (historial.isNotEmpty) ...[
+          const _CitasHeading('Historial'),
+          ..._citasPorFecha(historial),
         ],
       ],
+    );
+  }
+
+  List<Widget> _citasPorFecha(List<CitaDto> citas) {
+    final groups = <String, List<CitaDto>>{};
+    for (final cita in citas) {
+      groups.putIfAbsent(cita.fecha, () => []).add(cita);
+    }
+    final fechas = groups.keys.toList()..sort();
+    return [
+      for (final fecha in fechas) ...[
+        Padding(
+          padding: const EdgeInsets.only(top: 8, bottom: 8),
+          child: Text(
+            fecha,
+            style: const TextStyle(
+              color: AppColors.gold,
+              fontWeight: FontWeight.w700,
+              letterSpacing: 0.4,
+            ),
+          ),
+        ),
+        for (final c in groups[fecha]!) ...[
+          _CitaCard(cita: c),
+          const SizedBox(height: 10),
+        ],
+      ],
+    ];
+  }
+}
+
+class _CitasHeading extends StatelessWidget {
+  const _CitasHeading(this.title);
+
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 8, bottom: 4),
+      child: Text(
+        title,
+        style: Theme.of(context).textTheme.titleLarge?.copyWith(color: _ivory),
+      ),
     );
   }
 }
@@ -407,7 +444,9 @@ class _CitaCard extends StatelessWidget {
 }
 
 class _ClientAgendarTab extends StatefulWidget {
-  const _ClientAgendarTab();
+  const _ClientAgendarTab({required this.onBooked});
+
+  final VoidCallback onBooked;
 
   @override
   State<_ClientAgendarTab> createState() => _ClientAgendarTabState();
@@ -518,7 +557,15 @@ class _ClientAgendarTabState extends State<_ClientAgendarTab> {
         ),
       ),
     );
-    if (ok) await vm.loadMisCitas();
+    if (!ok) return;
+    setState(() {
+      _servicio = null;
+      _barberoId = null;
+      _hora = null;
+    });
+    await vm.loadMisCitas();
+    if (!mounted) return;
+    widget.onBooked();
   }
 
   @override
@@ -592,9 +639,21 @@ class _ClientAgendarTabState extends State<_ClientAgendarTab> {
                     ),
                   ),
                 if (_servicio != null) ...[
+                  if (_servicio!.descripcion.trim().isNotEmpty) ...[
+                    const SizedBox(height: 4),
+                    Text(
+                      _servicio!.descripcion,
+                      style: const TextStyle(color: _muted, height: 1.35),
+                    ),
+                  ],
                   const SizedBox(height: 8),
                   const _StepLabel(index: '02', title: 'Barbero'),
-                  if (vm.barberos.isEmpty)
+                  if (vm.barberosLoading)
+                    const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 12),
+                      child: LoadingView(label: 'Cargando barberos…'),
+                    )
+                  else if (vm.barberos.isEmpty)
                     const Padding(
                       padding: EdgeInsets.symmetric(vertical: 8),
                       child: Text('No hay barberos para este servicio.'),
@@ -619,7 +678,20 @@ class _ClientAgendarTabState extends State<_ClientAgendarTab> {
                     subtitle: 'Cambiar fecha',
                     onTap: _pickDate,
                   ),
-                  if (_barberoId != null) ...[
+                  if (_barberoId == null)
+                    const Padding(
+                      padding: EdgeInsets.only(top: 8),
+                      child: Text(
+                        'Elige un barbero para consultar los horarios de esa fecha.',
+                        style: TextStyle(color: _muted),
+                      ),
+                    )
+                  else if (vm.slotsLoading)
+                    const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 12),
+                      child: LoadingView(label: 'Consultando horarios…'),
+                    )
+                  else ...[
                     const SizedBox(height: 12),
                     Wrap(
                       spacing: 8,
