@@ -162,11 +162,12 @@ class GuestServiceCard extends StatelessWidget {
         children: [
           AspectRatio(
             aspectRatio: 16 / 10,
-            child: ClipRect(
+            child: ColoredBox(
+              color: _surface,
               child: SizedBox.expand(
                 child: GuestPremiumImage(
                   url: servicio.imagenUrl,
-                  fit: BoxFit.cover,
+                  fit: BoxFit.contain,
                   alignment: Alignment.center,
                   label: servicio.nombre,
                   fallbackIcon: Icons.content_cut_rounded,

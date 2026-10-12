@@ -133,9 +133,11 @@ class _FakeCitasRepository implements CitasRepository {
 class _FakeSecretariaRepository implements SecretariaRepository {
   Object? loadError;
   Object? actionError;
+  String? lastFecha;
 
   @override
   Future<SecretariaDiaDto> getCitasDia({String? fecha}) async {
+    lastFecha = fecha;
     if (loadError != null) throw loadError!;
     return SecretariaDiaDto.fromJson({
       'fecha': '2026-10-06',
@@ -189,10 +191,61 @@ class _FakeSecretariaRepository implements SecretariaRepository {
     required String metodoPago,
     String? comprobante,
     String? referencia,
+    double? efectivoRecibido,
   }) async {
     if (actionError != null) throw actionError!;
     return {'ok': true, 'mensaje': 'Cobro registrado'};
   }
+
+  @override
+  Future<List<SecretariaClienteDto>> buscarClientes(String q) async => const [];
+
+  @override
+  Future<SecretariaClienteDto> crearClientePaso({
+    required String nombres,
+    String apellido = '',
+    required String telefono,
+  }) async {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Map<String, dynamic>> crearCita({
+    required int clienteId,
+    required int barberoId,
+    required int servicioId,
+    required int duracionMinutos,
+    required String fecha,
+    required String hora,
+    required double precioTotal,
+    double anticipoPagado = 0,
+    String metodoAnticipo = '',
+    String comprobantePago = '',
+    String notas = '',
+  }) async => {'ok': true, 'id': 1};
+
+  @override
+  Future<List<SecretariaCitaResumenDto>> citasDeCliente(int clienteId) async =>
+      const [];
+
+  @override
+  Future<SecretariaCitaEditableDto> citaEditable(int citaId) async {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Map<String, dynamic>> actualizarCita({
+    required int citaId,
+    required int barberoId,
+    required int servicioId,
+    required String fecha,
+    required String hora,
+    required double precioTotal,
+    required double anticipoPagado,
+    required String metodoAnticipo,
+    required String notas,
+    bool cancelar = false,
+  }) async => {'ok': true, 'mensaje': 'Cita actualizada correctamente.'};
 }
 
 void main() {
@@ -360,6 +413,28 @@ void main() {
       await vm.load();
       expect(vm.state, LoadState.error);
       expect(vm.errorMessage, contains('No se pudieron cargar'));
+    });
+
+    test('keeps the selected date on reload', () async {
+      final repo = _FakeSecretariaRepository();
+      final vm = SecretariaHoyViewModel(repo);
+      await vm.load(fecha: '2026-11-02');
+      expect(vm.fechaSeleccionada, '2026-11-02');
+      expect(repo.lastFecha, '2026-11-02');
+      await vm.load();
+      expect(repo.lastFecha, '2026-11-02');
+      await vm.mostrarHoy();
+      expect(vm.fechaSeleccionada, isNull);
+      expect(repo.lastFecha, isNull);
+    });
+
+    test('search matches client, service or barber', () async {
+      final vm = SecretariaHoyViewModel(_FakeSecretariaRepository());
+      await vm.load();
+      vm.setConsulta('tony');
+      expect(vm.citasFiltradas, hasLength(1));
+      vm.setConsulta('fade');
+      expect(vm.citasFiltradas, isEmpty);
     });
 
     test('asistencia failure surfaces error', () async {

@@ -192,6 +192,15 @@ void main() {
         home: const SecretaryHomeView(),
       );
       expect(find.text('Operación'), findsOneWidget);
+      await tester.scrollUntilVisible(
+        find.text('Ana López'),
+        80,
+        scrollable: find.byWidgetPredicate(
+          (widget) =>
+              widget is Scrollable &&
+              widget.axisDirection == AxisDirection.down,
+        ),
+      );
       expect(find.text('Ana López'), findsOneWidget);
       expect(tester.takeException(), isNull);
       staff.dispose();
@@ -216,6 +225,33 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('Cliente llegó'), findsNothing);
     expect(find.text('Cobrar restante'), findsNothing);
+    expect(find.text('Cita #15'), findsOneWidget);
+    expect(find.text('45 min'), findsOneWidget);
+    expect(find.text('Volver a la agenda'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+    auth.dispose();
+  });
+
+  testWidgets('secretary search filters the loaded day', (tester) async {
+    final auth = await _auth(role: UserRole.secretaria);
+    await _pump(
+      tester,
+      size: const Size(390, 844),
+      auth: auth,
+      secretariaRepo: _FakeSecretaria(),
+      home: const SecretaryHomeView(),
+    );
+    expect(find.text('Ana López'), findsOneWidget);
+    await tester.enterText(find.byType(TextField), 'nadie');
+    await tester.pump();
+    expect(find.text('Ana López'), findsNothing);
+    expect(
+      find.text('Ninguna cita coincide con la búsqueda o el filtro.'),
+      findsOneWidget,
+    );
+    await tester.enterText(find.byType(TextField), 'Ana');
+    await tester.pump();
+    expect(find.text('Ana López'), findsOneWidget);
     expect(tester.takeException(), isNull);
     auth.dispose();
   });
@@ -535,5 +571,56 @@ class _FakeSecretaria implements SecretariaRepository {
     required String metodoPago,
     String? comprobante,
     String? referencia,
+    double? efectivoRecibido,
+  }) async => {'ok': true};
+
+  @override
+  Future<List<SecretariaClienteDto>> buscarClientes(String q) async => const [];
+
+  @override
+  Future<SecretariaClienteDto> crearClientePaso({
+    required String nombres,
+    String apellido = '',
+    required String telefono,
+  }) async {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Map<String, dynamic>> crearCita({
+    required int clienteId,
+    required int barberoId,
+    required int servicioId,
+    required int duracionMinutos,
+    required String fecha,
+    required String hora,
+    required double precioTotal,
+    double anticipoPagado = 0,
+    String metodoAnticipo = '',
+    String comprobantePago = '',
+    String notas = '',
+  }) async => {'ok': true, 'id': 1};
+
+  @override
+  Future<List<SecretariaCitaResumenDto>> citasDeCliente(int clienteId) async =>
+      const [];
+
+  @override
+  Future<SecretariaCitaEditableDto> citaEditable(int citaId) async {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Map<String, dynamic>> actualizarCita({
+    required int citaId,
+    required int barberoId,
+    required int servicioId,
+    required String fecha,
+    required String hora,
+    required double precioTotal,
+    required double anticipoPagado,
+    required String metodoAnticipo,
+    required String notas,
+    bool cancelar = false,
   }) async => {'ok': true};
 }
