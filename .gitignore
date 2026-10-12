@@ -21,8 +21,13 @@ coverage/
 **/android/local.properties
 **/android/**/GeneratedPluginRegistrant.java
 **/android/key.properties
+/android/hs_err_pid*.log
 *.jks
 *.keystore
+
+# LOCAL BUILD DIAGNOSTICS / GENERATED DESKTOP CONFIG
+/build_debug_log.txt
+/windows/flutter/ephemeral/
 
 # SYMBOLS / OBFUSCATION
 build/app/outputs/

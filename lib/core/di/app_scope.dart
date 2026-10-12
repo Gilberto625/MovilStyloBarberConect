@@ -12,6 +12,7 @@ import '../../viewmodels/auth_viewmodel.dart';
 import '../../viewmodels/catalog_list_viewmodel.dart';
 import '../../viewmodels/client_citas_viewmodel.dart';
 import '../../viewmodels/home_guest_viewmodel.dart';
+import '../../viewmodels/secretaria_gestion_viewmodel.dart';
 import '../../viewmodels/secretaria_hoy_viewmodel.dart';
 
 /// Manual constructor DI graph (no service-locator package).
@@ -28,6 +29,7 @@ class AppScope {
     required this.catalogListViewModel,
     required this.clientCitasViewModel,
     required this.secretariaHoyViewModel,
+    required this.secretariaGestionViewModel,
   });
 
   factory AppScope.create() {
@@ -68,6 +70,11 @@ class AppScope {
       catalogListViewModel: CatalogListViewModel(catalogRepository),
       clientCitasViewModel: ClientCitasViewModel(citasRepository),
       secretariaHoyViewModel: SecretariaHoyViewModel(secretariaRepository),
+      secretariaGestionViewModel: SecretariaGestionViewModel(
+        secretaria: secretariaRepository,
+        citas: citasRepository,
+        catalog: catalogRepository,
+      ),
     );
   }
 
@@ -82,6 +89,7 @@ class AppScope {
   final CatalogListViewModel catalogListViewModel;
   final ClientCitasViewModel clientCitasViewModel;
   final SecretariaHoyViewModel secretariaHoyViewModel;
+  final SecretariaGestionViewModel secretariaGestionViewModel;
 
   void dispose() {
     homeGuestViewModel.dispose();
@@ -89,6 +97,7 @@ class AppScope {
     authViewModel.dispose();
     clientCitasViewModel.dispose();
     secretariaHoyViewModel.dispose();
+    secretariaGestionViewModel.dispose();
     api.close();
   }
 }

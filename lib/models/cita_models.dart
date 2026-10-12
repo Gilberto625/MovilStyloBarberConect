@@ -155,6 +155,9 @@ class SecretariaCitaDto {
     required this.puedeCobrar,
     required this.puedeMarcarAsistencia,
     required this.clientePenalizado,
+    this.penalizacionPorcentaje = 0,
+    this.penalizacionInasistencias = 0,
+    this.penalizacionCitasRestantes = 0,
   });
 
   final int id;
@@ -174,8 +177,15 @@ class SecretariaCitaDto {
   final bool puedeCobrar;
   final bool puedeMarcarAsistencia;
   final bool clientePenalizado;
+  final double penalizacionPorcentaje;
+  final int penalizacionInasistencias;
+  final int penalizacionCitasRestantes;
 
   factory SecretariaCitaDto.fromJson(Map<String, dynamic> json) {
+    final penalizacion = json['penalizacion'];
+    final pen = penalizacion is Map
+        ? Map<String, dynamic>.from(penalizacion)
+        : const <String, dynamic>{};
     return SecretariaCitaDto(
       id: CitaDto._i(json['id']),
       clienteId: CitaDto._i(json['cliente_id']),
@@ -194,6 +204,9 @@ class SecretariaCitaDto {
       puedeCobrar: json['puede_cobrar'] == true,
       puedeMarcarAsistencia: json['puede_marcar_asistencia'] == true,
       clientePenalizado: json['cliente_penalizado'] == true,
+      penalizacionPorcentaje: CitaDto._d(pen['porcentaje_anticipo']),
+      penalizacionInasistencias: CitaDto._i(pen['total_inasistencias']),
+      penalizacionCitasRestantes: CitaDto._i(pen['citas_restantes']),
     );
   }
 }
@@ -239,6 +252,136 @@ class SecretariaDiaDto {
       enCurso: CitaDto._i(resumen['en_curso']),
       completadas: CitaDto._i(resumen['completadas']),
       noAsistio: CitaDto._i(resumen['no_asistio']),
+    );
+  }
+}
+
+class SecretariaClienteDto {
+  const SecretariaClienteDto({
+    required this.id,
+    required this.nombreCompleto,
+    required this.telefono,
+    required this.email,
+    required this.esAnonimo,
+  });
+
+  final int id;
+  final String nombreCompleto;
+  final String telefono;
+  final String email;
+  final bool esAnonimo;
+
+  factory SecretariaClienteDto.fromJson(Map<String, dynamic> json) {
+    return SecretariaClienteDto(
+      id: CitaDto._i(json['id']),
+      nombreCompleto: (json['nombre_completo'] ?? 'Cliente').toString(),
+      telefono: (json['telefono'] ?? '').toString(),
+      email: (json['email'] ?? '').toString(),
+      esAnonimo: json['es_anonimo'] == true,
+    );
+  }
+}
+
+class SecretariaCitaResumenDto {
+  const SecretariaCitaResumenDto({
+    required this.id,
+    required this.fecha,
+    required this.hora,
+    required this.servicio,
+    required this.barbero,
+    required this.estado,
+    required this.precioTotal,
+    required this.creadoPor,
+    required this.puedeEditar,
+  });
+
+  final int id;
+  final String fecha;
+  final String hora;
+  final String servicio;
+  final String barbero;
+  final String estado;
+  final double precioTotal;
+  final String creadoPor;
+  final bool puedeEditar;
+
+  factory SecretariaCitaResumenDto.fromJson(Map<String, dynamic> json) {
+    return SecretariaCitaResumenDto(
+      id: CitaDto._i(json['id']),
+      fecha: (json['fecha'] ?? '').toString(),
+      hora: (json['hora'] ?? '').toString(),
+      servicio: (json['servicio'] ?? '').toString(),
+      barbero: (json['barbero'] ?? '').toString(),
+      estado: (json['estado'] ?? '').toString(),
+      precioTotal: CitaDto._d(json['precio_total']),
+      creadoPor: (json['creado_por'] ?? '').toString(),
+      puedeEditar: json['puede_editar'] == true,
+    );
+  }
+}
+
+class SecretariaCitaEditableDto {
+  const SecretariaCitaEditableDto({
+    required this.id,
+    required this.clienteId,
+    required this.clienteNombre,
+    required this.barberoId,
+    required this.servicioId,
+    required this.servicioNombre,
+    required this.servicioPrecio,
+    required this.fecha,
+    required this.hora,
+    required this.duracionMinutos,
+    required this.estado,
+    required this.precioTotal,
+    required this.notas,
+    required this.anticipoPagado,
+    required this.metodoAnticipo,
+    required this.puedeEditar,
+    required this.fechaMinima,
+  });
+
+  final int id;
+  final int clienteId;
+  final String clienteNombre;
+  final int barberoId;
+  final int servicioId;
+  final String servicioNombre;
+  final double servicioPrecio;
+  final String fecha;
+  final String hora;
+  final int duracionMinutos;
+  final String estado;
+  final double precioTotal;
+  final String notas;
+  final double anticipoPagado;
+  final String metodoAnticipo;
+  final bool puedeEditar;
+  final String fechaMinima;
+
+  factory SecretariaCitaEditableDto.fromResponse(Map<String, dynamic> json) {
+    final raw = json['cita'];
+    final cita = raw is Map
+        ? Map<String, dynamic>.from(raw)
+        : const <String, dynamic>{};
+    return SecretariaCitaEditableDto(
+      id: CitaDto._i(cita['id']),
+      clienteId: CitaDto._i(cita['cliente_id']),
+      clienteNombre: (cita['cliente_nombre'] ?? 'Cliente').toString(),
+      barberoId: CitaDto._i(cita['barbero_id']),
+      servicioId: CitaDto._i(cita['servicio_id']),
+      servicioNombre: (cita['servicio_nombre'] ?? '').toString(),
+      servicioPrecio: CitaDto._d(cita['servicio_precio']),
+      fecha: (cita['fecha'] ?? '').toString(),
+      hora: (cita['hora'] ?? '').toString(),
+      duracionMinutos: CitaDto._i(cita['duracion_minutos']),
+      estado: (cita['estado'] ?? '').toString(),
+      precioTotal: CitaDto._d(cita['precio_total']),
+      notas: (cita['notas'] ?? '').toString(),
+      anticipoPagado: CitaDto._d(cita['anticipo_pagado']),
+      metodoAnticipo: (cita['metodo_anticipo'] ?? 'ninguno').toString(),
+      puedeEditar: cita['puede_editar'] == true,
+      fechaMinima: (json['fecha_minima'] ?? '').toString(),
     );
   }
 }

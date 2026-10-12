@@ -17,6 +17,8 @@ class ClientCitasViewModel extends ChangeNotifier {
   List<SlotDisponibilidad> slots = const [];
   PoliticaPagoDto? politica;
   bool bookingBusy = false;
+  bool barberosLoading = false;
+  bool slotsLoading = false;
   String? bookingMessage;
 
   Future<void> loadMisCitas() async {
@@ -34,16 +36,16 @@ class ClientCitasViewModel extends ChangeNotifier {
   }
 
   Future<void> loadBarberos({int? servicioId}) async {
-    state = LoadState.loading;
+    barberosLoading = true;
     errorMessage = null;
     notifyListeners();
     try {
       barberos = await _repository.getBarberos(servicioId: servicioId);
-      state = barberos.isEmpty ? LoadState.empty : LoadState.ready;
     } catch (e) {
       errorMessage = e.toString();
-      state = LoadState.error;
+      barberos = const [];
     }
+    barberosLoading = false;
     notifyListeners();
   }
 
@@ -52,6 +54,7 @@ class ClientCitasViewModel extends ChangeNotifier {
     required String fecha,
     required int duracion,
   }) async {
+    slotsLoading = true;
     errorMessage = null;
     notifyListeners();
     try {
@@ -64,6 +67,7 @@ class ClientCitasViewModel extends ChangeNotifier {
       errorMessage = e.toString();
       slots = const [];
     }
+    slotsLoading = false;
     notifyListeners();
   }
 

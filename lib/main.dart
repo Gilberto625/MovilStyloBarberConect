@@ -9,6 +9,7 @@ import 'viewmodels/auth_viewmodel.dart';
 import 'viewmodels/catalog_list_viewmodel.dart';
 import 'viewmodels/client_citas_viewmodel.dart';
 import 'viewmodels/home_guest_viewmodel.dart';
+import 'viewmodels/secretaria_gestion_viewmodel.dart';
 import 'viewmodels/secretaria_hoy_viewmodel.dart';
 
 Future<void> main() async {
@@ -39,6 +40,9 @@ class StyloBarberApp extends StatelessWidget {
         ),
         ChangeNotifierProvider<SecretariaHoyViewModel>.value(
           value: scope.secretariaHoyViewModel,
+        ),
+        ChangeNotifierProvider<SecretariaGestionViewModel>.value(
+          value: scope.secretariaGestionViewModel,
         ),
       ],
       child: MaterialApp(
