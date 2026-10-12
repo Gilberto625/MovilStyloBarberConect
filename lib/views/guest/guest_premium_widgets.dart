@@ -15,12 +15,14 @@ class GuestPremiumImage extends StatelessWidget {
     required this.fit,
     required this.label,
     required this.fallbackIcon,
+    this.alignment = Alignment.center,
   });
 
   final String url;
   final BoxFit fit;
   final String label;
   final IconData fallbackIcon;
+  final Alignment alignment;
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +40,7 @@ class GuestPremiumImage extends StatelessWidget {
       width: double.infinity,
       height: double.infinity,
       fit: fit,
+      alignment: alignment,
       excludeFromSemantics: true,
       frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
         if (wasSynchronouslyLoaded || frame != null) {
@@ -158,38 +161,44 @@ class GuestServiceCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           AspectRatio(
-            aspectRatio: 4 / 3,
-            child: GuestPremiumImage(
-              url: servicio.imagenUrl,
-              fit: BoxFit.cover,
-              label: servicio.nombre,
-              fallbackIcon: Icons.content_cut_rounded,
+            aspectRatio: 16 / 10,
+            child: ColoredBox(
+              color: _surface,
+              child: SizedBox.expand(
+                child: GuestPremiumImage(
+                  url: servicio.imagenUrl,
+                  fit: BoxFit.contain,
+                  alignment: Alignment.center,
+                  label: servicio.nombre,
+                  fallbackIcon: Icons.content_cut_rounded,
+                ),
+              ),
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(18),
+            padding: const EdgeInsets.fromLTRB(14, 12, 14, 14),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   servicio.nombre,
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    fontSize: 20,
-                    height: 1.25,
-                    fontWeight: FontWeight.w500,
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    fontSize: 17,
+                    height: 1.28,
+                    fontWeight: FontWeight.w600,
                     color: _ivory,
                   ),
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 10),
                 Text(
                   price,
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    fontSize: 20,
+                    fontSize: 18,
                     fontWeight: FontWeight.w700,
                     color: AppColors.gold,
                   ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 6),
                 Wrap(
                   spacing: 6,
                   runSpacing: 4,
@@ -235,9 +244,9 @@ class GuestProductCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           AspectRatio(
-            aspectRatio: 1,
+            aspectRatio: 4 / 3,
             child: Padding(
-              padding: const EdgeInsets.all(12),
+              padding: const EdgeInsets.fromLTRB(12, 12, 12, 4),
               child: GuestPremiumImage(
                 url: producto.imagenUrl,
                 fit: BoxFit.contain,
@@ -247,7 +256,7 @@ class GuestProductCard extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(18, 8, 18, 18),
+            padding: const EdgeInsets.fromLTRB(14, 8, 14, 14),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -300,34 +309,72 @@ class _GuestCatalogSurface extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final shape = RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(20),
-      side: BorderSide(color: AppColors.border.withValues(alpha: 0.65)),
+      borderRadius: BorderRadius.circular(16),
+      side: BorderSide(color: AppColors.border.withValues(alpha: 0.55)),
     );
-    return Semantics(
-      button: true,
-      label: label,
-      child: Material(
-        color: _surface,
-        shape: shape,
-        clipBehavior: Clip.antiAlias,
-        child: Stack(
-          children: [
-            ExcludeSemantics(child: child),
-            Positioned.fill(
-              child: Material(
-                type: MaterialType.transparency,
-                child: InkWell(
-                  onTap: onTap,
-                  customBorder: shape,
-                  focusColor: AppColors.gold.withValues(alpha: 0.14),
-                  hoverColor: AppColors.gold.withValues(alpha: 0.08),
-                  splashColor: AppColors.gold.withValues(alpha: 0.16),
-                  highlightColor: AppColors.gold.withValues(alpha: 0.08),
+    return GuestPressable(
+      child: Semantics(
+        button: true,
+        label: label,
+        child: Material(
+          color: _surface,
+          shape: shape,
+          clipBehavior: Clip.antiAlias,
+          child: Stack(
+            children: [
+              ExcludeSemantics(child: child),
+              Positioned.fill(
+                child: Material(
+                  type: MaterialType.transparency,
+                  child: InkWell(
+                    onTap: onTap,
+                    customBorder: shape,
+                    focusColor: AppColors.gold.withValues(alpha: 0.14),
+                    hoverColor: AppColors.gold.withValues(alpha: 0.08),
+                    splashColor: AppColors.gold.withValues(alpha: 0.16),
+                    highlightColor: AppColors.gold.withValues(alpha: 0.08),
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
+      ),
+    );
+  }
+}
+
+/// Press feedback on transform only. Skipped when the system asks for less motion.
+class GuestPressable extends StatefulWidget {
+  const GuestPressable({super.key, required this.child});
+
+  final Widget child;
+
+  @override
+  State<GuestPressable> createState() => _GuestPressableState();
+}
+
+class _GuestPressableState extends State<GuestPressable> {
+  var _pressed = false;
+
+  void _setPressed(bool value) {
+    if (MediaQuery.disableAnimationsOf(context) || _pressed == value) return;
+    setState(() => _pressed = value);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final reduced = MediaQuery.disableAnimationsOf(context);
+    return Listener(
+      behavior: HitTestBehavior.translucent,
+      onPointerDown: (_) => _setPressed(true),
+      onPointerUp: (_) => _setPressed(false),
+      onPointerCancel: (_) => _setPressed(false),
+      child: AnimatedScale(
+        scale: _pressed ? 0.98 : 1,
+        duration: reduced ? Duration.zero : const Duration(milliseconds: 120),
+        curve: const Cubic(0.23, 1, 0.32, 1),
+        child: widget.child,
       ),
     );
   }

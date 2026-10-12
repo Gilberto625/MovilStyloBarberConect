@@ -13,31 +13,60 @@ class SecretariaHoyViewModel extends ChangeNotifier {
   String? errorMessage;
   String? actionMessage;
   bool actionBusy = false;
+  bool reloading = false;
   SecretariaDiaDto? dia;
+  String? fechaSeleccionada;
   String filtroEstado = 'todas';
+  String consulta = '';
 
   List<SecretariaCitaDto> get citasFiltradas {
-    final all = dia?.citas ?? const [];
-    if (filtroEstado == 'todas') return all;
-    return all.where((c) => c.estado == filtroEstado).toList();
+    final q = consulta.trim().toLowerCase();
+    return (dia?.citas ?? const <SecretariaCitaDto>[]).where((c) {
+      if (filtroEstado != 'todas' && c.estado != filtroEstado) return false;
+      if (q.isEmpty) return true;
+      final blob =
+          '${c.id} ${c.clienteNombre} ${c.clienteTelefono} ${c.servicioNombre} ${c.barberoNombre} ${c.hora}'
+              .toLowerCase();
+      return blob.contains(q);
+    }).toList();
   }
 
-  Future<void> load({String? fecha}) async {
-    state = LoadState.loading;
+  Future<void> load({String? fecha, bool hoy = false}) async {
+    if (hoy) {
+      fechaSeleccionada = null;
+    } else if (fecha != null) {
+      fechaSeleccionada = fecha;
+    }
+    final previous = dia;
+    final firstLoad = previous == null;
+    if (firstLoad) state = LoadState.loading;
+    reloading = !firstLoad;
     errorMessage = null;
     notifyListeners();
     try {
-      dia = await _repository.getCitasDia(fecha: fecha);
+      dia = await _repository.getCitasDia(fecha: fechaSeleccionada);
       state = (dia?.citas.isEmpty ?? true) ? LoadState.empty : LoadState.ready;
     } catch (e) {
       errorMessage = e.toString();
-      state = LoadState.error;
+      if (firstLoad) {
+        state = LoadState.error;
+      } else {
+        dia = previous;
+      }
     }
+    reloading = false;
     notifyListeners();
   }
 
+  Future<void> mostrarHoy() => load(hoy: true);
+
   void setFiltro(String estado) {
     filtroEstado = estado;
+    notifyListeners();
+  }
+
+  void setConsulta(String value) {
+    consulta = value;
     notifyListeners();
   }
 
@@ -53,12 +82,14 @@ class SecretariaHoyViewModel extends ChangeNotifier {
     required int citaId,
     required String metodoPago,
     String? comprobante,
+    double? efectivoRecibido,
   }) async {
     return _runAction(
       () => _repository.cobrar(
         citaId: citaId,
         metodoPago: metodoPago,
         comprobante: comprobante,
+        efectivoRecibido: efectivoRecibido,
       ),
     );
   }
@@ -66,6 +97,7 @@ class SecretariaHoyViewModel extends ChangeNotifier {
   Future<bool> _runAction(
     Future<Map<String, dynamic>> Function() action,
   ) async {
+    if (actionBusy) return false;
     actionBusy = true;
     actionMessage = null;
     errorMessage = null;
@@ -77,7 +109,7 @@ class SecretariaHoyViewModel extends ChangeNotifier {
                   result['message'] ??
                   'Operación confirmada por el servidor.')
               .toString();
-      await load(fecha: dia?.fecha);
+      await load();
       actionBusy = false;
       notifyListeners();
       return true;

@@ -20,6 +20,9 @@ class AppColors {
   static const onGold = Color(0xFF0A120E);
 
   static const museum = Color(0xFF718F83);
+  static const ivory = Color(0xFFF4F0E8);
+  static const surface = Color(0xFF14211B);
+  static const muted = Color(0xFFA6BAB0);
   static const text = Color(0xFFEBF0E7);
   static const textPanel = Color(0xFFF5F4EF);
   static const ok = Color(0xFF34D66B);
@@ -133,6 +136,11 @@ class AppTheme {
           borderRadius: BorderRadius.circular(12),
           borderSide: const BorderSide(color: AppColors.gold, width: 1.4),
         ),
+      ),
+      textSelectionTheme: TextSelectionThemeData(
+        cursorColor: AppColors.gold,
+        selectionColor: AppColors.gold.withValues(alpha: 0.28),
+        selectionHandleColor: AppColors.gold,
       ),
       cardTheme: CardThemeData(
         color: base.colorScheme.surface,
