@@ -50,116 +50,182 @@ class _SecretaryHomeViewState extends State<SecretaryHomeView> {
       );
     }
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Hoy'),
-        actions: [
-          IconButton(
-            onPressed: () => context.read<SecretariaHoyViewModel>().load(),
-            icon: const Icon(Icons.refresh),
-          ),
-          IconButton(
-            onPressed: () async {
-              await auth.logout();
-              if (!context.mounted) return;
-              Navigator.pushNamedAndRemoveUntil(
-                context,
-                AppRoutes.guestHome,
-                (_) => false,
-              );
-            },
-            icon: const Icon(Icons.logout),
-          ),
-        ],
-      ),
-      body: SafeArea(
-        child: Consumer<SecretariaHoyViewModel>(
-          builder: (context, vm, _) {
-            if (vm.state == LoadState.loading || vm.state == LoadState.idle) {
-              return const LoadingView(label: 'Cargando citas del día…');
-            }
-            if (vm.state == LoadState.error) {
-              return ErrorView(
-                message: vm.errorMessage ?? 'Error',
-                onRetry: vm.load,
-              );
-            }
-            final dia = vm.dia;
-            return Column(
-              children: [
-                if (vm.actionMessage != null)
+    return Theme(
+      data: AppTheme.guest(),
+      child: Scaffold(
+        backgroundColor: AppColors.guestBg,
+        appBar: AppBar(
+          title: const Text('Operación'),
+          actions: [
+            IconButton(
+              tooltip: 'Actualizar día',
+              onPressed: () => context.read<SecretariaHoyViewModel>().load(),
+              icon: const Icon(Icons.refresh),
+            ),
+            IconButton(
+              tooltip: 'Cerrar sesión',
+              onPressed: () async {
+                await auth.logout();
+                if (!context.mounted) return;
+                Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  AppRoutes.guestHome,
+                  (_) => false,
+                );
+              },
+              icon: const Icon(Icons.logout),
+            ),
+          ],
+        ),
+        body: SafeArea(
+          child: Consumer<SecretariaHoyViewModel>(
+            builder: (context, vm, _) {
+              if (vm.state == LoadState.loading || vm.state == LoadState.idle) {
+                return const LoadingView(label: 'Cargando citas del día…');
+              }
+              if (vm.state == LoadState.error) {
+                return ErrorView(
+                  message: vm.errorMessage ?? 'Error',
+                  onRetry: vm.load,
+                );
+              }
+              final dia = vm.dia;
+              return ListView(
+                padding: const EdgeInsets.only(bottom: 24),
+                children: [
+                  if (vm.actionMessage != null)
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+                      child: StatusBanner(message: vm.actionMessage!),
+                    ),
+                  if (vm.errorMessage != null)
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+                      child: StatusBanner(
+                        message: vm.errorMessage!,
+                        isError: true,
+                      ),
+                    ),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
-                    child: StatusBanner(message: vm.actionMessage!),
-                  ),
-                if (vm.errorMessage != null)
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
-                    child: StatusBanner(
-                      message: vm.errorMessage!,
-                      isError: true,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          dia?.esHoy == true ? 'Hoy' : 'Día seleccionado',
+                          style: Theme.of(context).textTheme.headlineSmall,
+                        ),
+                        Text(
+                          '${dia?.fecha ?? '—'} · ${dia?.total ?? 0} citas',
+                          style: const TextStyle(color: Color(0xFFA6BAB0)),
+                        ),
+                        const SizedBox(height: 12),
+                        Row(
+                          children: [
+                            _Metric(
+                              label: 'Acción',
+                              value: '${dia?.pendientesAccion ?? 0}',
+                            ),
+                            _Metric(
+                              label: 'En curso',
+                              value: '${dia?.enCurso ?? 0}',
+                            ),
+                            _Metric(
+                              label: 'Listas',
+                              value: '${dia?.completadas ?? 0}',
+                            ),
+                            _Metric(
+                              label: 'Faltas',
+                              value: '${dia?.noAsistio ?? 0}',
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
                   ),
-                Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          'Fecha: ${dia?.fecha ?? '—'}'
-                          '${dia?.esHoy == true ? ' (hoy)' : ''}',
-                        ),
-                      ),
-                      Text('${dia?.total ?? 0} citas'),
-                    ],
-                  ),
-                ),
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
-                  child: Row(
-                    children: [
-                      for (final f in const [
-                        'todas',
-                        'pendiente',
-                        'confirmada',
-                        'en_curso',
-                        'completada',
-                        'no_asistio',
-                        'cancelada',
-                      ])
-                        Padding(
-                          padding: const EdgeInsets.only(right: 8),
-                          child: FilterChip(
-                            label: Text(f),
-                            selected: vm.filtroEstado == f,
-                            onSelected: (_) => vm.setFiltro(f),
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    padding: const EdgeInsets.fromLTRB(12, 12, 12, 0),
+                    child: Row(
+                      children: [
+                        for (final f in const [
+                          ('todas', 'Todas'),
+                          ('pendiente', 'Pendientes'),
+                          ('confirmada', 'Confirmadas'),
+                          ('en_curso', 'En curso'),
+                          ('completada', 'Completadas'),
+                          ('no_asistio', 'No asistió'),
+                          ('cancelada', 'Canceladas'),
+                        ])
+                          Padding(
+                            padding: const EdgeInsets.only(right: 8),
+                            child: FilterChip(
+                              label: Text(f.$2),
+                              selected: vm.filtroEstado == f.$1,
+                              onSelected: (_) => vm.setFiltro(f.$1),
+                            ),
                           ),
-                        ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                const SizedBox(height: 8),
-                Expanded(
-                  child: vm.citasFiltradas.isEmpty
-                      ? EmptyView(
-                          message: 'Sin citas para este filtro.',
-                          onRetry: vm.load,
-                        )
-                      : ListView.separated(
-                          padding: const EdgeInsets.all(16),
-                          itemCount: vm.citasFiltradas.length,
-                          separatorBuilder: (context, index) =>
-                              const SizedBox(height: 10),
-                          itemBuilder: (context, i) {
-                            final c = vm.citasFiltradas[i];
-                            return _CitaTile(cita: c);
-                          },
-                        ),
-                ),
-              ],
-            );
-          },
+                  const SizedBox(height: 8),
+                  if (vm.citasFiltradas.isEmpty)
+                    EmptyView(
+                      message: 'Sin citas para este filtro.',
+                      onRetry: vm.load,
+                    )
+                  else ...[
+                    for (final c in vm.citasFiltradas)
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(16, 0, 16, 10),
+                        child: _CitaTile(cita: c),
+                      ),
+                  ],
+                ],
+              );
+            },
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _Metric extends StatelessWidget {
+  const _Metric({required this.label, required this.value});
+
+  final String label;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Container(
+        margin: const EdgeInsets.only(right: 8),
+        padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+        decoration: BoxDecoration(
+          color: const Color(0xFF14211B),
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: AppColors.border),
+        ),
+        child: Column(
+          children: [
+            Text(
+              value,
+              style: const TextStyle(
+                color: AppColors.gold,
+                fontWeight: FontWeight.w700,
+                fontSize: 18,
+                fontFeatures: [FontFeature.tabularFigures()],
+              ),
+            ),
+            Text(
+              label,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(fontSize: 11, color: Color(0xFFA6BAB0)),
+            ),
+          ],
         ),
       ),
     );
@@ -194,8 +260,13 @@ class _CitaTile extends StatelessWidget {
               children: [
                 Expanded(
                   child: Text(
-                    '${cita.hora} · ${cita.clienteNombre}',
-                    style: const TextStyle(fontWeight: FontWeight.w700),
+                    cita.clienteNombre,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.ivory,
+                    ),
                   ),
                 ),
                 EstadoChip(estado: cita.estado),
@@ -336,74 +407,78 @@ class SecretaryCitaDetailView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final vm = context.watch<SecretariaHoyViewModel>();
-    return Scaffold(
-      appBar: AppBar(title: Text('Cita #${cita.id}')),
-      body: SafeArea(
-        child: ListView(
-          padding: const EdgeInsets.all(20),
-          children: [
-            Text(
-              cita.clienteNombre,
-              style: Theme.of(context).textTheme.headlineSmall,
-            ),
-            if (cita.clienteTelefono.isNotEmpty) Text(cita.clienteTelefono),
-            const SizedBox(height: 12),
-            Text('${cita.fecha} · ${cita.hora}'),
-            Text(cita.servicioNombre),
-            Text('Barbero: ${cita.barberoNombre}'),
-            const SizedBox(height: 8),
-            EstadoChip(estado: cita.estado),
-            const SizedBox(height: 12),
-            Text('Total: ${moneyFormat.format(cita.precioTotal)}'),
-            Text('Anticipo: ${moneyFormat.format(cita.anticipoPagado)}'),
-            Text(
-              'Restante: ${moneyFormat.format(cita.restante)}',
-              style: const TextStyle(color: AppColors.gold),
-            ),
-            const SizedBox(height: 24),
-            if (cita.puedeMarcarAsistencia) ...[
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: vm.actionBusy
-                      ? null
-                      : () async {
-                          final ok = await vm.marcarLlego(cita.id);
-                          if (!context.mounted) return;
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                ok
-                                    ? (vm.actionMessage ?? 'OK')
-                                    : (vm.errorMessage ?? 'Error'),
+    return Theme(
+      data: AppTheme.guest(),
+      child: Scaffold(
+        backgroundColor: AppColors.guestBg,
+        appBar: AppBar(title: Text('Cita #${cita.id}')),
+        body: SafeArea(
+          child: ListView(
+            padding: const EdgeInsets.all(20),
+            children: [
+              Text(
+                cita.clienteNombre,
+                style: Theme.of(context).textTheme.headlineSmall,
+              ),
+              if (cita.clienteTelefono.isNotEmpty) Text(cita.clienteTelefono),
+              const SizedBox(height: 12),
+              Text('${cita.fecha} · ${cita.hora}'),
+              Text(cita.servicioNombre),
+              Text('Barbero: ${cita.barberoNombre}'),
+              const SizedBox(height: 8),
+              EstadoChip(estado: cita.estado),
+              const SizedBox(height: 12),
+              Text('Total: ${moneyFormat.format(cita.precioTotal)}'),
+              Text('Anticipo: ${moneyFormat.format(cita.anticipoPagado)}'),
+              Text(
+                'Restante: ${moneyFormat.format(cita.restante)}',
+                style: const TextStyle(color: AppColors.gold),
+              ),
+              const SizedBox(height: 24),
+              if (cita.puedeMarcarAsistencia) ...[
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: vm.actionBusy
+                        ? null
+                        : () async {
+                            final ok = await vm.marcarLlego(cita.id);
+                            if (!context.mounted) return;
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                  ok
+                                      ? (vm.actionMessage ?? 'OK')
+                                      : (vm.errorMessage ?? 'Error'),
+                                ),
                               ),
-                            ),
-                          );
-                          if (ok) Navigator.pop(context);
-                        },
-                  child: const Text('Cliente llegó'),
+                            );
+                            if (ok) Navigator.pop(context);
+                          },
+                    child: const Text('Cliente llegó'),
+                  ),
                 ),
-              ),
-              const SizedBox(height: 10),
-              SizedBox(
-                width: double.infinity,
-                child: OutlinedButton(
-                  onPressed: vm.actionBusy ? null : () => _noAsistio(context),
-                  child: const Text('No asistió'),
+                const SizedBox(height: 10),
+                SizedBox(
+                  width: double.infinity,
+                  child: OutlinedButton(
+                    onPressed: vm.actionBusy ? null : () => _noAsistio(context),
+                    child: const Text('No asistió'),
+                  ),
                 ),
-              ),
+              ],
+              if (cita.puedeCobrar) ...[
+                const SizedBox(height: 10),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: vm.actionBusy ? null : () => _cobrar(context),
+                    child: const Text('Cobrar restante'),
+                  ),
+                ),
+              ],
             ],
-            if (cita.puedeCobrar) ...[
-              const SizedBox(height: 10),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: vm.actionBusy ? null : () => _cobrar(context),
-                  child: const Text('Cobrar restante'),
-                ),
-              ),
-            ],
-          ],
+          ),
         ),
       ),
     );
