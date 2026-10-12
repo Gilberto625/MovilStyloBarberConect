@@ -9,15 +9,10 @@ Aplicación Android Flutter/Dart para Tony Stylo Barbería.
 ## Requisitos
 
 - Flutter 3.47+ / Dart 3.13+
-- **Android SDK** (hoy no está instalado en esta máquina; ver abajo)
-- Java 17+ (detectado: 17.0.12)
+- Android SDK (`ANDROID_HOME`, p. ej. `%LOCALAPPDATA%\Android\Sdk`)
+- NDK side-by-side `28.2.13676358` (requerido por el plugin Flutter actual)
+- Java 17+ (JDK de Android Studio o OpenJDK)
 - Backend Stylo Barber Connect accesible por HTTPS/HTTP
-
-## Android SDK (bloqueante para APK)
-
-Guía paso a paso: [docs/ANDROID_SDK_SETUP.md](docs/ANDROID_SDK_SETUP.md)
-
-Sin `ANDROID_HOME` / SDK, `flutter build apk` y `flutter run` en Android **no pueden ejecutarse**.
 
 ## Estructura
 
@@ -36,15 +31,20 @@ lib/
 
 Flujo: **View → ViewModel → Repository → API Service → Django REST**
 
-## Configuración de API
+## Configuración de API (`--dart-define`)
 
 ```bash
-# Emulador Android → backend local
+# Emulador Android → Django local
 flutter run --dart-define=API_BASE_URL=http://10.0.2.2:8000/api
 
-# Producción (default embebido)
+# Dispositivo físico en LAN (HTTP solo en debug; ver network_security_config)
+flutter run --dart-define=API_BASE_URL=http://192.168.x.x:8000/api
+
+# Producción (default embebido, HTTPS)
 flutter run --dart-define=API_BASE_URL=https://backendstylobarberconect-lo71.onrender.com/api
 ```
+
+Cleartext HTTP está permitido **solo en el manifest debug** hacia `10.0.2.2`, `localhost` y `127.0.0.1`. Release no hereda esa configuración.
 
 ## Instalación y ejecución
 
@@ -53,16 +53,35 @@ cd Movil
 flutter pub get
 flutter analyze
 flutter test
-flutter run   # requiere Android SDK + dispositivo/emulador
+flutter devices
+flutter run
 ```
 
-Release:
+### Nota: ruta con espacios
+
+Si el proyecto vive bajo una carpeta con espacios (p. ej. `proyevto v2`), Gradle a veces falla al empaquetar el APK (`Could not find EOCD`). Solución local:
+
+```powershell
+cmd /c mklink /J C:\stylo_barber_movil "C:\Users\yager\Documents\INGENIERIA\proyevto v2\Movil"
+cd C:\stylo_barber_movil
+flutter build apk --debug
+```
+
+El junction no mueve el código; el APK sigue generándose dentro de `/Movil/build/...`.
+
+### Compilación Android
 
 ```bash
-flutter build apk --release --obfuscate --split-debug-info=build/debug-info
+# Debug
+flutter build apk --debug
+# APK: build/app/outputs/flutter-apk/app-debug.apk
+
+# Release ofuscado (símbolos privados, no versionar)
+flutter build apk --release --obfuscate --split-debug-info=build/symbols
 ```
 
-Los símbolos de ofuscación (`debug-info/`, `*.symbols`) están en `.gitignore`.
+Guarda `build/symbols` fuera del repo público (por versión/build).
+La firma release actual usa claves debug temporalmente; no publicar en Play Store sin keystore autorizado.
 
 ## Endpoints conectados
 
@@ -75,22 +94,25 @@ Los símbolos de ofuscación (`debug-info/`, `*.symbols`) están en `.gitignore`
 
 ## Seguridad
 
-- Tokens en `flutter_secure_storage` (no contraseñas).
+- Tokens JWT en `flutter_secure_storage` (no se guardan contraseñas).
 - Sin logs de `Authorization`, tokens u OTP.
 - Logout solo local (el backend no expone logout).
-- 401 → intento de refresh; si falla, limpia sesión.
+- 401 → refresh; si falla, limpia sesión.
 - Roles: secretaría solo si el backend reporta `secretaria` o `admin`.
+- El ocultar botones en UI no sustituye permisos del servidor.
 
 ## Pruebas
 
 ```bash
-dart format .
 flutter analyze
 flutter test
 ```
+
+Incluye ViewModels (auth, citas, secretaría), repositorios fake, widgets de home y manejo de errores/estados vacíos.
 
 ## Notas
 
 - No es monorepo: este directorio tiene su propio `.git`.
 - No modifica `/backend` ni `/FrontStyloBarberConect`.
 - No hay pagos simulados ni sync offline de asistencia/cobro.
+- Setup Android histórico: [docs/ANDROID_SDK_SETUP.md](docs/ANDROID_SDK_SETUP.md)
