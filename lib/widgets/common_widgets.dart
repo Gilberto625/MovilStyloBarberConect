@@ -162,11 +162,11 @@ class ServicioCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            AspectRatio(
-              aspectRatio: 4 / 3,
+            Expanded(
               child: imagenUrl != null && imagenUrl!.isNotEmpty
                   ? Image.network(
                       imagenUrl!,
+                      width: double.infinity,
                       fit: BoxFit.cover,
                       errorBuilder: (context, error, stackTrace) =>
                           _placeholder(),
@@ -241,30 +241,37 @@ class ProductoCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          AspectRatio(
-            aspectRatio: 3 / 4,
+          Expanded(
             child: imagenUrl != null && imagenUrl!.isNotEmpty
                 ? Image.network(
                     imagenUrl!,
+                    width: double.infinity,
                     fit: BoxFit.contain,
                     errorBuilder: (context, error, stackTrace) => _ph(),
                   )
                 : _ph(),
           ),
           Padding(
-            padding: const EdgeInsets.all(10),
+            padding: const EdgeInsets.fromLTRB(10, 8, 10, 10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 if (marca.isNotEmpty)
                   Text(
                     marca,
-                    style: TextStyle(color: AppColors.museum, fontSize: 11),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      color: AppColors.museum,
+                      fontSize: 11,
+                    ),
                   ),
                 Text(nombre, maxLines: 2, overflow: TextOverflow.ellipsis),
                 const SizedBox(height: 4),
                 Text(
                   moneyFormat.format(precio),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
                     color: AppColors.gold,
                     fontWeight: FontWeight.w700,
