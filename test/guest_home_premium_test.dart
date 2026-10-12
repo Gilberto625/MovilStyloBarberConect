@@ -9,6 +9,7 @@ import 'package:stylo_barber_connect/models/catalog_models.dart';
 import 'package:stylo_barber_connect/repositories/catalog_repository.dart';
 import 'package:stylo_barber_connect/viewmodels/home_guest_viewmodel.dart';
 import 'package:stylo_barber_connect/views/guest/guest_home_view.dart';
+import 'package:stylo_barber_connect/views/guest/guest_premium_widgets.dart';
 import 'package:stylo_barber_connect/widgets/common_widgets.dart';
 
 typedef _HomeData = ({
@@ -232,6 +233,20 @@ void main() {
         });
       }
     }
+
+    testWidgets('service card leaves the next item visible at 360', (
+      tester,
+    ) async {
+      await _pumpHome(
+        tester,
+        _FixtureCatalogRepository(),
+        size: const Size(360, 800),
+      );
+      await _reveal(tester, find.byType(GuestServiceCard));
+      final card = tester.getSize(find.byType(GuestServiceCard));
+      expect(card.width, lessThan(240));
+      expect(card.width, greaterThan(180));
+    });
   });
 
   group('Guest premium Home states', () {

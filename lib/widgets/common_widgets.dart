@@ -96,18 +96,23 @@ class BrandTitle extends StatelessWidget {
     required this.part1,
     required this.part2,
     this.logoUrl,
+    this.logoHeight = 48,
   });
 
   final String part1;
   final String part2;
   final String? logoUrl;
+  final double logoHeight;
 
   @override
   Widget build(BuildContext context) {
     if (logoUrl != null && logoUrl!.isNotEmpty) {
       return Image.network(
         logoUrl!,
-        height: 48,
+        height: logoHeight,
+        fit: BoxFit.contain,
+        alignment: Alignment.centerLeft,
+        filterQuality: FilterQuality.medium,
         errorBuilder: (context, error, stackTrace) => _textBrand(context),
       );
     }

@@ -81,7 +81,7 @@ class _GuestHomeViewState extends State<GuestHomeView> {
               }
               return LayoutBuilder(
                 builder: (context, constraints) {
-                  final gutter = constraints.maxWidth >= 600 ? 24.0 : 16.0;
+                  final gutter = constraints.maxWidth >= 600 ? 28.0 : 20.0;
                   final width = (constraints.maxWidth - gutter * 2).clamp(
                     0.0,
                     1040.0,
@@ -97,141 +97,145 @@ class _GuestHomeViewState extends State<GuestHomeView> {
                     color: AppColors.gold,
                     backgroundColor: AppColors.guestCard,
                     onRefresh: vm.load,
-                    child: ListView(
-                      key: const PageStorageKey('guest-home-scroll'),
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      padding: EdgeInsets.fromLTRB(inset, 12, inset, 32),
-                      children: [
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Align(
-                                alignment: Alignment.centerLeft,
-                                child: ConstrainedBox(
-                                  constraints: const BoxConstraints(
-                                    maxWidth: 160,
-                                    minHeight: 64,
+                    child: _GuestEntrance(
+                      child: ListView(
+                        key: const PageStorageKey('guest-home-scroll'),
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        padding: EdgeInsets.fromLTRB(inset, 8, inset, 36),
+                        children: [
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Expanded(
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: ConstrainedBox(
+                                    constraints: const BoxConstraints(
+                                      maxWidth: 240,
+                                      minHeight: 56,
+                                    ),
+                                    child: Semantics(
+                                      label: c.nombreNegocio,
+                                      child: BrandTitle(
+                                        part1: c.logoParte1,
+                                        part2: c.logoParte2,
+                                        logoHeight: 68,
+                                        logoUrl: c.logoUrl.isEmpty
+                                            ? null
+                                            : c.logoUrl,
+                                      ),
+                                    ),
                                   ),
-                                  child: Semantics(
-                                    label: c.nombreNegocio,
-                                    child: BrandTitle(
-                                      part1: c.logoParte1,
-                                      part2: c.logoParte2,
-                                      logoUrl: c.logoUrl.isEmpty
-                                          ? null
-                                          : c.logoUrl,
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+                              OutlinedButton(
+                                style: OutlinedButton.styleFrom(
+                                  minimumSize: const Size(88, 48),
+                                  foregroundColor: AppColors.gold,
+                                  side: const BorderSide(color: AppColors.gold),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                ),
+                                onPressed: () => _navigate(AppRoutes.login),
+                                child: const Text('Entrar'),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 20),
+                          if (vm.state == LoadState.empty) ...[
+                            Semantics(
+                              liveRegion: true,
+                              child: const Text(
+                                'No hay servicios ni productos publicados todavía.',
+                                style: TextStyle(color: _muted),
+                              ),
+                            ),
+                            const SizedBox(height: 24),
+                          ],
+                          _GuestHero(
+                            contacto: c,
+                            image: heroImage,
+                            wide: width >= 600,
+                            onReserve: () => _navigate(AppRoutes.login),
+                          ),
+                          if (vm.promociones.isNotEmpty) ...[
+                            const SizedBox(height: 32),
+                            const _SectionTitle(title: 'Promociones'),
+                            const SizedBox(height: 16),
+                            ...vm.promociones.map(
+                              (service) => Padding(
+                                padding: const EdgeInsets.only(bottom: 16),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(20),
+                                  child: AspectRatio(
+                                    aspectRatio: 16 / 7,
+                                    child: GuestPremiumImage(
+                                      url: service.bannerUrl,
+                                      fit: BoxFit.cover,
+                                      label: service.nombre,
+                                      fallbackIcon: Icons.local_offer_outlined,
                                     ),
                                   ),
                                 ),
                               ),
                             ),
-                            const SizedBox(width: 16),
-                            OutlinedButton(
-                              style: OutlinedButton.styleFrom(
-                                minimumSize: const Size(88, 48),
-                                foregroundColor: AppColors.gold,
-                                side: const BorderSide(color: AppColors.gold),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                              ),
-                              onPressed: () => _navigate(AppRoutes.login),
-                              child: const Text('Entrar'),
-                            ),
                           ],
-                        ),
-                        const SizedBox(height: 16),
-                        if (vm.state == LoadState.empty) ...[
-                          Semantics(
-                            liveRegion: true,
-                            child: const Text(
-                              'No hay servicios ni productos publicados todavía.',
-                              style: TextStyle(color: _muted),
-                            ),
-                          ),
-                          const SizedBox(height: 24),
-                        ],
-                        _GuestHero(
-                          contacto: c,
-                          image: heroImage,
-                          wide: width >= 600,
-                          onReserve: () => _navigate(AppRoutes.login),
-                        ),
-                        if (vm.promociones.isNotEmpty) ...[
                           const SizedBox(height: 32),
-                          const _SectionTitle(title: 'Promociones'),
+                          _SectionTitle(
+                            title: 'Servicios',
+                            actionKey: const ValueKey('guest-services-all'),
+                            onAll: () => _navigate(AppRoutes.servicios),
+                          ),
                           const SizedBox(height: 16),
-                          ...vm.promociones.map(
-                            (service) => Padding(
-                              padding: const EdgeInsets.only(bottom: 16),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(20),
-                                child: AspectRatio(
-                                  aspectRatio: 16 / 7,
-                                  child: GuestPremiumImage(
-                                    url: service.bannerUrl,
-                                    fit: BoxFit.cover,
-                                    label: service.nombre,
-                                    fallbackIcon: Icons.local_offer_outlined,
+                          if (services.isEmpty)
+                            const Text(
+                              'Sin servicios disponibles.',
+                              style: TextStyle(color: _muted),
+                            )
+                          else
+                            _CatalogRail(
+                              cardWidth: width >= 600
+                                  ? 248
+                                  : (width * 0.72).clamp(196.0, 228.0),
+                              children: [
+                                for (final service in services)
+                                  GuestServiceCard(
+                                    servicio: service,
+                                    onTap: () => _navigate(AppRoutes.servicios),
                                   ),
-                                ),
-                              ),
+                              ],
                             ),
+                          const SizedBox(height: 32),
+                          _SectionTitle(
+                            title: 'Productos',
+                            actionKey: const ValueKey('guest-products-all'),
+                            onAll: () => _navigate(AppRoutes.productos),
                           ),
+                          const SizedBox(height: 16),
+                          if (products.isEmpty)
+                            const Text(
+                              'Sin productos disponibles.',
+                              style: TextStyle(color: _muted),
+                            )
+                          else
+                            _CatalogRail(
+                              cardWidth: width >= 600 ? 240 : 210,
+                              children: [
+                                for (final product in products)
+                                  GuestProductCard(
+                                    producto: product,
+                                    onTap: () => _navigate(AppRoutes.productos),
+                                  ),
+                              ],
+                            ),
+                          const SizedBox(height: 32),
+                          const _SectionTitle(title: 'Encuéntranos'),
+                          const SizedBox(height: 16),
+                          _GuestContact(contacto: c, wide: width >= 720),
                         ],
-                        const SizedBox(height: 32),
-                        _SectionTitle(
-                          title: 'Servicios',
-                          actionKey: const ValueKey('guest-services-all'),
-                          onAll: () => _navigate(AppRoutes.servicios),
-                        ),
-                        const SizedBox(height: 16),
-                        if (services.isEmpty)
-                          const Text(
-                            'Sin servicios disponibles.',
-                            style: TextStyle(color: _muted),
-                          )
-                        else
-                          _CatalogRail(
-                            cardWidth: width >= 600
-                                ? 300
-                                : (width * 0.8).clamp(240.0, 280.0),
-                            children: [
-                              for (final service in services)
-                                GuestServiceCard(
-                                  servicio: service,
-                                  onTap: () => _navigate(AppRoutes.servicios),
-                                ),
-                            ],
-                          ),
-                        const SizedBox(height: 32),
-                        _SectionTitle(
-                          title: 'Productos',
-                          actionKey: const ValueKey('guest-products-all'),
-                          onAll: () => _navigate(AppRoutes.productos),
-                        ),
-                        const SizedBox(height: 16),
-                        if (products.isEmpty)
-                          const Text(
-                            'Sin productos disponibles.',
-                            style: TextStyle(color: _muted),
-                          )
-                        else
-                          _CatalogRail(
-                            cardWidth: width >= 600 ? 240 : 210,
-                            children: [
-                              for (final product in products)
-                                GuestProductCard(
-                                  producto: product,
-                                  onTap: () => _navigate(AppRoutes.productos),
-                                ),
-                            ],
-                          ),
-                        const SizedBox(height: 32),
-                        const _SectionTitle(title: 'Encuéntranos'),
-                        const SizedBox(height: 16),
-                        _GuestContact(contacto: c, wide: width >= 720),
-                      ],
+                      ),
                     ),
                   );
                 },
@@ -241,6 +245,45 @@ class _GuestHomeViewState extends State<GuestHomeView> {
         ),
       ),
     );
+  }
+}
+
+class _GuestEntrance extends StatefulWidget {
+  const _GuestEntrance({required this.child});
+
+  final Widget child;
+
+  @override
+  State<_GuestEntrance> createState() => _GuestEntranceState();
+}
+
+class _GuestEntranceState extends State<_GuestEntrance>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 220),
+    value: 1,
+  );
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted || MediaQuery.disableAnimationsOf(context)) return;
+      _controller.value = 0;
+      _controller.forward();
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FadeTransition(opacity: _controller, child: widget.child);
   }
 }
 
@@ -258,116 +301,141 @@ class _GuestHero extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      clipBehavior: Clip.antiAlias,
-      decoration: BoxDecoration(
-        color: AppColors.guestCard,
-        borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: AppColors.gold.withValues(alpha: 0.25)),
-      ),
-      child: Stack(
-        children: [
-          if (image != null)
-            Positioned.fill(
-              child: ExcludeSemantics(
-                child: GuestPremiumImage(
-                  url: image!.imagenUrl,
-                  fit: BoxFit.cover,
-                  label: image!.nombre,
-                  fallbackIcon: Icons.content_cut_outlined,
-                ),
-              ),
-            ),
-          Positioned.fill(
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: wide ? Alignment.centerLeft : Alignment.topCenter,
-                  end: wide ? Alignment.centerRight : Alignment.bottomCenter,
-                  colors: wide
-                      ? const [Color(0xF20A100E), Color(0x660A100E)]
-                      : const [Color(0x330A100E), Color(0xF20A100E)],
-                ),
-              ),
-            ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final viewport = MediaQuery.sizeOf(context).height;
+        final floor = (constraints.maxWidth * (wide ? 0.46 : 0.78)).clamp(
+          220.0,
+          viewport < 420 ? 250.0 : 360.0,
+        );
+        return Container(
+          clipBehavior: Clip.antiAlias,
+          decoration: BoxDecoration(
+            color: AppColors.guestCard,
+            borderRadius: BorderRadius.circular(22),
+            border: Border.all(color: AppColors.gold.withValues(alpha: 0.18)),
           ),
-          ConstrainedBox(
-            constraints: BoxConstraints(minHeight: wide ? 400 : 340),
-            child: Padding(
-              padding: EdgeInsets.all(wide ? 40 : 24),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.end,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  SizedBox(height: wide ? 36 : 72),
-                  Text(
-                    contacto.nombreNegocio,
-                    style: const TextStyle(
-                      color: AppColors.gold,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w700,
-                      letterSpacing: 1.4,
-                      height: 1.5,
+          child: Stack(
+            children: [
+              if (image != null)
+                Positioned.fill(
+                  child: ExcludeSemantics(
+                    child: GuestPremiumImage(
+                      url: image!.imagenUrl,
+                      fit: BoxFit.cover,
+                      alignment: const Alignment(0, 0.22),
+                      label: image!.nombre,
+                      fallbackIcon: Icons.content_cut_outlined,
                     ),
                   ),
-                  const SizedBox(height: 16),
-                  ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: 480),
-                    child: Text.rich(
-                      TextSpan(
-                        children: [
-                          const TextSpan(text: 'Tu Estilo,\n'),
+                ),
+              const Positioned.fill(
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Color(0x330A100E),
+                        Color(0x000A100E),
+                        Color(0xB80A100E),
+                        Color(0xF20A100E),
+                      ],
+                      stops: [0, 0.34, 0.62, 1],
+                    ),
+                  ),
+                ),
+              ),
+              ConstrainedBox(
+                constraints: BoxConstraints(minHeight: floor),
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(
+                    wide ? 32 : 20,
+                    wide ? 28 : 18,
+                    wide ? 32 : 20,
+                    wide ? 24 : 18,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      ConstrainedBox(
+                        constraints: const BoxConstraints(maxWidth: 420),
+                        child: Text(
+                          contacto.nombreNegocio,
+                          style: const TextStyle(
+                            color: AppColors.gold,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600,
+                            letterSpacing: 0.2,
+                            height: 1.35,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      ConstrainedBox(
+                        constraints: const BoxConstraints(maxWidth: 460),
+                        child: Text.rich(
                           TextSpan(
-                            text: 'Nuestra Pasión',
-                            style: TextStyle(
-                              fontStyle: FontStyle.italic,
-                              color: _ivory.withValues(alpha: 0.9),
+                            children: [
+                              const TextSpan(text: 'Tu Estilo,\n'),
+                              TextSpan(
+                                text: 'Nuestra Pasión',
+                                style: TextStyle(
+                                  fontStyle: FontStyle.italic,
+                                  color: _ivory.withValues(alpha: 0.92),
+                                ),
+                              ),
+                            ],
+                          ),
+                          style: Theme.of(context).textTheme.headlineMedium
+                              ?.copyWith(
+                                color: _ivory,
+                                fontSize: wide ? 44 : 32,
+                                height: 1.08,
+                                fontWeight: FontWeight.w500,
+                              ),
+                        ),
+                      ),
+                      const SizedBox(height: 18),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: GuestPressable(
+                          child: ConstrainedBox(
+                            constraints: BoxConstraints(
+                              minWidth: wide ? 196 : double.infinity,
+                            ),
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: AppColors.gold,
+                                foregroundColor: AppColors.onGold,
+                                minimumSize: const Size(48, 48),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 22,
+                                  vertical: 12,
+                                ),
+                                textStyle: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                              ),
+                              onPressed: onReserve,
+                              child: const Text('Reservar cita'),
                             ),
                           ),
-                        ],
-                      ),
-                      style: Theme.of(context).textTheme.headlineLarge
-                          ?.copyWith(
-                            color: _ivory,
-                            fontSize: wide ? 52 : 36,
-                            height: 1.12,
-                            fontWeight: FontWeight.w500,
-                          ),
-                    ),
-                  ),
-                  const SizedBox(height: 24),
-                  ConstrainedBox(
-                    constraints: BoxConstraints(
-                      minWidth: wide ? 200 : double.infinity,
-                    ),
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.gold,
-                        foregroundColor: AppColors.onGold,
-                        minimumSize: const Size(48, 52),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 24,
-                          vertical: 14,
-                        ),
-                        textStyle: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                        ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
                         ),
                       ),
-                      onPressed: onReserve,
-                      child: const Text('Reservar cita'),
-                    ),
+                    ],
                   ),
-                ],
+                ),
               ),
-            ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
@@ -388,12 +456,16 @@ class _SectionTitle extends StatelessWidget {
               header: true,
               child: Text(
                 title,
-                style: Theme.of(context).textTheme.titleLarge
-                    ?.copyWith(fontSize: 28, color: _ivory),
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  fontSize: 22,
+                  height: 1.2,
+                  fontWeight: FontWeight.w500,
+                  color: _ivory,
+                ),
               ),
             ),
             const SizedBox(height: 8),
-            Container(width: 40, height: 2, color: AppColors.gold),
+            Container(width: 28, height: 1, color: AppColors.gold),
           ],
         ),
       ),
@@ -426,7 +498,7 @@ class _CatalogRail extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             for (var index = 0; index < children.length; index++) ...[
-              if (index > 0) const SizedBox(width: 16),
+              if (index > 0) const SizedBox(width: 12),
               SizedBox(width: cardWidth, child: children[index]),
             ],
           ],
