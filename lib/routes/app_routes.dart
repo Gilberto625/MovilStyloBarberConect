@@ -8,8 +8,10 @@ import '../views/guest/guest_home_view.dart';
 import '../views/secretary/secretary_gestion_views.dart';
 import '../views/secretary/secretary_home_view.dart';
 import '../views/secretary/secretary_shell.dart';
+import '../views/splash/splash_view.dart';
 
 class AppRoutes {
+  static const splash = '/splash';
   static const guestHome = '/';
   static const servicios = '/servicios';
   static const productos = '/productos';
@@ -41,6 +43,8 @@ class AppRoutes {
 
   static Widget _pageFor(RouteSettings settings) {
     switch (settings.name) {
+      case splash:
+        return const SplashGate();
       case guestHome:
         return const GuestHomeView();
       case servicios:

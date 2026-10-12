@@ -7,7 +7,9 @@ plugins {
 android {
     namespace = "com.tonystylo.stylo_barber_connect"
     compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
+    // Fijo al NDK side-by-side instalado en el SDK local.
+    // Evita que Gradle invoque sdkmanager (CLI deprecado) para auto-descargar.
+    ndkVersion = "28.2.13676358"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17

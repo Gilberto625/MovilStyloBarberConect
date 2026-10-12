@@ -11,12 +11,10 @@ import 'viewmodels/client_citas_viewmodel.dart';
 import 'viewmodels/home_guest_viewmodel.dart';
 import 'viewmodels/secretaria_gestion_viewmodel.dart';
 import 'viewmodels/secretaria_hoy_viewmodel.dart';
-import 'models/auth_models.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final scope = AppScope.create();
-  await scope.authViewModel.bootstrap();
   runApp(StyloBarberApp(scope: scope));
 }
 
@@ -24,15 +22,6 @@ class StyloBarberApp extends StatelessWidget {
   const StyloBarberApp({super.key, required this.scope});
 
   final AppScope scope;
-
-  String get _initialRoute {
-    final auth = scope.authViewModel;
-    if (auth.phase == AuthPhase.authenticated) {
-      if (auth.role.isStaffPanel) return AppRoutes.secretaryHome;
-      return AppRoutes.clientHome;
-    }
-    return AppRoutes.guestHome;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +49,7 @@ class StyloBarberApp extends StatelessWidget {
         title: AppConfig.appName,
         debugShowCheckedModeBanner: false,
         theme: AppTheme.panel(),
-        initialRoute: _initialRoute,
+        initialRoute: AppRoutes.splash,
         onGenerateRoute: AppRoutes.onGenerateRoute,
       ),
     );
