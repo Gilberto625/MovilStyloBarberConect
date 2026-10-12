@@ -89,6 +89,45 @@ class ProductoDto {
   }
 }
 
+class HorarioDiaDto {
+  const HorarioDiaDto({
+    required this.diaSemana,
+    this.abierto,
+    this.apertura,
+    this.cierre,
+  }) : assert(diaSemana >= 0 && diaSemana <= 6);
+
+  final int diaSemana;
+  final bool? abierto;
+  final String? apertura;
+  final String? cierre;
+
+  bool get cerrado => abierto == false;
+
+  static HorarioDiaDto? tryFromJson(Map<dynamic, dynamic> json) {
+    final rawDia = json['dia_semana'];
+    final dia = rawDia is int
+        ? rawDia
+        : rawDia is String
+        ? int.tryParse(rawDia.trim())
+        : null;
+    if (dia == null || dia < 0 || dia > 6) return null;
+
+    return HorarioDiaDto(
+      diaSemana: dia,
+      abierto: json['abierto'] is bool ? json['abierto'] as bool : null,
+      apertura: _optionalText(json['apertura']),
+      cierre: _optionalText(json['cierre']),
+    );
+  }
+
+  static String? _optionalText(Object? value) {
+    if (value is! String) return null;
+    final text = value.trim();
+    return text.isEmpty ? null : text;
+  }
+}
+
 class ContactoDto {
   const ContactoDto({
     required this.telefono,
@@ -102,6 +141,7 @@ class ContactoDto {
     required this.logoUrl,
     required this.whatsappUrl,
     required this.googleMapsUrl,
+    this.horariosPorDia = const [],
   });
 
   final String telefono;
@@ -115,6 +155,7 @@ class ContactoDto {
   final String logoUrl;
   final String whatsappUrl;
   final String googleMapsUrl;
+  final List<HorarioDiaDto> horariosPorDia;
 
   factory ContactoDto.fromJson(Map<String, dynamic> json) {
     return ContactoDto(
@@ -130,7 +171,20 @@ class ContactoDto {
       logoUrl: (json['logo_url'] ?? '').toString(),
       whatsappUrl: (json['whatsapp_url'] ?? '').toString(),
       googleMapsUrl: (json['google_maps_url'] ?? '').toString(),
+      horariosPorDia: _parseHorarios(json['horarios_por_dia']),
     );
+  }
+
+  static List<HorarioDiaDto> _parseHorarios(Object? raw) {
+    if (raw is! List) return const [];
+    final horarios = <HorarioDiaDto>[];
+    for (final item in raw) {
+      if (item is! Map) continue;
+      final horario = HorarioDiaDto.tryFromJson(item);
+      if (horario != null) horarios.add(horario);
+    }
+    horarios.sort((a, b) => a.diaSemana.compareTo(b.diaSemana));
+    return List<HorarioDiaDto>.unmodifiable(horarios);
   }
 
   static ContactoDto empty() => const ContactoDto(
