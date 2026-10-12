@@ -18,59 +18,46 @@ class AppRoutes {
   static const secretaryCitaDetail = '/secretaria/cita';
 
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
+    final page = _pageFor(settings);
+    return PageRouteBuilder<void>(
+      settings: settings,
+      transitionDuration: const Duration(milliseconds: 240),
+      reverseTransitionDuration: const Duration(milliseconds: 180),
+      pageBuilder: (context, animation, secondaryAnimation) => page,
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        if (MediaQuery.disableAnimationsOf(context)) return child;
+        return FadeTransition(
+          opacity: CurvedAnimation(parent: animation, curve: Curves.easeOut),
+          child: child,
+        );
+      },
+    );
+  }
+
+  static Widget _pageFor(RouteSettings settings) {
     switch (settings.name) {
       case guestHome:
-        return MaterialPageRoute(
-          builder: (_) => const GuestHomeView(),
-          settings: settings,
-        );
+        return const GuestHomeView();
       case servicios:
-        return MaterialPageRoute(
-          builder: (_) => const ServiciosListView(),
-          settings: settings,
-        );
+        return const ServiciosListView();
       case productos:
-        return MaterialPageRoute(
-          builder: (_) => const ProductosListView(),
-          settings: settings,
-        );
+        return const ProductosListView();
       case login:
-        return MaterialPageRoute(
-          builder: (_) => const LoginView(),
-          settings: settings,
-        );
+        return const LoginView();
       case verify2fa:
-        return MaterialPageRoute(
-          builder: (_) => const Verify2FAView(),
-          settings: settings,
-        );
+        return const Verify2FAView();
       case clientHome:
-        return MaterialPageRoute(
-          builder: (_) => const ClientHomeShell(),
-          settings: settings,
-        );
+        return const ClientHomeShell();
       case secretaryHome:
-        return MaterialPageRoute(
-          builder: (_) => const SecretaryHomeView(),
-          settings: settings,
-        );
+        return const SecretaryHomeView();
       case secretaryCitaDetail:
         final cita = settings.arguments;
         if (cita is! SecretariaCitaDto) {
-          return MaterialPageRoute(
-            builder: (_) =>
-                const Scaffold(body: Center(child: Text('Cita no válida'))),
-          );
+          return const Scaffold(body: Center(child: Text('Cita no válida')));
         }
-        return MaterialPageRoute(
-          builder: (_) => SecretaryCitaDetailView(cita: cita),
-          settings: settings,
-        );
+        return SecretaryCitaDetailView(cita: cita);
       default:
-        return MaterialPageRoute(
-          builder: (_) => const GuestHomeView(),
-          settings: settings,
-        );
+        return const GuestHomeView();
     }
   }
 }
