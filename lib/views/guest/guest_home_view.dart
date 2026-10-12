@@ -37,11 +37,11 @@ class _GuestHomeViewState extends State<GuestHomeView> {
         child: Consumer<HomeGuestViewModel>(
           builder: (context, vm, _) {
             if (vm.state == LoadState.loading || vm.state == LoadState.idle) {
-              return const LoadingView(label: 'Cargando catálogo…');
+              return const _GuestLoading();
             }
             if (vm.state == LoadState.error) {
               return ErrorView(
-                message: vm.errorMessage ?? 'No se pudo cargar la información.',
+                message: _guestErrorMessage(vm.errorMessage),
                 onRetry: vm.load,
               );
             }
@@ -50,7 +50,12 @@ class _GuestHomeViewState extends State<GuestHomeView> {
               color: AppColors.gold,
               onRefresh: vm.load,
               child: ListView(
-                padding: const EdgeInsets.fromLTRB(20, 12, 20, 32),
+                padding: EdgeInsets.fromLTRB(
+                  wide ? 28 : 20,
+                  12,
+                  wide ? 28 : 20,
+                  32,
+                ),
                 children: [
                   Row(
                     children: [
@@ -135,10 +140,7 @@ class _GuestHomeViewState extends State<GuestHomeView> {
                     ),
                   if (vm.promociones.isNotEmpty) ...[
                     const SizedBox(height: 28),
-                    Text(
-                      'Promociones',
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
+                    const _SectionHeading(title: 'Promociones'),
                     const SizedBox(height: 12),
                     SizedBox(
                       height: 120,
@@ -169,20 +171,13 @@ class _GuestHomeViewState extends State<GuestHomeView> {
                     ),
                   ],
                   const SizedBox(height: 28),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          'Servicios',
-                          style: Theme.of(context).textTheme.titleLarge,
-                        ),
-                      ),
-                      TextButton(
-                        onPressed: () =>
-                            Navigator.pushNamed(context, AppRoutes.servicios),
-                        child: const Text('Ver todos'),
-                      ),
-                    ],
+                  _SectionHeading(
+                    title: 'Servicios',
+                    action: TextButton(
+                      onPressed: () =>
+                          Navigator.pushNamed(context, AppRoutes.servicios),
+                      child: const Text('Ver todos'),
+                    ),
                   ),
                   const SizedBox(height: 8),
                   if (vm.serviciosDestacados.isEmpty)
@@ -207,20 +202,13 @@ class _GuestHomeViewState extends State<GuestHomeView> {
                       ),
                     ),
                   const SizedBox(height: 28),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          'Productos',
-                          style: Theme.of(context).textTheme.titleLarge,
-                        ),
-                      ),
-                      TextButton(
-                        onPressed: () =>
-                            Navigator.pushNamed(context, AppRoutes.productos),
-                        child: const Text('Ver todos'),
-                      ),
-                    ],
+                  _SectionHeading(
+                    title: 'Productos',
+                    action: TextButton(
+                      onPressed: () =>
+                          Navigator.pushNamed(context, AppRoutes.productos),
+                      child: const Text('Ver todos'),
+                    ),
                   ),
                   const SizedBox(height: 8),
                   if (vm.productosDestacados.isEmpty)
@@ -245,10 +233,7 @@ class _GuestHomeViewState extends State<GuestHomeView> {
                       ),
                     ),
                   const SizedBox(height: 28),
-                  Text(
-                    'Encuéntranos',
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
+                  const _SectionHeading(title: 'Encuéntranos'),
                   const SizedBox(height: 12),
                   Container(
                     width: double.infinity,
@@ -256,29 +241,40 @@ class _GuestHomeViewState extends State<GuestHomeView> {
                     decoration: BoxDecoration(
                       color: AppColors.guestCard,
                       borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: AppColors.border),
+                      border: Border.all(
+                        color: AppColors.gold.withValues(alpha: 0.28),
+                      ),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        if (c.direccion.isNotEmpty) Text(c.direccion),
-                        if (c.horario.isNotEmpty) ...[
-                          const SizedBox(height: 8),
+                        if (c.direccion.isNotEmpty)
+                          _ContactLine(
+                            icon: Icons.place_outlined,
+                            text: c.direccion,
+                          ),
+                        if (c.horario.isNotEmpty)
+                          _ContactLine(icon: Icons.schedule, text: c.horario),
+                        if (c.telefono.isNotEmpty)
+                          _ContactLine(
+                            icon: Icons.phone_outlined,
+                            text: c.telefono,
+                          ),
+                        if (c.correo.isNotEmpty)
+                          _ContactLine(
+                            icon: Icons.mail_outline,
+                            text: c.correo,
+                          ),
+                        if (c.direccion.isEmpty &&
+                            c.horario.isEmpty &&
+                            c.telefono.isEmpty &&
+                            c.correo.isEmpty)
                           Text(
-                            c.horario,
+                            'La ubicación y el horario aparecen cuando el servidor responde.',
                             style: TextStyle(
-                              color: AppColors.text.withValues(alpha: 0.75),
+                              color: AppColors.text.withValues(alpha: 0.7),
                             ),
                           ),
-                        ],
-                        if (c.telefono.isNotEmpty) ...[
-                          const SizedBox(height: 8),
-                          Text(c.telefono),
-                        ],
-                        if (c.correo.isNotEmpty) ...[
-                          const SizedBox(height: 4),
-                          Text(c.correo),
-                        ],
                       ],
                     ),
                   ),
@@ -287,6 +283,102 @@ class _GuestHomeViewState extends State<GuestHomeView> {
             );
           },
         ),
+      ),
+    );
+  }
+}
+
+String _guestErrorMessage(String? raw) {
+  final text = raw ?? '';
+  if (text.contains('Failed to fetch') ||
+      text.contains('ClientException') ||
+      text.contains('SocketException') ||
+      text.contains('Timeout')) {
+    return 'No se pudo conectar con la barbería. Si el servidor está dormido, ábrelo y pulsa Reintentar.';
+  }
+  if (text.isEmpty) return 'No se pudo cargar la información.';
+  return text;
+}
+
+class _GuestLoading extends StatelessWidget {
+  const _GuestLoading();
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const SizedBox(
+            width: 140,
+            child: LinearProgressIndicator(
+              minHeight: 2,
+              color: AppColors.gold,
+              backgroundColor: Color(0xFF24302B),
+              borderRadius: BorderRadius.all(Radius.circular(2)),
+            ),
+          ),
+          const SizedBox(height: 14),
+          Text(
+            'Cargando catálogo',
+            style: TextStyle(
+              color: AppColors.text.withValues(alpha: 0.7),
+              letterSpacing: 0.6,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _SectionHeading extends StatelessWidget {
+  const _SectionHeading({required this.title, this.action});
+
+  final String title;
+  final Widget? action;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(title, style: Theme.of(context).textTheme.titleLarge),
+              const SizedBox(height: 6),
+              Container(
+                width: 36,
+                height: 2,
+                color: AppColors.gold.withValues(alpha: 0.85),
+              ),
+            ],
+          ),
+        ),
+        ?action,
+      ],
+    );
+  }
+}
+
+class _ContactLine extends StatelessWidget {
+  const _ContactLine({required this.icon, required this.text});
+
+  final IconData icon;
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(icon, size: 18, color: AppColors.gold),
+          const SizedBox(width: 10),
+          Expanded(child: Text(text)),
+        ],
       ),
     );
   }
