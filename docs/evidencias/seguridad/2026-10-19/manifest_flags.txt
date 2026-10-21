@@ -1,0 +1,15 @@
+# Atributos del <application> en el AndroidManifest compilado (aapt2 dump xmltree)
+## app-debug.apk
+  debuggable(0x0101000f)=true
+  allowBackup(0x01010280)=false
+  usesCleartextTraffic(0x010104ec)=true
+  networkSecurityConfig(0x01010527)=@0x7f0e0000
+## app-release-plain.apk
+  allowBackup(0x01010280)=false
+## app-release-obf.apk
+  allowBackup(0x01010280)=false
+
+# Paquete instalado en el emulador (dumpsys package): APK ofuscado
+versionName=0.1.0
+flags=[ HAS_CODE ALLOW_CLEAR_USER_DATA ]
+pkgFlags=[ HAS_CODE ALLOW_CLEAR_USER_DATA ]
