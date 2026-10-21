@@ -1,0 +1,46 @@
+Flutter 3.47.7 • channel stable • https://github.com/flutter/flutter.git
+
+Resolving dependencies...
+Downloading packages...
+  code_assets 1.2.1 (2.1.0 available)
+  cupertino_icons 1.0.9 (2.0.0 available)
+  flutter_secure_storage 9.2.4 (11.2.0 available)
+  flutter_secure_storage_linux 1.2.3 (3.0.3 available)
+  flutter_secure_storage_macos 3.1.3 (4.0.0 available)
+  flutter_secure_storage_platform_interface 1.1.2 (2.1.1 available)
+  flutter_secure_storage_web 1.2.1 (2.1.1 available)
+  flutter_secure_storage_windows 3.1.2 (4.2.2 available)
+  google_fonts 6.3.3 (9.0.0 available)
+  hooks 2.0.2 (2.2.0 available)
+  js 0.6.7 (0.7.2 available)
+  material_color_utilities 0.13.0 (0.13.1 available)
+  meta 1.18.3 (1.19.0 available)
+  objective_c 9.5.0 (9.6.2 available)
+  record_use 0.6.0 (1.1.1 available)
+  test_api 0.7.12 (0.7.15 available)
+  vector_math 2.4.0 (2.4.3 available)
+  vm_service 15.3.0 (15.4.0 available)
+  win32 5.15.0 (6.4.0 available)
+Got dependencies!
+19 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+00:00 +0: loading <repo>/test/integration/api_client_refresh_test.dart
+00:00 +0: <repo>/test/integration/api_client_refresh_test.dart: I-401 ApiClient con MockClient (GH#69) 401 → refresh → reintento con el token nuevo
+00:00 +1: <repo>/test/integration/api_client_refresh_test.dart: I-401 ApiClient con MockClient (GH#69) 401 → refresh → reintento con el token nuevo
+00:00 +2: <repo>/test/integration/repositories_http_test.dart: CatalogRepository 500 del catálogo llega como error, no como lista vacía
+00:00 +3: <repo>/test/integration/api_client_refresh_test.dart: I-401 ApiClient con MockClient (GH#69) refresh sin rotación guarda solo el access nuevo
+00:00 +4: <repo>/test/integration/repositories_http_test.dart: CitasRepository 200: mis citas con Bearer
+00:00 +5: <repo>/test/integration/api_client_refresh_test.dart: I-401 ApiClient con MockClient (GH#69) refresh rechazado → borra tokens, avisa sesión vencida y lanza 401
+00:00 +6: <repo>/test/integration/repositories_http_test.dart: CitasRepository crear cita envía el cuerpo que espera Django
+00:00 +7: <repo>/test/integration/repositories_http_test.dart: CitasRepository crear cita envía el cuerpo que espera Django
+00:00 +8: <repo>/test/integration/api_client_refresh_test.dart: I-401 ApiClient con MockClient (GH#69) un 401 en login (sin auth) no intenta refresh ni cierra sesión
+00:00 +9: <repo>/test/integration/repositories_http_test.dart: CitasRepository 400 y 409 al crear cita no se toman como creadas
+00:00 +10: <repo>/test/integration/api_client_refresh_test.dart: I-401 ApiClient con MockClient (GH#69) errores HTTP traen el mensaje de Django (error, detail o texto)
+00:00 +11: <repo>/test/integration/api_client_refresh_test.dart: I-401 ApiClient con MockClient (GH#69) errores HTTP traen el mensaje de Django (error, detail o texto)
+00:00 +12: <repo>/test/integration/repositories_http_test.dart: SecretariaRepository 403 de citas del día (rol sin permiso) llega como prohibido
+00:00 +13: <repo>/test/integration/api_client_refresh_test.dart: I-401 ApiClient con MockClient (GH#69) la query se codifica sobre la URL base
+00:00 +14: <repo>/test/integration/repositories_http_test.dart: SecretariaRepository no asistió y cobrar mandan la acción y el método correctos
+00:00 +15: <repo>/test/integration/repositories_http_test.dart: SecretariaRepository 500 al cobrar no se toma como cobrado
+00:00 +16: <repo>/test/integration/repositories_http_test.dart: AuthRepository login con 2FA no guarda tokens; login directo sí
+00:00 +17: <repo>/test/integration/repositories_http_test.dart: AuthRepository logout local borra tokens y datos de sesión (PM09)
+00:01 +18: All tests passed!
