@@ -1,0 +1,13 @@
+# Prueba local de tool/coverage_gate.sh sobre develop (flutter test --coverage)
+$ bash tool/coverage_gate.sh 55
+Cobertura de líneas: 55.39 % (2031/3667). Mínimo: 55 %.
+exit=0
+
+$ bash tool/coverage_gate.sh 99   # debe fallar
+Cobertura de líneas: 55.39 % (2031/3667). Mínimo: 99 %.
+::error::La cobertura (55.39 %) bajó del mínimo (99 %).
+exit=1
+
+$ bash tool/coverage_gate.sh 55 /no/existe.info   # debe fallar
+::error::No existe /no/existe.info. Corre flutter test --coverage antes del gate.
+exit=1

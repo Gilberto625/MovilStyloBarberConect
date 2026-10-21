@@ -83,6 +83,32 @@ flutter build apk --release --obfuscate --split-debug-info=build/symbols
 Guarda `build/symbols` fuera del repo público (por versión/build).
 La firma release actual usa claves debug temporalmente; no publicar en Play Store sin keystore autorizado.
 
+### Release ofuscado
+
+El release combina dos capas:
+- **R8** (`android/app/build.gradle.kts`: `isMinifyEnabled`, `isShrinkResources`, `proguard-rules.pro`) ofusca y recorta el código Java/Kotlin y genera `mapping.txt`.
+- **`--obfuscate`** renombra el código Dart dentro de `libapp.so` y deja los símbolos aparte.
+
+```bash
+# Usa la versión de pubspec.yaml en la carpeta de símbolos
+flutter build apk       --release --obfuscate --split-debug-info=build/symbols/0.1.0+1
+flutter build appbundle --release --obfuscate --split-debug-info=build/symbols/0.1.0+1   # Play
+```
+
+Después de cada build de release, guarda **fuera del repo** y por versión:
+- `build/symbols/<versión>/` (símbolos Dart);
+- `build/app/outputs/mapping/release/mapping.txt` (R8).
+
+Un lugar privado del equipo (unidad compartida o un secreto cifrado) sirve; el repo y los artefactos de Actions no, porque el repo es público. Con eso se desofusca un crash:
+
+```bash
+flutter symbolize -i stacktrace.txt -d build/symbols/0.1.0+1/app.android-arm64.symbols
+```
+
+- La firma lee `android/key.properties` si existe; si no, usa la clave debug. El keystore lo crea el equipo.
+- El release no permite HTTP sin cifrar: para probar contra el backend local usa un build debug.
+- Evidencia de la verificación (strings, hashes, manifest, JADX/MobSF): `docs/evidencias/seguridad/2026-10-19/`.
+
 ## Endpoints conectados
 
 | Área | Endpoints |
@@ -105,10 +131,24 @@ La firma release actual usa claves debug temporalmente; no publicar en Play Stor
 
 ```bash
 flutter analyze
-flutter test
+flutter test --coverage
 ```
 
 Incluye ViewModels (auth, citas, secretaría), repositorios fake, widgets de home y manejo de errores/estados vacíos.
+
+Pruebas unitarias (Actividad 3):
+
+| Carpeta | Qué contiene |
+|---|---|
+| `test/unit/` | `PM-U01` (validador de correo), `fromJson` con fixtures y ViewModels con Mockito (`verify`, errores HTTP, timeout, doble toque) |
+| `test/fixtures/` | JSON con la forma real de las respuestas de Django, con datos ficticios |
+| `test/mocks/` | `mocks.dart` declara los mocks; `mocks.mocks.dart` es generado y se versiona para que CI no necesite `build_runner` |
+
+Si cambia la firma de un repository, regenera los mocks y súbelos en el mismo PR:
+
+```bash
+dart run build_runner build --delete-conflicting-outputs
+```
 
 ## Notas
 
