@@ -339,16 +339,38 @@ class _DetailScaffoldState extends State<_DetailScaffold> {
               collapseMode: CollapseMode.parallax,
               background: ColoredBox(
                 color: AppColors.surface,
-                child: Padding(
-                  padding: widget.imagePadding,
-                  child: CatalogHero(tag: widget.heroTag, child: widget.image),
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    Padding(
+                      padding: widget.imagePadding,
+                      child: CatalogHero(
+                        tag: widget.heroTag,
+                        child: widget.image,
+                      ),
+                    ),
+                    // Velo arriba: la barra de estado y Volver se leen sobre
+                    // cualquier foto.
+                    const IgnorePointer(
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment(0, -0.4),
+                            colors: [Color(0x990A100E), Color(0x000A100E)],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
           ),
           SliverToBoxAdapter(
             child: Center(
-              child: ConstrainedBox(
+              child: Container(
+                width: double.infinity,
                 constraints: const BoxConstraints(
                   maxWidth: AppSpacing.maxContent,
                 ),
@@ -362,6 +384,7 @@ class _DetailScaffoldState extends State<_DetailScaffold> {
                   child: QuietEntrance(
                     rise: 12,
                     child: Column(
+                      mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: widget.children,
                     ),

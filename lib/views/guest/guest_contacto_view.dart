@@ -437,6 +437,7 @@ class _Horarios extends StatelessWidget {
             );
             return Container(
               key: ValueKey('guest-schedule-row-${day.diaSemana}'),
+              width: double.infinity,
               padding: const EdgeInsets.symmetric(
                 horizontal: AppSpacing.md,
                 vertical: AppSpacing.sm + 2,

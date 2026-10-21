@@ -184,7 +184,8 @@ class GuestServiceCard extends StatelessWidget {
                 child: SizedBox.expand(
                   child: GuestPremiumImage(
                     url: servicio.imagenUrl,
-                    fit: BoxFit.contain,
+                    fit: BoxFit.cover,
+                    alignment: const Alignment(0, -0.2),
                     label: servicio.nombre,
                     fallbackIcon: Icons.content_cut_rounded,
                   ),

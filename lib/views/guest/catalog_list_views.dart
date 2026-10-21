@@ -227,7 +227,7 @@ class _Centered extends StatelessWidget {
         constraints: BoxConstraints(
           maxWidth: wide ? 1040 : AppSpacing.maxContent,
         ),
-        child: child,
+        child: SizedBox(width: double.infinity, child: child),
       ),
     );
   }
