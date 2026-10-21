@@ -4,12 +4,19 @@ on:
   pull_request:
     branches:
       - develop
+      - release
       - main
   push:
     branches:
       - develop
+      - release
       - main
   workflow_dispatch:
+    inputs:
+      build_release:
+        description: "Compilar también el APK release ofuscado (build-release)"
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -73,6 +80,13 @@ jobs:
           set -o pipefail
           flutter test --coverage --reporter expanded | tee build/reports/flutter/flutter-test.log
 
+      # PR-01: la cobertura no puede bajar del mínimo acordado (sube por hito).
+      - name: Coverage gate
+        shell: bash
+        run: |
+          set -o pipefail
+          bash tool/coverage_gate.sh 55 | tee build/reports/flutter/coverage-gate.log
+
       - name: Upload Flutter evidence
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
@@ -83,6 +97,59 @@ jobs:
             coverage/lcov.info
           if-no-files-found: warn
           retention-days: 30
+
+  # Comprueba que el release compila con R8 y --obfuscate. Es manual para no
+  # alargar cada PR. No sube símbolos, mapping.txt ni el APK: el repo es público.
+  build-release:
+    name: Release build check (R8 + obfuscate)
+    if: github.event_name == 'workflow_dispatch' && inputs.build_release
+    needs: flutter-quality
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - name: Setup Java 17
+        uses: actions/setup-java@cf277c60eb25467037889841efdb72551f06f6c3 # v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Install NDK
+        shell: bash
+        run: yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --install "ndk;28.2.13676358" > /dev/null
+
+      - name: Build obfuscated release APK
+        run: flutter build apk --release --obfuscate --split-debug-info=build/symbols/ci
+
+      - name: Verify R8 mapping and Dart obfuscation
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s build/app/outputs/mapping/release/mapping.txt
+          unzip -p build/app/outputs/flutter-apk/app-release.apk lib/arm64-v8a/libapp.so > libapp.so
+          hits=$(grep -a -o -E 'AuthViewModel|SecretariaGestionViewModel|_tryRefresh' libapp.so | wc -l)
+          {
+            echo "### Release check"
+            echo "- mapping.txt de R8: presente"
+            echo "- Nombres de clase Dart visibles en libapp.so: $hits (esperado 0)"
+            echo "- SHA-256 del APK: \`$(sha256sum build/app/outputs/flutter-apk/app-release.apk | cut -d' ' -f1)\`"
+          } >> "$GITHUB_STEP_SUMMARY"
+          if [ "$hits" -ne 0 ]; then
+            echo "::error::libapp.so conserva nombres de clase: --obfuscate no se aplicó."
+            exit 1
+          fi
 
   sast-semgrep:
     name: SAST Semgrep gate
