@@ -224,11 +224,18 @@ class AuthViewModel extends ChangeNotifier {
   }
 
   Future<PerfilDto?> loadPerfil() async {
+    // Sin sesión no hay perfil que pedir: evita un 401 que después se
+    // mostraría como error en la pantalla de acceso.
+    if (phase == AuthPhase.guest) return null;
     try {
-      perfil = await _repository.getPerfil();
+      final leido = await _repository.getPerfil();
+      // Si la sesión se cerró mientras llegaba la respuesta, se descarta.
+      if (phase == AuthPhase.guest) return null;
+      perfil = leido;
       notifyListeners();
       return perfil;
     } catch (e) {
+      if (phase == AuthPhase.guest) return null;
       errorMessage = e.toString();
       notifyListeners();
       return null;
