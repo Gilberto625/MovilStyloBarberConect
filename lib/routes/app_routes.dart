@@ -45,9 +45,13 @@ class AppRoutes {
   static const editarPerfil = '/privacidad/editar-perfil';
   static const avisoPrivacidad = '/aviso-privacidad';
 
-  static Route<dynamic> onGenerateRoute(RouteSettings settings) {
-    final page = _pageFor(settings);
-    return PageRouteBuilder<void>(
+  static Route<dynamic> onGenerateRoute(RouteSettings settings) =>
+      page<void>(_pageFor(settings), settings: settings);
+
+  /// Ruta con la transición de la marca. Sirve también para pantallas que
+  /// reciben su ViewModel por constructor (carrito, detalle de cita).
+  static Route<T> page<T>(Widget page, {RouteSettings? settings}) {
+    return PageRouteBuilder<T>(
       settings: settings,
       transitionDuration: AppMotion.page,
       reverseTransitionDuration: AppMotion.quick,

@@ -40,7 +40,15 @@ void main() {
     await tester.tap(find.byTooltip('Actualizar citas'));
     await tester.pumpAndSettle();
     expect(find.text('Corte clásico'), findsOneWidget);
-    expect(find.text('2026-10-14'), findsWidgets);
+    // La fecha se muestra legible ("14 oct"), no como 2026-10-14.
+    expect(
+      find.descendant(
+        of: find.byKey(const ValueKey('cita-3')),
+        matching: find.text('oct'),
+      ),
+      findsOneWidget,
+    );
+    expect(find.text('2026-10-14'), findsNothing);
 
     citas.misCitas = const [];
     citas.citasError = ApiException('Sin conexión.');
@@ -81,6 +89,11 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.text('11:30'));
     await tester.pumpAndSettle();
+    expect(find.text('Confirmar reserva'), findsNothing);
+    // Paso 4: el resumen se revisa antes de confirmar.
+    await tester.tap(find.byKey(const Key('agendar_continuar')));
+    await tester.pumpAndSettle();
+    expect(find.text('Luis Mora'), findsOneWidget);
     expect(find.text('Confirmar reserva'), findsOneWidget);
     await tester.tap(find.text('Confirmar reserva'));
     await tester.pumpAndSettle();
@@ -110,9 +123,13 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.text('11:30'));
     await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const Key('agendar_continuar')));
+    await tester.pumpAndSettle();
     await tester.tap(find.text('Confirmar reserva'));
     await tester.pumpAndSettle();
     expect(citas.created, 0);
+    // El usuario sigue en el resumen para elegir otro horario.
+    expect(find.text('Paso 4 de 4: Resumen'), findsOneWidget);
     expect(find.textContaining('ya no está disponible'), findsWidgets);
     expect(tester.takeException(), isNull);
     auth.dispose();
