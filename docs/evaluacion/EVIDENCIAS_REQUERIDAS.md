@@ -57,9 +57,9 @@ Leyenda: ✅ disponible · ⚠️ parcial · ❌ ausente · 🔒 bloqueado exter
 | ARCO Rectificación (editar + PUT) | ❌ | Backend PUT existe; UI no |
 | ARCO Cancelación (eliminar cuenta) | 🔒 | **Sin endpoint** Django — evidencia = documento de bloqueo |
 | ARCO Oposición / Opt-Out | ❌ | Definir alcance |
-| `minifyEnabled` + `shrinkResources` + `proguard-rules.pro` | ❌ | Release actual sin R8 |
-| Comando y log `--obfuscate --split-debug-info` | ⚠️ | APK release 47.9 MB + `build/symbols/` |
-| Informe JADX (antes/después ofuscación) | ❌ | — |
+| `minifyEnabled` + `shrinkResources` + `proguard-rules.pro` | ✅ | R8 activo: 95 % de clases renombradas. `docs/evidencias/estatico-2026-10-21/` |
+| Comando y log `--obfuscate --split-debug-info` | ✅ | Antes y después de `libapp.so` (7.41 → 6.16 MB; identificadores a 0) en `docs/evidencias/estatico-2026-10-21/` |
+| Informe JADX (antes/después ofuscación) | ⚠️ | Mismo antes/después con herramientas del SDK; faltan capturas de JADX-GUI |
 | Informe MobSF release | ❌ | — |
 | Suite E2E caja negra + resultados | ❌ | — |
 | Matriz Debug vs Release | ❌ | — |
