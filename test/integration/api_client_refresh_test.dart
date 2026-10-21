@@ -192,12 +192,18 @@ void main() {
         expect(e403.isForbidden, isTrue);
         expect(e403.message, 'No tienes permiso.');
 
+        // Un 5xx sin mensaje de Django muestra un texto para la persona,
+        // no el del servidor ("Internal Server Error").
         final e500 = await _fallo(api.get('/public/servicios/', auth: false));
         expect(e500.statusCode, 500);
-        expect(e500.message, 'Internal Server Error');
+        expect(e500.message, contains('no está disponible'));
+        expect(e500.message, isNot(contains('Internal')));
 
         final e502 = await _fallo(api.get('/public/servicios/', auth: false));
-        expect(e502.message, 'Error del servidor (502).');
+        expect(
+          e502.message,
+          contains('no está disponible en este momento (502)'),
+        );
       },
     );
 

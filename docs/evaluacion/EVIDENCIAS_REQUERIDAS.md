@@ -55,7 +55,7 @@ Leyenda: ✅ disponible · ⚠️ parcial · ❌ ausente · 🔒 bloqueado exter
 | Opt-In desactivado por defecto (captura) | ❌ | — |
 | ARCO Acceso (perfil) | ⚠️ | UI lectura parcial |
 | ARCO Rectificación (editar + PUT) | ❌ | Backend PUT existe; UI no |
-| ARCO Cancelación (eliminar cuenta) | 🔒 | **Sin endpoint** Django — evidencia = documento de bloqueo |
+| ARCO Cancelación (eliminar cuenta) | ✅ | E2E en emulador contra Django local: folio, bloqueo y login rechazado. `docs/evidencias/arco/2026-10-21-cancelacion/` |
 | ARCO Oposición / Opt-Out | ❌ | Definir alcance |
 | `minifyEnabled` + `shrinkResources` + `proguard-rules.pro` | ❌ | Release actual sin R8 |
 | Comando y log `--obfuscate --split-debug-info` | ⚠️ | APK release 47.9 MB + `build/symbols/` |

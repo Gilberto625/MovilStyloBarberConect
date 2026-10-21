@@ -147,3 +147,29 @@ class ConsentimientoPrivacidad {
     );
   }
 }
+
+/// Respuesta de `POST /privacidad/cancelacion/` (ARCO GH#44): la cuenta quedó
+/// bloqueada y sus datos se suprimen en `fechaSupresion`.
+class CancelacionCuenta {
+  const CancelacionCuenta({
+    required this.folio,
+    required this.estado,
+    required this.fechaSupresion,
+    required this.mensaje,
+  });
+
+  final String folio;
+  final String estado;
+
+  /// `AAAA-MM-DD` tal como lo manda Django.
+  final String fechaSupresion;
+  final String mensaje;
+
+  factory CancelacionCuenta.fromJson(Map<String, dynamic> json) =>
+      CancelacionCuenta(
+        folio: (json['folio'] ?? '').toString(),
+        estado: (json['estado'] ?? '').toString(),
+        fechaSupresion: (json['fecha_supresion'] ?? '').toString(),
+        mensaje: (json['mensaje'] ?? '').toString(),
+      );
+}

@@ -7,8 +7,8 @@ import '../services/citas_api_service.dart';
 import '../services/privacidad_api_service.dart';
 
 /// Derechos ARCO con los endpoints que ya existen (GH#42, GH#43) y el aviso de
-/// privacidad con opt-in guardado en Django (GH#41, GH#45). La cancelación
-/// todavía no tiene endpoint.
+/// privacidad con opt-in guardado en Django (GH#41, GH#45) y la cancelación
+/// de la cuenta (GH#44).
 class PrivacidadRepository {
   PrivacidadRepository({
     required AuthApiService auth,
@@ -49,4 +49,10 @@ class PrivacidadRepository {
   Future<ConsentimientoPrivacidad> guardarConsentimiento(
     ConsentimientoPrivacidad c,
   ) => _preferencias.guardarPreferencias(c);
+
+  /// Bloquea la cuenta en el servidor; la sesión local la cierra quien llama.
+  Future<CancelacionCuenta> cancelarCuenta({
+    required String contrasena,
+    String motivo = '',
+  }) => _preferencias.cancelarCuenta(contrasena: contrasena, motivo: motivo);
 }

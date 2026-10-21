@@ -89,15 +89,29 @@ class ApiClient {
     );
   }
 
+  /// Hace la petición y convierte cualquier falla de transporte (socket,
+  /// DNS, TLS, cliente cerrado) en [NetworkException].
+  Future<http.Response> _enviar(
+    Future<http.Response> Function() request,
+  ) async {
+    try {
+      return await request();
+    } on AppException {
+      rethrow;
+    } on Exception {
+      throw NetworkException();
+    }
+  }
+
   Future<dynamic> _send(
     Future<http.Response> Function() request, {
     required bool auth,
   }) async {
-    var response = await request();
+    var response = await _enviar(request);
     if (auth && response.statusCode == 401) {
       final refreshed = await _tryRefresh();
       if (refreshed) {
-        response = await request();
+        response = await _enviar(request);
       } else {
         await _onSessionExpired?.call();
         throw ApiException.fromBody(401, _tryDecode(response));
@@ -113,10 +127,13 @@ class ApiClient {
       final refresh = await _tokenStorage.readRefresh();
       if (refresh == null || refresh.isEmpty) return false;
 
-      final response = await _http.post(
-        _uri('/auth/token/refresh/'),
-        headers: await _headers(auth: false),
-        body: jsonEncode({'refresh': refresh}),
+      final headers = await _headers(auth: false);
+      final response = await _enviar(
+        () => _http.post(
+          _uri('/auth/token/refresh/'),
+          headers: headers,
+          body: jsonEncode({'refresh': refresh}),
+        ),
       );
       if (response.statusCode < 200 || response.statusCode >= 300) {
         await _tokenStorage.clear();
@@ -140,6 +157,9 @@ class ApiClient {
         await _tokenStorage.saveAccess(access);
       }
       return true;
+    } on NetworkException {
+      // Sin red no se sabe si la sesión venció: no se cierra.
+      rethrow;
     } catch (_) {
       return false;
     } finally {

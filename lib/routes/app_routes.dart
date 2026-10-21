@@ -15,6 +15,7 @@ import '../views/guest/catalog_detail_views.dart';
 import '../views/guest/catalog_list_views.dart';
 import '../views/guest/guest_home_view.dart';
 import '../views/privacy/aviso_privacidad_view.dart';
+import '../views/privacy/eliminar_cuenta_view.dart';
 import '../views/privacy/editar_perfil_view.dart';
 import '../views/privacy/mis_datos_view.dart';
 import '../views/privacy/privacidad_view.dart';
@@ -44,6 +45,7 @@ class AppRoutes {
   static const misDatos = '/privacidad/mis-datos';
   static const editarPerfil = '/privacidad/editar-perfil';
   static const avisoPrivacidad = '/aviso-privacidad';
+  static const eliminarCuenta = '/privacidad/eliminar-cuenta';
 
   static Route<dynamic> onGenerateRoute(RouteSettings settings) =>
       page<void>(_pageFor(settings), settings: settings);
@@ -154,6 +156,13 @@ class AppRoutes {
             context.read<AppScope>().privacidadRepository,
           ),
           child: const EditarPerfilView(),
+        );
+      case eliminarCuenta:
+        return ChangeNotifierProvider(
+          create: (context) => EliminarCuentaViewModel(
+            context.read<AppScope>().privacidadRepository,
+          ),
+          child: const EliminarCuentaView(),
         );
       case avisoPrivacidad:
         return ChangeNotifierProvider(

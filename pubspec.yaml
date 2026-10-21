@@ -31,3 +31,6 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  # Fraunces y Manrope empaquetadas (OFL): la app no descarga fuentes.
+  assets:
+    - assets/google_fonts/
