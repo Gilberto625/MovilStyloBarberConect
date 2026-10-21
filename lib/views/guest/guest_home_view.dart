@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../core/media/variante_imagen.dart';
 import '../../core/theme/app_theme.dart';
 import '../../models/catalog_models.dart';
 import '../../routes/app_routes.dart';
@@ -315,6 +316,7 @@ class _InicioTab extends StatelessWidget {
                       child: GuestPremiumImage(
                         url: promo.bannerUrl,
                         fit: BoxFit.cover,
+                        variante: VarianteImagen.banner,
                         label: promo.nombre,
                         fallbackIcon: Icons.local_offer_outlined,
                       ),
@@ -456,6 +458,7 @@ class _GuestHero extends StatelessWidget {
                       url: image!.imagenUrl,
                       fit: BoxFit.cover,
                       alignment: const Alignment(0, 0.22),
+                      variante: VarianteImagen.portada,
                       label: image!.nombre,
                       fallbackIcon: Icons.content_cut_outlined,
                     ),

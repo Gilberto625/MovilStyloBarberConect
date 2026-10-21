@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../core/media/variante_imagen.dart';
 import '../../core/theme/app_theme.dart';
 import '../../models/catalog_models.dart';
 import '../../routes/app_routes.dart';
@@ -10,6 +11,22 @@ import '../../widgets/common_widgets.dart';
 import 'catalog_detail_views.dart';
 import 'guest_premium_widgets.dart';
 
+/// Empieza a bajar la foto del detalle mientras corre la transición, para que
+/// al llegar no aparezca el indicador de carga. Es la misma imagen que pide
+/// `GuestPremiumImage` con esa variante, así que queda en caché.
+void _precargarFoto(BuildContext context, String url, VarianteImagen variante) {
+  final limpia = url.trim();
+  if (limpia.isEmpty) return;
+  precacheImage(
+    ResizeImage(
+      NetworkImage(urlVariante(limpia, variante)),
+      width: variante.ancho,
+    ),
+    context,
+    onError: (_, _) {},
+  );
+}
+
 /// Abre el detalle de un servicio con su foto como Hero.
 void abrirServicio(
   BuildContext context,
@@ -17,6 +34,7 @@ void abrirServicio(
   required String origen,
   DetalleAccion accion = DetalleAccion.iniciarSesion,
 }) {
+  _precargarFoto(context, servicio.imagenUrl, VarianteImagen.detalle);
   Navigator.pushNamed(
     context,
     AppRoutes.servicioDetalle,
@@ -35,6 +53,7 @@ void abrirProducto(
   required String origen,
   DetalleAccion accion = DetalleAccion.iniciarSesion,
 }) {
+  _precargarFoto(context, producto.imagenUrl, VarianteImagen.productoDetalle);
   Navigator.pushNamed(
     context,
     AppRoutes.productoDetalle,
