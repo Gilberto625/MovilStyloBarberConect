@@ -1,10 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../core/di/app_scope.dart';
 
 import '../models/cita_models.dart';
+import '../viewmodels/auth_viewmodel.dart';
+import '../viewmodels/privacidad_viewmodels.dart';
 import '../views/auth/login_views.dart';
 import '../views/client/client_home_view.dart';
 import '../views/guest/catalog_list_views.dart';
 import '../views/guest/guest_home_view.dart';
+import '../views/privacy/aviso_privacidad_view.dart';
+import '../views/privacy/editar_perfil_view.dart';
+import '../views/privacy/mis_datos_view.dart';
+import '../views/privacy/privacidad_view.dart';
 import '../views/secretary/secretary_gestion_views.dart';
 import '../views/secretary/secretary_home_view.dart';
 import '../views/secretary/secretary_shell.dart';
@@ -23,6 +32,10 @@ class AppRoutes {
   static const secretaryNuevaCita = '/secretaria/cita/nueva';
   static const secretaryClienteCitas = '/secretaria/cliente-citas';
   static const secretaryReprogramar = '/secretaria/cita/editar';
+  static const privacidad = '/privacidad';
+  static const misDatos = '/privacidad/mis-datos';
+  static const editarPerfil = '/privacidad/editar-perfil';
+  static const avisoPrivacidad = '/aviso-privacidad';
 
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
     final page = _pageFor(settings);
@@ -75,6 +88,32 @@ class AppRoutes {
           return const Scaffold(body: Center(child: Text('Cita no válida')));
         }
         return SecretaryReprogramarView(citaId: citaId);
+      case privacidad:
+        return const PrivacidadView();
+      // Las pantallas de privacidad crean su ViewModel por ruta: no comparten
+      // estado entre usuarios (PM09) y se liberan al salir.
+      case misDatos:
+        return ChangeNotifierProvider(
+          create: (context) =>
+              MisDatosViewModel(context.read<AppScope>().privacidadRepository),
+          child: const MisDatosView(),
+        );
+      case editarPerfil:
+        return ChangeNotifierProvider(
+          create: (context) => EditarPerfilViewModel(
+            context.read<AppScope>().privacidadRepository,
+          ),
+          child: const EditarPerfilView(),
+        );
+      case avisoPrivacidad:
+        return ChangeNotifierProvider(
+          create: (context) => AvisoPrivacidadViewModel(
+            context.read<AppScope>().privacidadRepository,
+            autenticado:
+                context.read<AuthViewModel>().phase == AuthPhase.authenticated,
+          ),
+          child: const AvisoPrivacidadView(),
+        );
       default:
         return const GuestHomeView();
     }

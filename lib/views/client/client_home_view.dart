@@ -853,7 +853,18 @@ class _ClientPerfilTabState extends State<_ClientPerfilTab> {
                 ],
               ),
             ),
-          const SizedBox(height: 24),
+          const SizedBox(height: 16),
+          OutlinedButton.icon(
+            key: const Key('perfil_privacidad'),
+            onPressed: () async {
+              await Navigator.pushNamed(context, AppRoutes.privacidad);
+              // Al volver, refleja lo que se haya corregido.
+              if (mounted) await _load();
+            },
+            icon: const Icon(Icons.privacy_tip_outlined),
+            label: const Text('Privacidad y mis datos'),
+          ),
+          const SizedBox(height: 12),
           OutlinedButton(
             onPressed: () async {
               await auth.logout();

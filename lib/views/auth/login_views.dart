@@ -155,6 +155,16 @@ class _LoginViewState extends State<LoginView> {
                       },
                 child: const Text('Volver al inicio'),
               ),
+              TextButton(
+                key: const Key('login_aviso_privacidad'),
+                onPressed: auth.busy
+                    ? null
+                    : () => Navigator.pushNamed(
+                        context,
+                        AppRoutes.avisoPrivacidad,
+                      ),
+                child: const Text('Aviso de privacidad'),
+              ),
             ],
           ),
         ),

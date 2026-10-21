@@ -1,0 +1,75 @@
+Flutter 3.47.7 • channel stable • https://github.com/flutter/flutter.git
+
+Resolving dependencies...
+Downloading packages...
+  build 4.0.11 (5.0.0 available)
+  build_config 1.3.3 (1.4.0 available)
+  build_runner 2.16.2 (2.17.1 available)
+  code_assets 1.2.1 (2.1.0 available)
+  cupertino_icons 1.0.9 (2.0.0 available)
+  flutter_secure_storage 9.2.4 (11.2.0 available)
+  flutter_secure_storage_linux 1.2.3 (3.0.3 available)
+  flutter_secure_storage_macos 3.1.3 (4.0.0 available)
+  flutter_secure_storage_platform_interface 1.1.2 (2.1.1 available)
+  flutter_secure_storage_web 1.2.1 (2.1.1 available)
+  flutter_secure_storage_windows 3.1.2 (4.2.2 available)
+  google_fonts 6.3.3 (9.0.0 available)
+  hooks 2.0.2 (2.2.0 available)
+  js 0.6.7 (0.7.2 available)
+  material_color_utilities 0.13.0 (0.13.1 available)
+  meta 1.18.3 (1.19.0 available)
+  objective_c 9.5.0 (9.6.2 available)
+  record_use 0.6.0 (1.1.1 available)
+  test_api 0.7.12 (0.7.15 available)
+  vector_math 2.4.0 (2.4.3 available)
+  vm_service 15.3.0 (15.4.0 available)
+  win32 5.15.0 (6.4.0 available)
+Got dependencies!
+22 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+00:00 +0: loading <repo>/test/unit/privacidad_test.dart
+00:00 +0: <repo>/test/unit/privacidad_test.dart: (setUpAll)
+00:00 +0: <repo>/test/unit/privacidad_test.dart: Validadores de PUT /perfil/ (mismas reglas que Django) nombre obligatorio de al menos 2 caracteres
+00:00 +1: <repo>/test/unit/privacidad_test.dart: Validadores de PUT /perfil/ (mismas reglas que Django) teléfono opcional de 10 a 15 dígitos, ignorando separadores
+00:00 +2: <repo>/test/unit/privacidad_test.dart: Validadores de PUT /perfil/ (mismas reglas que Django) fecha opcional AAAA-MM-DD, real y no futura
+00:00 +3: <repo>/test/unit/privacidad_test.dart: ARCO-M02 contrato HTTP de PUT /perfil/ (MockClient) envía PUT con Bearer y el cuerpo completo, y lee el perfil nuevo
+00:00 +4: <repo>/test/unit/privacidad_test.dart: ARCO-M02 contrato HTTP de PUT /perfil/ (MockClient) un 400 de Django llega como ApiException con su mensaje
+00:00 +5: <repo>/test/unit/privacidad_test.dart: ARCO-M02 contrato HTTP de PUT /perfil/ (MockClient) el aviso se pide sin token a /public/legal/?tipo=privacidad
+00:00 +6: <repo>/test/unit/privacidad_test.dart: ARCO-M02 EditarPerfilViewModel (Mockito) guarda una vez y conserva avatar y dirección
+00:00 +7: <repo>/test/unit/privacidad_test.dart: ARCO-M02 EditarPerfilViewModel (Mockito) el error del servidor se muestra y no se da por guardado
+00:00 +8: <repo>/test/unit/privacidad_test.dart: ARCO-M02 EditarPerfilViewModel (Mockito) un segundo toque mientras guarda no envía otro PUT
+00:00 +9: <repo>/test/unit/privacidad_test.dart: ARCO-M02 EditarPerfilViewModel (Mockito) sin perfil cargado no se envía nada
+00:00 +10: <repo>/test/unit/privacidad_test.dart: ARCO-M01 MisDatosViewModel si falla el historial, el perfil se muestra igual
+00:00 +11: <repo>/test/unit/privacidad_test.dart: ARCO-M01 MisDatosViewModel si falla el perfil, queda en error y no pide el historial
+00:00 +12: <repo>/test/unit/privacidad_test.dart: ARCO-M05 AvisoPrivacidadViewModel (opt-in en el servidor) con sesión: lee del servidor y sin respuesta previa todo apagado
+00:00 +13: <repo>/test/unit/privacidad_test.dart: ARCO-M05 AvisoPrivacidadViewModel (opt-in en el servidor) sin sesión: muestra el aviso, no pide preferencias ni guarda
+00:00 +14: <repo>/test/unit/privacidad_test.dart: ARCO-M05 AvisoPrivacidadViewModel (opt-in en el servidor) guardar manda la versión del aviso y usa lo que devuelve el servidor
+00:00 +15: <repo>/test/unit/privacidad_test.dart: ARCO-M05 AvisoPrivacidadViewModel (opt-in en el servidor) si el servidor rechaza el guardado, no se da por guardado
+00:00 +16: <repo>/test/unit/privacidad_test.dart: ARCO-M05 AvisoPrivacidadViewModel (opt-in en el servidor) si fallan las preferencias, el aviso se ve y no se puede guardar
+00:00 +17: <repo>/test/unit/privacidad_test.dart: ARCO-M05 AvisoPrivacidadViewModel (opt-in en el servidor) sin aviso a la vista no se puede guardar consentimiento
+00:00 +18: <repo>/test/unit/privacidad_test.dart: ARCO-M05 AvisoPrivacidadViewModel (opt-in en el servidor) si el aviso cambió desde la última respuesta, lo avisa
+00:00 +19: <repo>/test/unit/privacidad_test.dart: ARCO-M05 AvisoPrivacidadViewModel (opt-in en el servidor) la versión del aviso es estable y cambia con el texto
+00:00 +20: <repo>/test/unit/privacidad_test.dart: ARCO-M05 AvisoPrivacidadViewModel (opt-in en el servidor) el JSON sigue el contrato de /privacidad/preferencias/
+00:00 +21: <repo>/test/unit/privacidad_test.dart: ARCO-M05 contrato HTTP de /privacidad/preferencias/ (MockClient) GET y PUT con Bearer; la fecha la pone el servidor
+00:00 +22: <repo>/test/unit/privacidad_test.dart: ARCO-M05 contrato HTTP de /privacidad/preferencias/ (MockClient) un 400 de Django llega como ApiException
+00:00 +23: <repo>/test/unit/privacidad_test.dart: CitaDto vacío no rompe el historial
+00:00 +24: <repo>/test/unit/privacidad_test.dart: (tearDownAll)
+00:00 +24: <repo>/test/privacidad_views_test.dart: (setUpAll)
+00:00 +24: <repo>/test/privacidad_views_test.dart: ARCO-M01 Mis datos muestra carga, luego perfil e historial del titular
+00:01 +25: <repo>/test/privacidad_views_test.dart: ARCO-M01 Mis datos historial vacío y datos sin registrar se dicen claro
+00:01 +26: <repo>/test/privacidad_views_test.dart: ARCO-M01 Mis datos error del servidor ofrece reintentar y vuelve a pedir
+00:01 +27: <repo>/test/privacidad_views_test.dart: ARCO-M02 Corregir mis datos un teléfono inválido no llega al servidor
+00:01 +28: <repo>/test/privacidad_views_test.dart: ARCO-M02 Corregir mis datos guardar envía un PUT y regresa con true
+00:02 +29: <repo>/test/privacidad_views_test.dart: ARCO-M02 Corregir mis datos el rechazo del servidor se muestra y no cierra
+00:02 +30: <repo>/test/privacidad_views_test.dart: ARCO-M02 Corregir mis datos 360×800 con texto 1.3 sin overflow
+00:02 +31: <repo>/test/privacidad_views_test.dart: ARCO-M05 Aviso de privacidad y opt-in muestra el aviso y los permisos empiezan apagados
+00:02 +32: <repo>/test/privacidad_views_test.dart: ARCO-M05 Aviso de privacidad y opt-in activar uno y guardar lo persiste con la versión del aviso
+00:03 +33: <repo>/test/privacidad_views_test.dart: ARCO-M05 Aviso de privacidad y opt-in error de red: reintentar y nada que guardar
+00:03 +34: <repo>/test/privacidad_views_test.dart: ARCO-M05 Aviso de privacidad y opt-in sin sesión: aviso visible, sin permisos y sin pedirlos
+00:03 +35: <repo>/test/privacidad_views_test.dart: ARCO-M05 Aviso de privacidad y opt-in si fallan las preferencias, se ve el error y reintentar
+00:03 +36: <repo>/test/privacidad_views_test.dart: ARCO-M05 Aviso de privacidad y opt-in aviso no publicado muestra estado vacío
+00:03 +37: <repo>/test/privacidad_views_test.dart: ARCO-M05 Aviso de privacidad y opt-in 360×800 con texto 1.3 sin overflow
+00:03 +38: <repo>/test/privacidad_views_test.dart: Entradas a privacidad el centro de privacidad lleva a sus tres pantallas
+00:03 +39: <repo>/test/privacidad_views_test.dart: Entradas a privacidad el login enlaza al aviso de privacidad
+00:03 +40: <repo>/test/privacidad_views_test.dart: (tearDownAll)
+00:03 +40: All tests passed!

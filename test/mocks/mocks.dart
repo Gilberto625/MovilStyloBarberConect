@@ -5,12 +5,14 @@ import 'package:mockito/annotations.dart';
 import 'package:stylo_barber_connect/repositories/auth_repository.dart';
 import 'package:stylo_barber_connect/repositories/catalog_repository.dart';
 import 'package:stylo_barber_connect/repositories/citas_repository.dart';
+import 'package:stylo_barber_connect/repositories/privacidad_repository.dart';
 import 'package:stylo_barber_connect/repositories/secretaria_repository.dart';
 
 @GenerateNiceMocks([
   MockSpec<AuthRepository>(),
   MockSpec<CatalogRepository>(),
   MockSpec<CitasRepository>(),
+  MockSpec<PrivacidadRepository>(),
   MockSpec<SecretariaRepository>(),
 ])
 void main() {}
