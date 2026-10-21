@@ -1,0 +1,11 @@
+00:36 +114: All tests passed!
+Cobertura total (coverage/lcov.info): 2284/3667 líneas = 62.29%
+   43.8%  lib\repositories\auth_repository.dart
+   81.0%  lib\repositories\citas_repository.dart
+   16.7%  lib\repositories\secretaria_repository.dart
+  100.0%  lib\repositories\catalog_repository.dart
+   33.9%  lib\services\auth_api_service.dart
+   95.2%  lib\services\catalog_api_service.dart
+   42.6%  lib\services\citas_api_service.dart
+   29.9%  lib\services\secretaria_api_service.dart
+   84.1%  lib\core\network\api_client.dart
