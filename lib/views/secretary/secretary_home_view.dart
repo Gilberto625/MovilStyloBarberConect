@@ -511,85 +511,17 @@ class SecretaryCitaDetailView extends StatelessWidget {
   }
 
   Future<void> _cobrar(BuildContext context, SecretariaCitaDto actual) async {
-    String metodo = 'efectivo';
-    final comprobante = TextEditingController();
-    final recibido = TextEditingController(
-      text: actual.restante > 0 ? actual.restante.toStringAsFixed(2) : '',
-    );
-    final ok = await showDialog<bool>(
+    // El diálogo es dueño de sus controladores: los libera en su dispose,
+    // después de la animación de salida. Liberarlos aquí, apenas regresa
+    // showDialog, rompía el TextField mientras el diálogo se cerraba.
+    final datos = await showDialog<_DatosCobro>(
       context: context,
-      builder: (ctx) => StatefulBuilder(
-        builder: (ctx, setLocal) => AlertDialog(
-          title: const Text('Registrar cobro'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                'Restante ${moneyFormat.format(actual.restante)}',
-                style: const TextStyle(color: AppColors.gold),
-              ),
-              const SizedBox(height: 12),
-              Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: [
-                  for (final opcion in const [
-                    ('efectivo', 'Efectivo'),
-                    ('tarjeta', 'Tarjeta'),
-                    ('transferencia', 'Transferencia'),
-                  ])
-                    ChoiceChip(
-                      label: Text(opcion.$2),
-                      selected: metodo == opcion.$1,
-                      onSelected: (_) => setLocal(() => metodo = opcion.$1),
-                    ),
-                ],
-              ),
-              if (metodo == 'efectivo' && actual.restante > 0) ...[
-                const SizedBox(height: 8),
-                TextField(
-                  controller: recibido,
-                  keyboardType: const TextInputType.numberWithOptions(
-                    decimal: true,
-                  ),
-                  decoration: const InputDecoration(
-                    labelText: 'Efectivo recibido',
-                  ),
-                ),
-              ],
-              if (metodo == 'transferencia') ...[
-                const SizedBox(height: 8),
-                TextField(
-                  controller: comprobante,
-                  decoration: const InputDecoration(
-                    labelText: 'Comprobante / referencia',
-                  ),
-                ),
-              ],
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(ctx, false),
-              child: const Text('Cancelar'),
-            ),
-            ElevatedButton(
-              onPressed: () => Navigator.pop(ctx, true),
-              child: const Text('Cobrar'),
-            ),
-          ],
-        ),
-      ),
+      builder: (_) => _CobroDialog(restante: actual.restante),
     );
-    if (ok != true || !context.mounted) {
-      comprobante.dispose();
-      recibido.dispose();
-      return;
-    }
-    final proof = comprobante.text.trim();
-    final cashRaw = recibido.text.trim().replaceAll(',', '.');
-    comprobante.dispose();
-    recibido.dispose();
+    if (datos == null || !context.mounted) return;
+    final metodo = datos.metodo;
+    final proof = datos.comprobante.trim();
+    final cashRaw = datos.efectivo.trim().replaceAll(',', '.');
     if (metodo == 'transferencia' && proof.isEmpty) {
       _snack(context, 'La transferencia requiere comprobante o referencia.');
       return;
@@ -859,4 +791,114 @@ class SecretaryNav extends InheritedWidget {
 
   @override
   bool updateShouldNotify(SecretaryNav oldWidget) => go != oldWidget.go;
+}
+
+/// Lo que la secretaria capturó en el diálogo de cobro.
+class _DatosCobro {
+  const _DatosCobro({
+    required this.metodo,
+    required this.comprobante,
+    required this.efectivo,
+  });
+
+  final String metodo;
+  final String comprobante;
+  final String efectivo;
+}
+
+class _CobroDialog extends StatefulWidget {
+  const _CobroDialog({required this.restante});
+
+  final double restante;
+
+  @override
+  State<_CobroDialog> createState() => _CobroDialogState();
+}
+
+class _CobroDialogState extends State<_CobroDialog> {
+  String _metodo = 'efectivo';
+  final _comprobante = TextEditingController();
+  late final _recibido = TextEditingController(
+    text: widget.restante > 0 ? widget.restante.toStringAsFixed(2) : '',
+  );
+
+  @override
+  void dispose() {
+    _comprobante.dispose();
+    _recibido.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: const Text('Registrar cobro'),
+      content: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'Restante ${moneyFormat.format(widget.restante)}',
+              style: const TextStyle(color: AppColors.gold),
+            ),
+            const SizedBox(height: 12),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                for (final opcion in const [
+                  ('efectivo', 'Efectivo'),
+                  ('tarjeta', 'Tarjeta'),
+                  ('transferencia', 'Transferencia'),
+                ])
+                  ChoiceChip(
+                    label: Text(opcion.$2),
+                    selected: _metodo == opcion.$1,
+                    onSelected: (_) => setState(() => _metodo = opcion.$1),
+                  ),
+              ],
+            ),
+            if (_metodo == 'efectivo' && widget.restante > 0) ...[
+              const SizedBox(height: 8),
+              TextField(
+                controller: _recibido,
+                keyboardType: const TextInputType.numberWithOptions(
+                  decimal: true,
+                ),
+                decoration: const InputDecoration(
+                  labelText: 'Efectivo recibido',
+                ),
+              ),
+            ],
+            if (_metodo == 'transferencia') ...[
+              const SizedBox(height: 8),
+              TextField(
+                controller: _comprobante,
+                decoration: const InputDecoration(
+                  labelText: 'Comprobante / referencia',
+                ),
+              ),
+            ],
+          ],
+        ),
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: const Text('Cancelar'),
+        ),
+        ElevatedButton(
+          onPressed: () => Navigator.pop(
+            context,
+            _DatosCobro(
+              metodo: _metodo,
+              comprobante: _comprobante.text,
+              efectivo: _recibido.text,
+            ),
+          ),
+          child: const Text('Cobrar'),
+        ),
+      ],
+    );
+  }
 }
