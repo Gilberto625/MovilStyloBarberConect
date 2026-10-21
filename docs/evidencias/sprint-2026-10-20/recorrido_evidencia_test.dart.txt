@@ -1,0 +1,215 @@
+// Recorrido de evidencia del sprint (Bloque 4): PM01, PM03, PM09, ARCO y
+// secretaría contra el backend LOCAL. En cada paso imprime "EVIDENCIA:<nombre>"
+// y espera; un script en la PC toma la captura con adb al ver la marca en logcat.
+//
+//   flutter test integration_test/recorrido_evidencia_test.dart -d emulator-5554 \
+//     --dart-define=API_BASE_URL=http://10.0.2.2:8000/api \
+//     --dart-define=TEST_CLIENT_USER=... --dart-define=TEST_CLIENT_PASS=... \
+//     --dart-define=TEST_SECRETARIA_USER=... --dart-define=TEST_SECRETARIA_PASS=...
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:integration_test/integration_test.dart';
+import 'package:stylo_barber_connect/core/config/app_config.dart';
+import 'package:stylo_barber_connect/main.dart' as app;
+
+const _cliente = String.fromEnvironment('TEST_CLIENT_USER');
+const _clientePass = String.fromEnvironment('TEST_CLIENT_PASS');
+const _secretaria = String.fromEnvironment('TEST_SECRETARIA_USER');
+const _secretariaPass = String.fromEnvironment('TEST_SECRETARIA_PASS');
+
+/// Para repetir solo el inicio sin volver a escribir datos (llegada, cobro).
+const _hastaPaso = int.fromEnvironment('HASTA_PASO', defaultValue: 99);
+
+Future<void> _esperar(
+  WidgetTester tester,
+  Finder finder, {
+  Duration timeout = const Duration(seconds: 45),
+}) async {
+  final limite = DateTime.now().add(timeout);
+  while (DateTime.now().isBefore(limite)) {
+    await tester.pump(const Duration(milliseconds: 250));
+    if (finder.evaluate().isNotEmpty) return;
+  }
+  fail('No apareció a tiempo: $finder');
+}
+
+/// Deja la pantalla quieta, marca el paso y da tiempo a que adb capture.
+Future<void> _evidencia(WidgetTester tester, String nombre) async {
+  for (var i = 0; i < 8; i++) {
+    await tester.pump(const Duration(milliseconds: 250));
+  }
+  // ignore: avoid_print
+  print('EVIDENCIA:$nombre');
+  for (var i = 0; i < 16; i++) {
+    await tester.pump(const Duration(milliseconds: 250));
+  }
+}
+
+Future<void> _tocar(WidgetTester tester, Finder finder) async {
+  await tester.ensureVisible(finder.first);
+  await tester.pump(const Duration(milliseconds: 300));
+  await tester.tap(finder.first);
+  await tester.pump(const Duration(milliseconds: 300));
+}
+
+Future<void> _login(WidgetTester tester, String usuario, String pass) async {
+  await _esperar(tester, find.byType(TextFormField));
+  await tester.enterText(find.byType(TextFormField).at(0), usuario);
+  await tester.enterText(find.byType(TextFormField).at(1), pass);
+  await tester.tap(find.widgetWithText(ElevatedButton, 'Entrar'));
+}
+
+void main() {
+  IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+
+  testWidgets('Recorrido de evidencia del sprint (backend local)', (
+    tester,
+  ) async {
+    expect(AppConfig.apiBaseUrl, isNot(contains('onrender.com')));
+    expect(
+      [
+        _cliente,
+        _clientePass,
+        _secretaria,
+        _secretariaPass,
+      ].every((v) => v.isNotEmpty),
+      isTrue,
+      reason: 'Faltan credenciales de prueba por --dart-define.',
+    );
+
+    await app.main();
+
+    // Invitado: catálogo real del backend local.
+    await _esperar(
+      tester,
+      find.text('Entrar'),
+      timeout: const Duration(seconds: 60),
+    );
+    await _esperar(tester, find.text('Servicios'));
+    await _evidencia(tester, '01_invitado_inicio');
+
+    // PM01: credenciales incorrectas se quedan en login con mensaje.
+    await _tocar(tester, find.text('Entrar'));
+    await _login(tester, _cliente, 'incorrecta-de-prueba');
+    await _esperar(tester, find.text('Credenciales incorrectas.'));
+    await _evidencia(tester, '02_pm01_login_invalido');
+
+    // PM01: login válido entra al panel del cliente.
+    await _login(tester, _cliente, _clientePass);
+    await _esperar(tester, find.text('Agendar'));
+    await _evidencia(tester, '03_pm01_cliente_inicio');
+
+    // PM03: la cita creada en PI-01 aparece en Mis citas.
+    await _tocar(tester, find.text('Citas'));
+    await _esperar(tester, find.text('Corte clásico'));
+    await _evidencia(tester, '04_pm03_mis_citas');
+
+    // Agendar: pasos con disponibilidad real.
+    await _tocar(tester, find.text('Agendar'));
+    await _esperar(tester, find.text('Corte clásico'));
+    await _tocar(tester, find.text('Barba'));
+    await _esperar(tester, find.text('Barbero Dos Prueba'));
+    await _tocar(tester, find.text('Barbero Dos Prueba'));
+    await _esperar(tester, find.byType(ChoiceChip));
+    await _evidencia(tester, '05_pm03_agendar_horarios');
+
+    // ARCO: Privacidad y mis datos.
+    await _tocar(tester, find.text('Perfil'));
+    await _esperar(tester, find.byKey(const Key('perfil_privacidad')));
+    await _evidencia(tester, '06_perfil');
+    if (_hastaPaso <= 6) return;
+    await _tocar(tester, find.byKey(const Key('perfil_privacidad')));
+    await _esperar(tester, find.byKey(const Key('privacidad_mis_datos')));
+    await _evidencia(tester, '07_arco_privacidad');
+
+    await _tocar(tester, find.byKey(const Key('privacidad_mis_datos')));
+    await _esperar(tester, find.textContaining('Historial de citas'));
+    await _evidencia(tester, '08_arco_mis_datos');
+    await tester.pageBack();
+    await tester.pump(const Duration(milliseconds: 500));
+
+    await _tocar(tester, find.byKey(const Key('privacidad_editar_perfil')));
+    await _esperar(tester, find.byKey(const Key('editar_perfil_guardar')));
+    await _evidencia(tester, '09_arco_corregir_datos');
+    await tester.pageBack();
+    await tester.pump(const Duration(milliseconds: 500));
+
+    await _tocar(tester, find.byKey(const Key('privacidad_aviso')));
+    await _esperar(tester, find.byKey(const Key('aviso_opt_whatsapp')));
+    await _evidencia(tester, '10_aviso_optin_apagado');
+    await _tocar(tester, find.byKey(const Key('aviso_opt_whatsapp')));
+    await _tocar(tester, find.byKey(const Key('aviso_guardar_preferencias')));
+    await _esperar(tester, find.text('Preferencias guardadas en tu cuenta.'));
+    await _evidencia(tester, '11_aviso_optin_guardado_en_backend');
+    await tester.pageBack();
+    await tester.pump(const Duration(milliseconds: 500));
+    await tester.pageBack();
+    await tester.pump(const Duration(milliseconds: 500));
+
+    // PM09: cerrar sesión vuelve a invitado.
+    await _esperar(tester, find.text('Cerrar sesión'));
+    await _tocar(tester, find.text('Cerrar sesión'));
+    await _esperar(tester, find.text('Entrar'));
+    await _evidencia(tester, '12_pm09_logout');
+
+    // PM09: otro usuario (secretaría) no ve datos del cliente anterior.
+    await _tocar(tester, find.text('Entrar'));
+    await _login(tester, _secretaria, _secretariaPass);
+    await _esperar(tester, find.text('Agenda'));
+    await _evidencia(tester, '13_pm09_secretaria_hoy');
+
+    // Secretaría: día de la cita de PI-01 (mañana).
+    final manana = DateTime.now().add(const Duration(days: 1));
+    await _tocar(tester, find.byIcon(Icons.calendar_today_outlined));
+    await _esperar(tester, find.byType(DatePickerDialog));
+    await tester.tap(
+      find.descendant(
+        of: find.byType(DatePickerDialog),
+        matching: find.text('${manana.day}'),
+      ),
+    );
+    await tester.pump(const Duration(milliseconds: 300));
+    final ok = MaterialLocalizations.of(
+      tester.element(find.byType(DatePickerDialog)),
+    ).okButtonLabel;
+    await tester.tap(find.text(ok));
+    await _esperar(tester, find.text('Cliente Prueba'));
+    await _evidencia(tester, '14_secretaria_dia_con_cita');
+
+    await tester.ensureVisible(find.text('Cliente Prueba').last);
+    await tester.tap(find.text('Cliente Prueba').last);
+    await tester.pump(const Duration(milliseconds: 300));
+    await _esperar(tester, find.text('Cliente llegó'));
+    await _evidencia(tester, '15_secretaria_detalle');
+
+    // No asistió penaliza: se muestra la confirmación y se cancela.
+    await _tocar(tester, find.text('No asistió'));
+    await _esperar(tester, find.text('Marcar no asistió'));
+    await _evidencia(tester, '16_no_asistio_confirmacion_fuerte');
+    await tester.tap(find.text('Cancelar'));
+    await tester.pump(const Duration(milliseconds: 500));
+
+    // Llegó: confirmación y respuesta del servidor.
+    await _tocar(tester, find.text('Cliente llegó'));
+    await _esperar(tester, find.text('Registrar llegada'));
+    await tester.tap(find.text('Confirmar'));
+    await _esperar(tester, find.text('Agenda'));
+    await _evidencia(tester, '17_secretaria_llego');
+
+    // Cobrar el restante en efectivo.
+    await tester.ensureVisible(find.text('Cliente Prueba').last);
+    await tester.tap(find.text('Cliente Prueba').last);
+    await tester.pump(const Duration(milliseconds: 300));
+    await _esperar(tester, find.text('Cobrar restante'));
+    await _tocar(tester, find.text('Cobrar restante'));
+    await _esperar(tester, find.text('Registrar cobro'));
+    await tester.enterText(
+      find.widgetWithText(TextField, 'Efectivo recibido'),
+      '200',
+    );
+    await _evidencia(tester, '18_secretaria_cobrar_dialogo');
+    await tester.tap(find.widgetWithText(ElevatedButton, 'Cobrar'));
+    await _esperar(tester, find.text('Agenda'));
+    await _evidencia(tester, '19_secretaria_cobrado');
+  });
+}
