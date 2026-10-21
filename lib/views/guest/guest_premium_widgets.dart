@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../core/media/variante_imagen.dart';
 import '../../core/theme/app_theme.dart';
 import '../../models/catalog_models.dart';
 import '../../widgets/common_widgets.dart';
@@ -14,6 +15,7 @@ class GuestPremiumImage extends StatelessWidget {
     required this.label,
     required this.fallbackIcon,
     this.alignment = Alignment.center,
+    this.variante,
   });
 
   final String url;
@@ -21,6 +23,10 @@ class GuestPremiumImage extends StatelessWidget {
   final String label;
   final IconData fallbackIcon;
   final Alignment alignment;
+
+  /// Tamaño y encuadre que se pide a Cloudinary. Sin variante se baja la
+  /// foto original.
+  final VarianteImagen? variante;
 
   @override
   Widget build(BuildContext context) {
@@ -33,8 +39,12 @@ class GuestPremiumImage extends StatelessWidget {
       return _fallback(context, 'Imagen no disponible');
     }
 
+    final variante = this.variante;
     return Image.network(
-      source,
+      variante == null ? source : urlVariante(source, variante),
+      // Fuera de Cloudinary la foto llega completa: se decodifica al ancho de
+      // la variante para no ocupar la memoria de una foto de 12 MP.
+      cacheWidth: variante?.ancho,
       width: double.infinity,
       height: double.infinity,
       fit: fit,
@@ -185,7 +195,7 @@ class GuestServiceCard extends StatelessWidget {
                   child: GuestPremiumImage(
                     url: servicio.imagenUrl,
                     fit: BoxFit.cover,
-                    alignment: const Alignment(0, -0.2),
+                    variante: VarianteImagen.tarjeta,
                     label: servicio.nombre,
                     fallbackIcon: Icons.content_cut_rounded,
                   ),
@@ -276,6 +286,7 @@ class ServiceListTile extends StatelessWidget {
                   child: GuestPremiumImage(
                     url: servicio.imagenUrl,
                     fit: BoxFit.cover,
+                    variante: VarianteImagen.miniatura,
                     label: servicio.nombre,
                     fallbackIcon: Icons.content_cut_rounded,
                   ),
@@ -370,6 +381,7 @@ class GuestProductCard extends StatelessWidget {
                 child: GuestPremiumImage(
                   url: producto.imagenUrl,
                   fit: BoxFit.contain,
+                  variante: VarianteImagen.producto,
                   label: producto.nombre,
                   fallbackIcon: Icons.shopping_bag_outlined,
                 ),

@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
+import '../../core/media/variante_imagen.dart';
 import '../../core/theme/app_theme.dart';
 import '../../models/catalog_models.dart';
 import '../../routes/app_routes.dart';
@@ -55,6 +56,7 @@ class ServicioDetailView extends StatelessWidget {
       image: GuestPremiumImage(
         url: servicio.imagenUrl,
         fit: BoxFit.cover,
+        variante: VarianteImagen.detalle,
         label: servicio.nombre,
         fallbackIcon: Icons.content_cut_rounded,
       ),
@@ -127,6 +129,7 @@ class ProductoDetailView extends StatelessWidget {
       image: GuestPremiumImage(
         url: producto.imagenUrl,
         fit: BoxFit.contain,
+        variante: VarianteImagen.productoDetalle,
         label: producto.nombre,
         fallbackIcon: Icons.shopping_bag_outlined,
       ),

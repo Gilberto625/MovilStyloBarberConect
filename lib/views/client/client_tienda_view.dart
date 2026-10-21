@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../core/media/variante_imagen.dart';
 import '../../core/theme/app_theme.dart';
 import '../../models/catalog_models.dart';
 import '../../models/pedido_models.dart';
@@ -225,6 +226,7 @@ class _ProductoTienda extends StatelessWidget {
               child: GuestPremiumImage(
                 url: producto.imagenUrl,
                 fit: BoxFit.contain,
+                variante: VarianteImagen.producto,
                 label: producto.nombre,
                 fallbackIcon: Icons.shopping_bag_outlined,
               ),
@@ -537,6 +539,7 @@ class _LineaCarrito extends StatelessWidget {
               child: GuestPremiumImage(
                 url: p.imagenUrl,
                 fit: BoxFit.contain,
+                variante: VarianteImagen.productoMiniatura,
                 label: p.nombre,
                 fallbackIcon: Icons.shopping_bag_outlined,
               ),

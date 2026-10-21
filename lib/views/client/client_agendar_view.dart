@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../core/media/variante_imagen.dart';
 import '../../core/theme/app_theme.dart';
 import '../../models/catalog_models.dart';
 import '../../models/cita_models.dart';
@@ -397,6 +398,7 @@ class _PasoServicio extends StatelessWidget {
                     child: GuestPremiumImage(
                       url: s.imagenUrl,
                       fit: BoxFit.cover,
+                      variante: VarianteImagen.miniatura,
                       label: s.nombre,
                       fallbackIcon: Icons.content_cut_rounded,
                     ),
