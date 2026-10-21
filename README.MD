@@ -131,10 +131,24 @@ flutter symbolize -i stacktrace.txt -d build/symbols/0.1.0+1/app.android-arm64.s
 
 ```bash
 flutter analyze
-flutter test
+flutter test --coverage
 ```
 
 Incluye ViewModels (auth, citas, secretaría), repositorios fake, widgets de home y manejo de errores/estados vacíos.
+
+Pruebas unitarias (Actividad 3):
+
+| Carpeta | Qué contiene |
+|---|---|
+| `test/unit/` | `PM-U01` (validador de correo), `fromJson` con fixtures y ViewModels con Mockito (`verify`, errores HTTP, timeout, doble toque) |
+| `test/fixtures/` | JSON con la forma real de las respuestas de Django, con datos ficticios |
+| `test/mocks/` | `mocks.dart` declara los mocks; `mocks.mocks.dart` es generado y se versiona para que CI no necesite `build_runner` |
+
+Si cambia la firma de un repository, regenera los mocks y súbelos en el mismo PR:
+
+```bash
+dart run build_runner build --delete-conflicting-outputs
+```
 
 ## Notas
 
