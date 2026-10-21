@@ -1,0 +1,10 @@
+00:00 +0: loading <repo>/integration_test/pi01_reserva_test.dart
+Running Gradle task 'assembleDebug'...                          
+
+Running Gradle task 'assembleDebug'...                             28.0s
+√ Built build\app\outputs\flutter-apk\app-debug.apk
+Installing build\app\outputs\flutter-apk\app-debug.apk...        1,055ms
+00:00 +0: PI-01 crear cita y verla en Mis citas (backend local)
+00:19 +1: (tearDownAll)
+00:19 +1: All tests passed!
+exit=0
