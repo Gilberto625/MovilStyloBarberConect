@@ -99,10 +99,18 @@ class _Entorno {
     when(auth.restoreSession()).thenAnswer(
       (_) async => const AuthUser(
         id: 4,
-        username: 'Gilberto',
+        username: 'cliente.prueba',
         email: 'g@correo.mx',
         rol: UserRole.cliente,
       ),
+    );
+    when(auth.getPerfil()).thenAnswer(
+      (_) async => PerfilDto.fromJson({
+        'email': 'g@correo.mx',
+        'username': 'Gilberto',
+        'nombre': 'Gilberto',
+        'apellido': 'Hernández',
+      }),
     );
     when(citas.getMisCitas()).thenAnswer((_) async => misCitas);
     when(citas.getBarberos(servicioId: anyNamed('servicioId')))
@@ -328,6 +336,9 @@ void main() {
     ) async {
       await _pump(tester, _Entorno());
 
+      // Saluda con el nombre del perfil, no con el usuario.
+      expect(find.text('Hola, Gilberto'), findsOneWidget);
+      expect(find.textContaining('cliente.prueba'), findsNothing);
       final boleto = find.byKey(const Key('inicio_proxima_cita'));
       expect(boleto, findsOneWidget);
       expect(

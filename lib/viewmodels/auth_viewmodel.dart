@@ -207,13 +207,27 @@ class AuthViewModel extends ChangeNotifier {
   Future<void> logout() async {
     await _repository.logoutLocal();
     user = null;
+    perfil = null;
     phase = AuthPhase.guest;
     notifyListeners();
   }
 
+  /// Último perfil leído de `GET /perfil/` (para saludar por el nombre).
+  PerfilDto? perfil;
+
+  /// Nombre para saludar: el primer nombre del perfil o, si no hay, el
+  /// usuario.
+  String get nombreCorto {
+    final nombre = perfil?.nombre.trim() ?? '';
+    if (nombre.isNotEmpty) return nombre.split(RegExp(r'\s+')).first;
+    return user?.username ?? 'cliente';
+  }
+
   Future<PerfilDto?> loadPerfil() async {
     try {
-      return await _repository.getPerfil();
+      perfil = await _repository.getPerfil();
+      notifyListeners();
+      return perfil;
     } catch (e) {
       errorMessage = e.toString();
       notifyListeners();

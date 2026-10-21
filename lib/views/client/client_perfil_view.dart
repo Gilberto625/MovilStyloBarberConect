@@ -136,6 +136,10 @@ class _ClientPerfilTabState extends State<ClientPerfilTab> {
                 OutlinedButton.icon(
                   key: const Key('perfil_cerrar_sesion'),
                   onPressed: _salir,
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: AppColors.ivory,
+                    side: const BorderSide(color: AppColors.border),
+                  ),
                   icon: const Icon(Icons.logout_rounded),
                   label: const Text('Cerrar sesión'),
                 ),

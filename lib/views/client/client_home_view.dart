@@ -42,7 +42,9 @@ class _ClientHomeShellState extends State<ClientHomeShell> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) context.read<ClientCitasViewModel>().loadMisCitas();
+      if (!mounted) return;
+      context.read<ClientCitasViewModel>().loadMisCitas();
+      context.read<AuthViewModel>().loadPerfil();
     });
   }
 
@@ -153,7 +155,7 @@ class _ClientInicioTab extends StatelessWidget {
     final auth = context.watch<AuthViewModel>();
     final citas = context.watch<ClientCitasViewModel>();
     final theme = Theme.of(context).textTheme;
-    final name = auth.user?.username ?? 'cliente';
+    final name = auth.nombreCorto;
     final sinConexion =
         citas.state == LoadState.error && citas.citas.isNotEmpty;
     return SafeArea(

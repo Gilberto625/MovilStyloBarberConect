@@ -269,7 +269,17 @@ class _ProductoTienda extends StatelessWidget {
                         child: OutlinedButton.icon(
                           key: ValueKey('tienda-agregar-${producto.id}'),
                           onPressed: onAgregar,
-                          icon: const Icon(Icons.add_rounded, size: 20),
+                          // Tonal: el latón queda para el carrito y el precio.
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: AppColors.ivory,
+                            backgroundColor: AppColors.surfaceHigh,
+                            side: const BorderSide(color: AppColors.border),
+                          ),
+                          icon: const Icon(
+                            Icons.add_rounded,
+                            size: 20,
+                            color: AppColors.goldSoft,
+                          ),
                           label: const Text('Agregar'),
                         ),
                       ),
@@ -694,7 +704,30 @@ class _MisPedidosViewState extends State<MisPedidosView> {
                   Text(fecha, style: theme.bodySmall),
                   const SizedBox(height: AppSpacing.sm),
                   for (final item in p.items)
-                    InfoRow(label: '${item.cantidad} ×', value: item.nombre),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: AppSpacing.xs,
+                      ),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            width: 36,
+                            child: Text(
+                              '${item.cantidad} ×',
+                              style: AppText.cifra(
+                                size: 15,
+                                color: AppColors.muted,
+                                weight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            child: Text(item.nombre, style: theme.bodyLarge),
+                          ),
+                        ],
+                      ),
+                    ),
                   const Divider(height: AppSpacing.xl),
                   Row(
                     children: [
