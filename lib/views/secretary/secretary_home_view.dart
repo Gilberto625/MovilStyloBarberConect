@@ -775,6 +775,9 @@ class SecretaryCitaDetailView extends StatelessWidget {
                 label: 'Cobrar ${moneyFormat.format(actual.restante)}',
                 icon: Icons.payments_outlined,
                 busy: vm.actionBusy,
+                // Una sola acción de latón: si falta la llegada, cobrar va
+                // después.
+                secundaria: actual.puedeMarcarAsistencia,
                 onPressed: () => _cobrar(context, actual),
               ),
               const SizedBox(height: AppSpacing.md),
@@ -835,6 +838,7 @@ class _Accion extends StatelessWidget {
     required this.busy,
     required this.onPressed,
     this.peligro = false,
+    this.secundaria = false,
   });
 
   final String label;
@@ -842,6 +846,7 @@ class _Accion extends StatelessWidget {
   final bool busy;
   final VoidCallback onPressed;
   final bool peligro;
+  final bool secundaria;
 
   @override
   Widget build(BuildContext context) {
@@ -872,6 +877,8 @@ class _Accion extends StatelessWidget {
                 ),
                 child: child,
               )
+            : secundaria
+            ? OutlinedButton(onPressed: busy ? null : onPressed, child: child)
             : ElevatedButton(onPressed: busy ? null : onPressed, child: child),
       ),
     );
@@ -1085,13 +1092,19 @@ class _CobroSheetState extends State<_CobroSheet> {
             SegmentedButton<String>(
               key: const Key('cobro_metodo'),
               showSelectedIcon: false,
-              segments: const [
-                ButtonSegment(value: 'efectivo', label: Text('Efectivo')),
-                ButtonSegment(value: 'tarjeta', label: Text('Tarjeta')),
-                ButtonSegment(
-                  value: 'transferencia',
-                  label: Text('Transferencia'),
-                ),
+              segments: [
+                for (final m in const [
+                  ('efectivo', 'Efectivo'),
+                  ('tarjeta', 'Tarjeta'),
+                  ('transferencia', 'Transferencia'),
+                ])
+                  ButtonSegment(
+                    value: m.$1,
+                    label: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(m.$2, maxLines: 1),
+                    ),
+                  ),
               ],
               selected: {_metodo},
               onSelectionChanged: (s) => setState(() => _metodo = s.first),

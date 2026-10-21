@@ -105,55 +105,10 @@ class SplashView extends StatelessWidget {
 class _SplashBackdrop extends StatelessWidget {
   const _SplashBackdrop();
 
+  // Suelo plano de la marca: sin halos ni brillos (DESIGN.md › Sin Sombra).
   @override
-  Widget build(BuildContext context) {
-    return const DecoratedBox(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [Color(0xFF121C18), Color(0xFF0A100E), Color(0xFF080E0B)],
-        ),
-      ),
-      child: SizedBox.expand(
-        child: Stack(
-          children: [
-            Positioned(
-              top: -80,
-              right: -40,
-              child: _Glow(size: 280, color: Color(0x33D4AF37)),
-            ),
-            Positioned(
-              bottom: -100,
-              left: -60,
-              child: _Glow(size: 320, color: Color(0x33718F83)),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _Glow extends StatelessWidget {
-  const _Glow({required this.size, required this.color});
-
-  final double size;
-  final Color color;
-
-  @override
-  Widget build(BuildContext context) {
-    return IgnorePointer(
-      child: Container(
-        width: size,
-        height: size,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          gradient: RadialGradient(colors: [color, color.withValues(alpha: 0)]),
-        ),
-      ),
-    );
-  }
+  Widget build(BuildContext context) =>
+      const ColoredBox(color: AppColors.guestBg, child: SizedBox.expand());
 }
 
 class _BrandMark extends StatelessWidget {
@@ -179,17 +134,11 @@ class _BrandMark extends StatelessWidget {
         height: size * 0.78,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: const Color(0xFF101A16),
+          color: AppColors.surface,
           border: Border.all(
             color: AppColors.gold,
             width: (size * 0.02).clamp(1.4, 2.6),
           ),
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.gold.withValues(alpha: 0.22),
-              blurRadius: size * 0.22,
-            ),
-          ],
         ),
         child: Icon(
           Icons.content_cut,
@@ -216,7 +165,7 @@ class _SplashStatus extends StatelessWidget {
           child: const LinearProgressIndicator(
             minHeight: 2,
             color: AppColors.gold,
-            backgroundColor: Color(0xFF24302B),
+            backgroundColor: AppColors.border,
             borderRadius: BorderRadius.all(Radius.circular(2)),
           ),
         ),
