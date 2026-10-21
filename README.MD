@@ -116,7 +116,7 @@ flutter symbolize -i stacktrace.txt -d build/symbols/0.1.0+1/app.android-arm64.s
 | Público | `GET /public/servicios/`, `/public/productos/`, `/public/contacto/`, `/public/legal/?tipo=privacidad` (aviso de privacidad) |
 | Auth | `POST /login/`, `/login/2fa/verificar/`, `/login/2fa/solicitar-codigo/`, `POST /auth/token/refresh/`, `GET /auth/me/`, `GET /perfil/` |
 | Cliente | `GET /barberos/`, `/disponibilidad/`, `/citas/politica-pago/`, `/mis-citas/`, `POST /citas/` |
-| Privacidad (ARCO) | `GET /perfil/` + `GET /mis-citas/` (Mis datos, GH#42), `PUT /perfil/` (rectificación, GH#43). `PUT` reemplaza el perfil completo: la app reenvía `avatar_url` y `direccion` actuales. `GET`/`PUT /privacidad/preferencias/` (opt-in de finalidades secundarias guardado en la cuenta, GH#41/GH#45; backend `feature/movil-arco-preferencias`). La cancelación aún no tiene endpoint |
+| Privacidad (ARCO) | `GET /perfil/` + `GET /mis-citas/` (Mis datos, GH#42), `PUT /perfil/` (rectificación, GH#43). `PUT` reemplaza el perfil completo: la app reenvía `avatar_url` y `direccion` actuales. `GET`/`PUT /privacidad/preferencias/` (opt-in de finalidades secundarias guardado en la cuenta, GH#41/GH#45; backend `feature/movil-arco-preferencias`). `POST /privacidad/cancelacion/` (Eliminar mi cuenta, GH#44; backend PR #5): con sesión pide `{contrasena, motivo?}`, bloquea la cuenta al momento y responde 201 `{folio, estado, fecha_supresion}`; los datos personales se suprimen a los 30 días con `manage.py suprimir_cuentas_vencidas`. Sin sesión acepta `{cuenta, contrasena}` para la página web de borrado. El personal recibe 403 |
 | Secretaría | `GET /secretaria/citas/dia/`, `POST .../asistencia/`, `POST .../cobrar/` |
 
 ## Seguridad

@@ -43,12 +43,21 @@ class PrivacidadView extends StatelessWidget {
             onTap: () =>
                 Navigator.pushNamed(context, AppRoutes.avisoPrivacidad),
           ),
+          _Opcion(
+            key: const Key('privacidad_eliminar_cuenta'),
+            icono: Icons.person_remove_outlined,
+            titulo: 'Eliminar mi cuenta',
+            detalle: 'Se bloquea al momento y tus datos se borran en 30 días.',
+            peligro: true,
+            onTap: () => Navigator.pushNamed(context, AppRoutes.eliminarCuenta),
+          ),
           const SizedBox(height: 8),
           const PanelSeccion(
-            titulo: 'Cancelar tu cuenta u oponerte a un uso',
+            titulo: 'Oponerte a un uso de tus datos',
             child: Text(
-              'La app todavía no tramita estas solicitudes. Envíalas por el '
-              'medio que indica el aviso de privacidad.',
+              'Apaga las finalidades opcionales en "Aviso de privacidad y '
+              'preferencias". Para otra solicitud, usa el medio que indica el '
+              'aviso.',
               style: TextStyle(color: AppColors.muted, height: 1.4),
             ),
           ),
@@ -65,12 +74,14 @@ class _Opcion extends StatelessWidget {
     required this.titulo,
     required this.detalle,
     required this.onTap,
+    this.peligro = false,
   });
 
   final IconData icono;
   final String titulo;
   final String detalle;
   final VoidCallback onTap;
+  final bool peligro;
 
   @override
   Widget build(BuildContext context) {
@@ -86,8 +97,14 @@ class _Opcion extends StatelessWidget {
         child: ListTile(
           minVerticalPadding: 14,
           contentPadding: const EdgeInsets.symmetric(horizontal: 16),
-          leading: Icon(icono, color: AppColors.gold),
-          title: Text(titulo, style: const TextStyle(color: AppColors.ivory)),
+          leading: Icon(
+            icono,
+            color: peligro ? AppColors.crit : AppColors.gold,
+          ),
+          title: Text(
+            titulo,
+            style: TextStyle(color: peligro ? AppColors.crit : AppColors.ivory),
+          ),
           subtitle: Text(
             detalle,
             style: const TextStyle(color: AppColors.muted),

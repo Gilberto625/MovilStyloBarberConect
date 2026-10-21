@@ -1,0 +1,8 @@
+00:00 +0: loading test/integration/api_client_errores_red_test.dart
+00:00 +0: Errores de red en ApiClient sin internet: mensaje para la persona, sin IP ni excepción
+00:00 +1: Errores de red en ApiClient socket, TLS y tiempo agotado también son NetworkException
+00:00 +2: Errores de red en ApiClient una página HTML de error no llega a la pantalla
+00:00 +3: Errores de red en ApiClient el mensaje de Django se sigue mostrando tal cual
+00:00 +4: Errores de red en ApiClient un texto plano corto sí se muestra
+00:00 +5: Errores de red en ApiClient si la red falla al renovar el token, la sesión no se cierra
+00:00 +6: All tests passed!

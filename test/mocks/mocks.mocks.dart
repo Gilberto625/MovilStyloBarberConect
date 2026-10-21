@@ -79,21 +79,27 @@ class _FakeConsentimientoPrivacidad_6 extends _i1.SmartFake
     : super(parent, parentInvocation);
 }
 
-class _FakeSecretariaDiaDto_7 extends _i1.SmartFake
+class _FakeCancelacionCuenta_7 extends _i1.SmartFake
+    implements _i6.CancelacionCuenta {
+  _FakeCancelacionCuenta_7(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
+}
+
+class _FakeSecretariaDiaDto_8 extends _i1.SmartFake
     implements _i4.SecretariaDiaDto {
-  _FakeSecretariaDiaDto_7(Object parent, Invocation parentInvocation)
+  _FakeSecretariaDiaDto_8(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakeSecretariaClienteDto_8 extends _i1.SmartFake
+class _FakeSecretariaClienteDto_9 extends _i1.SmartFake
     implements _i4.SecretariaClienteDto {
-  _FakeSecretariaClienteDto_8(Object parent, Invocation parentInvocation)
+  _FakeSecretariaClienteDto_9(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakeSecretariaCitaEditableDto_9 extends _i1.SmartFake
+class _FakeSecretariaCitaEditableDto_10 extends _i1.SmartFake
     implements _i4.SecretariaCitaEditableDto {
-  _FakeSecretariaCitaEditableDto_9(Object parent, Invocation parentInvocation)
+  _FakeSecretariaCitaEditableDto_10(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
@@ -546,6 +552,35 @@ class MockPrivacidadRepository extends _i1.Mock
       ),
     ),
   ) as _i8.Future<_i6.ConsentimientoPrivacidad>);
+
+  @override
+  _i8.Future<_i6.CancelacionCuenta> cancelarCuenta({
+    required String? contrasena,
+    String? motivo = '',
+  }) => (super.noSuchMethod(
+    Invocation.method(#cancelarCuenta, [], {
+      #contrasena: contrasena,
+      #motivo: motivo,
+    }),
+    returnValue: _i8.Future<_i6.CancelacionCuenta>.value(
+      _FakeCancelacionCuenta_7(
+        this,
+        Invocation.method(#cancelarCuenta, [], {
+          #contrasena: contrasena,
+          #motivo: motivo,
+        }),
+      ),
+    ),
+    returnValueForMissingStub: _i8.Future<_i6.CancelacionCuenta>.value(
+      _FakeCancelacionCuenta_7(
+        this,
+        Invocation.method(#cancelarCuenta, [], {
+          #contrasena: contrasena,
+          #motivo: motivo,
+        }),
+      ),
+    ),
+  ) as _i8.Future<_i6.CancelacionCuenta>);
 }
 
 /// A class which mocks [SecretariaRepository].
@@ -558,13 +593,13 @@ class MockSecretariaRepository extends _i1.Mock
       (super.noSuchMethod(
         Invocation.method(#getCitasDia, [], {#fecha: fecha}),
         returnValue: _i8.Future<_i4.SecretariaDiaDto>.value(
-          _FakeSecretariaDiaDto_7(
+          _FakeSecretariaDiaDto_8(
             this,
             Invocation.method(#getCitasDia, [], {#fecha: fecha}),
           ),
         ),
         returnValueForMissingStub: _i8.Future<_i4.SecretariaDiaDto>.value(
-          _FakeSecretariaDiaDto_7(
+          _FakeSecretariaDiaDto_8(
             this,
             Invocation.method(#getCitasDia, [], {#fecha: fecha}),
           ),
@@ -641,7 +676,7 @@ class MockSecretariaRepository extends _i1.Mock
       #telefono: telefono,
     }),
     returnValue: _i8.Future<_i4.SecretariaClienteDto>.value(
-      _FakeSecretariaClienteDto_8(
+      _FakeSecretariaClienteDto_9(
         this,
         Invocation.method(#crearClientePaso, [], {
           #nombres: nombres,
@@ -651,7 +686,7 @@ class MockSecretariaRepository extends _i1.Mock
       ),
     ),
     returnValueForMissingStub: _i8.Future<_i4.SecretariaClienteDto>.value(
-      _FakeSecretariaClienteDto_8(
+      _FakeSecretariaClienteDto_9(
         this,
         Invocation.method(#crearClientePaso, [], {
           #nombres: nombres,
@@ -714,14 +749,14 @@ class MockSecretariaRepository extends _i1.Mock
       (super.noSuchMethod(
         Invocation.method(#citaEditable, [citaId]),
         returnValue: _i8.Future<_i4.SecretariaCitaEditableDto>.value(
-          _FakeSecretariaCitaEditableDto_9(
+          _FakeSecretariaCitaEditableDto_10(
             this,
             Invocation.method(#citaEditable, [citaId]),
           ),
         ),
         returnValueForMissingStub:
             _i8.Future<_i4.SecretariaCitaEditableDto>.value(
-              _FakeSecretariaCitaEditableDto_9(
+              _FakeSecretariaCitaEditableDto_10(
                 this,
                 Invocation.method(#citaEditable, [citaId]),
               ),

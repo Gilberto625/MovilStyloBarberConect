@@ -1,4 +1,6 @@
+import '../config/app_config.dart';
 import '../network/api_client.dart';
+import '../network/cliente_http.dart';
 import '../storage/secure_token_storage.dart';
 import '../../repositories/auth_repository.dart';
 import '../../repositories/catalog_repository.dart';
@@ -45,6 +47,8 @@ class AppScope {
 
     final api = ApiClient(
       tokenStorage: storage,
+      // Certificate pinning en HTTPS (GH#38).
+      httpClient: crearClienteHttp(Uri.parse(AppConfig.apiBaseUrl)),
       onSessionExpired: () async {
         await authRepository.logoutLocal();
         await authViewModel.logout();

@@ -48,14 +48,14 @@ Leyenda: ✅ disponible · ⚠️ parcial · ❌ ausente · 🔒 bloqueado exter
 | Smoke API REST (health/públicos) | ⚠️ | Ejecutado en fase 3; guardar log fechado |
 | Captura JWT Bearer / login staging | ❌ | No usar prod para demos sensibles |
 | Prueba 401 → refresh → retry | ⚠️ | Código en `api_client.dart`; falta test/evidencia |
-| Config Certificate Pinning + doc rotación pines | ❌ | — |
-| Prueba pin inválido rechaza conexión | ❌ | — |
+| Config Certificate Pinning + doc rotación pines | ✅ | `lib/core/network/cliente_http.dart`, `docs/evaluacion/PINNING_ROTACION.md` |
+| Prueba pin inválido rechaza conexión | ✅ | `test/pinning_test.dart`, `tool/verificar_pines.dart` y emulador: `docs/evidencias/pinning-2026-10-21/` |
 | Evidencia `flutter_secure_storage` / Keystore | ⚠️ | Código; falta captura dispositivo/MobSF |
 | Pantalla aviso de privacidad | ❌ | — |
 | Opt-In desactivado por defecto (captura) | ❌ | — |
 | ARCO Acceso (perfil) | ⚠️ | UI lectura parcial |
 | ARCO Rectificación (editar + PUT) | ❌ | Backend PUT existe; UI no |
-| ARCO Cancelación (eliminar cuenta) | 🔒 | **Sin endpoint** Django — evidencia = documento de bloqueo |
+| ARCO Cancelación (eliminar cuenta) | ✅ | E2E en emulador contra Django local: folio, bloqueo y login rechazado. `docs/evidencias/arco/2026-10-21-cancelacion/` |
 | ARCO Oposición / Opt-Out | ❌ | Definir alcance |
 | `minifyEnabled` + `shrinkResources` + `proguard-rules.pro` | ✅ | R8 activo: 95 % de clases renombradas. `docs/evidencias/estatico-2026-10-21/` |
 | Comando y log `--obfuscate --split-debug-info` | ✅ | Antes y después de `libapp.so` (7.41 → 6.16 MB; identificadores a 0) en `docs/evidencias/estatico-2026-10-21/` |

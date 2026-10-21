@@ -1,0 +1,36 @@
+name: Certificate pinning
+
+# Vigila la rotación de certificados del backend (GH#39). Si Render cambia a
+# una autoridad que la app no tiene fijada, este job falla antes de que la
+# app publicada se quede sin conexión. Procedimiento:
+# docs/evaluacion/PINNING_ROTACION.md
+on:
+  schedule:
+    - cron: "17 14 * * 1" # lunes, 08:17 hora de México
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verificar-pines:
+    name: Verificar pines contra el backend
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@1a449444c387b1966244ae4d4f8c696479add0b2 # v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Dependencias
+        run: flutter pub get
+
+      - name: Backend con raíces fijadas y control con otra autoridad
+        run: dart run tool/verificar_pines.dart | tee -a "$GITHUB_STEP_SUMMARY"
+        shell: bash -o pipefail {0}

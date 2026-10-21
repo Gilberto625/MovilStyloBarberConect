@@ -216,3 +216,59 @@ class AvisoPrivacidadViewModel extends ChangeNotifier {
     }
   }
 }
+
+/// Perfil › Privacidad › Eliminar mi cuenta (ARCO GH#44, requisito de Play).
+/// Pide la contraseña y escribir "ELIMINAR" antes de llamar al servidor.
+class EliminarCuentaViewModel extends ChangeNotifier {
+  EliminarCuentaViewModel(this._repository);
+
+  static const palabraConfirmacion = 'ELIMINAR';
+
+  final PrivacidadRepository _repository;
+
+  String contrasena = '';
+  String confirmacion = '';
+  String motivo = '';
+  bool enviando = false;
+  String? error;
+  CancelacionCuenta? resultado;
+
+  bool get puedeEnviar =>
+      !enviando &&
+      contrasena.isNotEmpty &&
+      confirmacion.trim().toUpperCase() == palabraConfirmacion;
+
+  void setContrasena(String v) {
+    contrasena = v;
+    notifyListeners();
+  }
+
+  void setConfirmacion(String v) {
+    confirmacion = v;
+    notifyListeners();
+  }
+
+  void setMotivo(String v) => motivo = v;
+
+  Future<bool> enviar() async {
+    if (!puedeEnviar) return false;
+    enviando = true;
+    error = null;
+    notifyListeners();
+    try {
+      resultado = await _repository.cancelarCuenta(
+        contrasena: contrasena,
+        motivo: motivo,
+      );
+      contrasena = '';
+      enviando = false;
+      notifyListeners();
+      return true;
+    } catch (e) {
+      error = e.toString();
+      enviando = false;
+      notifyListeners();
+      return false;
+    }
+  }
+}
