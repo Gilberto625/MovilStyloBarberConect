@@ -1,0 +1,17 @@
+# strings sobre lib/arm64-v8a/libapp.so (conteo de coincidencias con grep -a -o)
+## app-release-plain.apk (release sin --obfuscate, R8 activo)
+libapp.so: 6226824 bytes
+AuthViewModel                2
+SecretariaGestionViewModel   2
+_tryRefresh                  1
+ClientCitasViewModel         2
+URL de la API (no secreta)   1
+
+## app-release-obf.apk (release --obfuscate --split-debug-info=build/symbols/0.1.0+1, R8 activo)
+libapp.so: 5243784 bytes
+AuthViewModel                0
+SecretariaGestionViewModel   0
+_tryRefresh                  0
+ClientCitasViewModel         0
+URL de la API (no secreta)   1
+

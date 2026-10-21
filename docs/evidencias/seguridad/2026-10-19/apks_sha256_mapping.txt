@@ -1,0 +1,8 @@
+# Tamaño y SHA-256 de cada APK (versión 0.1.0+1, firma debug)
+app-debug.apk             185738626 bytes  1d6179a035477ac5bd576aa2b58eb05a67cd95f22ed5746035dddccb5b8687a4
+app-release-plain.apk      54004982 bytes  e8443b29d601ec67e8c198b4f154b433d65043298a38696735cae91bd1513264
+app-release-obf.apk        50744566 bytes  f906bae4169379839255c952e8eb4cc024ee5057681720f99d550ed29337c531
+
+# mapping.txt de R8 (no se versiona; guardado fuera del repo)
+mapping.txt 6374408 bytes  sha256 5c9acf7d90a7a09e5697f07f707ac39b23c19253af207404c86d3c891628fc0c
+Clases en mapping: 1007; renombradas por R8: 951
