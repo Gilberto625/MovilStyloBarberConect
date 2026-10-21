@@ -53,12 +53,13 @@ class SplashView extends StatelessWidget {
                             RichText(
                               textAlign: TextAlign.center,
                               text: TextSpan(
-                                style: TextStyle(
-                                  fontSize: titleSize,
-                                  height: 1.05,
-                                  fontWeight: FontWeight.w500,
-                                  color: AppColors.text,
-                                ),
+                                // Fraunces del tema, como el resto de la marca.
+                                style: Theme.of(context).textTheme.displaySmall
+                                    ?.copyWith(
+                                      fontSize: titleSize,
+                                      height: 1.05,
+                                      color: AppColors.ivory,
+                                    ),
                                 children: const [
                                   TextSpan(text: 'Stylo'),
                                   TextSpan(
@@ -68,22 +69,16 @@ class SplashView extends StatelessWidget {
                                 ],
                               ),
                             ),
-                            SizedBox(height: gap * 0.7),
-                            Container(
-                              width: mark * 0.42,
-                              height: 1,
-                              color: AppColors.gold.withValues(alpha: 0.7),
-                            ),
-                            SizedBox(height: gap * 0.55),
+                            SizedBox(height: gap * 0.5),
+                            // Sin versalitas espaciadas (DESIGN.md).
                             Text(
-                              'BARBERÍA',
+                              'Barbería',
                               textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: AppColors.museum,
-                                fontSize: subtitleSize,
-                                letterSpacing: 4,
-                                fontWeight: FontWeight.w600,
-                              ),
+                              style: Theme.of(context).textTheme.titleMedium
+                                  ?.copyWith(
+                                    color: AppColors.muted,
+                                    fontSize: subtitleSize * 1.25,
+                                  ),
                             ),
                           ],
                         ),
@@ -175,7 +170,6 @@ class _SplashStatus extends StatelessWidget {
           style: TextStyle(
             color: AppColors.text.withValues(alpha: 0.55),
             fontSize: 12,
-            letterSpacing: 1.4,
           ),
         ),
       ],

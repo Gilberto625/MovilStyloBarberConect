@@ -12,7 +12,8 @@ void main() {
         .widgetList<RichText>(find.byType(RichText))
         .singleWhere((widget) => widget.text.toPlainText().contains('Stylo'));
     expect(brand.text.toPlainText(), 'Stylo Barber');
-    expect(find.text('BARBERÍA'), findsOneWidget);
+    expect(find.text('Barbería'), findsOneWidget);
+    expect(find.text('BARBERÍA'), findsNothing);
     expect(find.text('Cargando'), findsOneWidget);
     expect(find.byType(LinearProgressIndicator), findsOneWidget);
   }
