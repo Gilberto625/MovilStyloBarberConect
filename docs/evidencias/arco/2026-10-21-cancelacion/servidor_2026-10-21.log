@@ -1,0 +1,24 @@
+# Log de Django local (runserver 127.0.0.1:8000, rama backend feature/movil-arco-cancelacion)
+# Corrida 1 (APK sin el arreglo): tras la cancelación aparece GET /api/perfil/ 401 sin token.
+[21/Oct/2026 08:32:13] "POST /api/login/ HTTP/1.1" 200 620
+[21/Oct/2026 08:32:13] "GET /api/mis-citas/ HTTP/1.1" 200 390
+[21/Oct/2026 08:32:13] "GET /api/perfil/ HTTP/1.1" 200 204
+[21/Oct/2026 08:32:34] "GET /api/perfil/ HTTP/1.1" 200 204
+[21/Oct/2026 08:35:18] "POST /api/privacidad/cancelacion/ HTTP/1.1" 201 241
+[21/Oct/2026 08:36:03] "GET /api/public/contacto/ HTTP/1.1" 200 1614
+[21/Oct/2026 08:36:03] "GET /api/public/servicios/ HTTP/1.1" 200 1024
+Unauthorized: /api/perfil/
+[21/Oct/2026 08:36:04] "GET /api/perfil/ HTTP/1.1" 401 65
+[21/Oct/2026 08:36:04] "GET /api/public/productos/ HTTP/1.1" 200 916
+
+# Corrida 2 (APK con el arreglo): ya no hay GET /api/perfil/ después de cancelar; el login posterior da 401.
+[21/Oct/2026 08:47:06] "POST /api/login/ HTTP/1.1" 200 620
+[21/Oct/2026 08:47:07] "GET /api/mis-citas/ HTTP/1.1" 200 390
+[21/Oct/2026 08:47:08] "GET /api/perfil/ HTTP/1.1" 200 204
+[21/Oct/2026 08:47:16] "GET /api/perfil/ HTTP/1.1" 200 204
+[21/Oct/2026 08:48:11] "POST /api/privacidad/cancelacion/ HTTP/1.1" 201 241
+[21/Oct/2026 08:48:17] "GET /api/public/contacto/ HTTP/1.1" 200 1614
+[21/Oct/2026 08:48:17] "GET /api/public/productos/ HTTP/1.1" 200 916
+[21/Oct/2026 08:48:17] "GET /api/public/servicios/ HTTP/1.1" 200 1024
+Unauthorized: /api/login/
+[21/Oct/2026 08:49:03] "POST /api/login/ HTTP/1.1" 401 48
