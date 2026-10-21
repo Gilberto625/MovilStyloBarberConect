@@ -1,0 +1,476 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-21T03:16:21.953892+00:00",
+  "title": "Design System: Stylo Barber Connect",
+  "extensions": {
+    "colorMeta": {
+      "laton": {
+        "role": "primary",
+        "displayName": "Latón",
+        "canonical": "#D4AF37",
+        "tonalRamp": [
+          "#3F330E",
+          "#695617",
+          "#937820",
+          "#BD9A29",
+          "#D6B342",
+          "#E2C979",
+          "#EFE1B3",
+          "#FAF7EA"
+        ]
+      },
+      "laton-hondo": {
+        "role": "primary",
+        "displayName": "Latón hondo",
+        "canonical": "#B8941F",
+        "tonalRamp": [
+          "#41350B",
+          "#6D5812",
+          "#997B1A",
+          "#C49E21",
+          "#DEB73B",
+          "#E7CC73",
+          "#F2E2B0",
+          "#FBF7E9"
+        ]
+      },
+      "laton-claro": {
+        "role": "primary",
+        "displayName": "Latón claro",
+        "canonical": "#E2C76B",
+        "tonalRamp": [
+          "#40340D",
+          "#6B5715",
+          "#957A1D",
+          "#C09D26",
+          "#D9B63F",
+          "#E4CB77",
+          "#F0E2B2",
+          "#FBF7EA"
+        ]
+      },
+      "tinta-sobre-laton": {
+        "role": "neutral",
+        "displayName": "Tinta sobre latón",
+        "canonical": "#0A120E",
+        "tonalRamp": [
+          "#1B3126",
+          "#2E5240",
+          "#407359",
+          "#529473",
+          "#6BAD8C",
+          "#96C5AD",
+          "#C4DED1",
+          "#EFF6F2"
+        ]
+      },
+      "verde-noche": {
+        "role": "neutral",
+        "displayName": "Verde noche",
+        "canonical": "#0A100E",
+        "tonalRamp": [
+          "#1D2F29",
+          "#314E45",
+          "#456E60",
+          "#588D7C",
+          "#72A795",
+          "#9BC0B4",
+          "#C7DCD5",
+          "#EFF5F3"
+        ]
+      },
+      "negro-sillon": {
+        "role": "neutral",
+        "displayName": "Negro sillón",
+        "canonical": "#0D0D0D",
+        "tonalRamp": [
+          "#262626",
+          "#404040",
+          "#595959",
+          "#737373",
+          "#8C8C8C",
+          "#ADADAD",
+          "#D1D1D1",
+          "#F2F2F2"
+        ]
+      },
+      "cuero-verde-hondo": {
+        "role": "neutral",
+        "displayName": "Cuero verde hondo",
+        "canonical": "#0E1612",
+        "tonalRamp": [
+          "#1E2F26",
+          "#324E40",
+          "#456D59",
+          "#598C73",
+          "#73A68C",
+          "#9BC0AD",
+          "#C7DBD1",
+          "#EFF5F2"
+        ]
+      },
+      "cuero-verde": {
+        "role": "neutral",
+        "displayName": "Cuero verde",
+        "canonical": "#14211B",
+        "tonalRamp": [
+          "#1D3027",
+          "#304F41",
+          "#436F5B",
+          "#578F75",
+          "#70A88E",
+          "#99C1AF",
+          "#C6DCD2",
+          "#EFF5F2"
+        ]
+      },
+      "cuero-verde-claro": {
+        "role": "neutral",
+        "displayName": "Cuero verde claro",
+        "canonical": "#1B2A23",
+        "tonalRamp": [
+          "#1E2F27",
+          "#324E41",
+          "#466D5B",
+          "#5A8C74",
+          "#73A58E",
+          "#9CBFAF",
+          "#C7DBD2",
+          "#EFF5F2"
+        ]
+      },
+      "carbon": {
+        "role": "neutral",
+        "displayName": "Carbón",
+        "canonical": "#141414",
+        "tonalRamp": [
+          "#262626",
+          "#404040",
+          "#595959",
+          "#737373",
+          "#8C8C8C",
+          "#ADADAD",
+          "#D1D1D1",
+          "#F2F2F2"
+        ]
+      },
+      "marfil": {
+        "role": "neutral",
+        "displayName": "Marfil",
+        "canonical": "#F4F0E8",
+        "tonalRamp": [
+          "#342B19",
+          "#564729",
+          "#79643A",
+          "#9B804A",
+          "#B59A64",
+          "#CAB791",
+          "#E1D6C1",
+          "#F7F4EE"
+        ]
+      },
+      "texto-claro": {
+        "role": "neutral",
+        "displayName": "Texto claro",
+        "canonical": "#EBF0E7",
+        "tonalRamp": [
+          "#252F1D",
+          "#3E4E31",
+          "#576E45",
+          "#708D58",
+          "#89A772",
+          "#ABC09B",
+          "#D0DCC7",
+          "#F2F5EF"
+        ]
+      },
+      "salvia": {
+        "role": "secondary",
+        "displayName": "Salvia",
+        "canonical": "#718F83",
+        "tonalRamp": [
+          "#222B27",
+          "#384741",
+          "#4F645B",
+          "#658075",
+          "#7F9A8F",
+          "#A4B7AF",
+          "#CCD7D2",
+          "#F1F4F3"
+        ]
+      },
+      "niebla": {
+        "role": "neutral",
+        "displayName": "Niebla",
+        "canonical": "#A6BAB0",
+        "tonalRamp": [
+          "#212B26",
+          "#384840",
+          "#4E6559",
+          "#648173",
+          "#7E9B8C",
+          "#A3B8AD",
+          "#CBD7D1",
+          "#F1F4F2"
+        ]
+      },
+      "filo": {
+        "role": "neutral",
+        "displayName": "Filo",
+        "canonical": "#3D4F49",
+        "tonalRamp": [
+          "#212B28",
+          "#384842",
+          "#4E655D",
+          "#648278",
+          "#7D9B91",
+          "#A3B8B1",
+          "#CBD7D3",
+          "#F1F4F3"
+        ]
+      },
+      "estado-ok": {
+        "role": "tertiary",
+        "displayName": "Ok",
+        "canonical": "#34D66B",
+        "tonalRamp": [
+          "#0D401E",
+          "#156A32",
+          "#1E9546",
+          "#27BF5A",
+          "#40D874",
+          "#77E49C",
+          "#B3F0C7",
+          "#EAFBF0"
+        ]
+      },
+      "estado-aviso": {
+        "role": "tertiary",
+        "displayName": "Aviso",
+        "canonical": "#E2B35A",
+        "tonalRamp": [
+          "#412F0B",
+          "#6C4E13",
+          "#986D1B",
+          "#C38C22",
+          "#DDA53C",
+          "#E7BF74",
+          "#F1DBB1",
+          "#FBF5E9"
+        ]
+      },
+      "estado-critico": {
+        "role": "tertiary",
+        "displayName": "Crítico",
+        "canonical": "#F45B5B",
+        "tonalRamp": [
+          "#480505",
+          "#770808",
+          "#A70B0B",
+          "#D70E0E",
+          "#F12828",
+          "#F56666",
+          "#F9A9A9",
+          "#FDE7E7"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Solo el titular del inicio de invitado."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Título de cada pantalla."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Títulos de sección."
+      },
+      "item": {
+        "displayName": "Item",
+        "purpose": "Nombres de servicio, cliente o producto."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Descripciones y mensajes."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Etiquetas, chips y datos secundarios; mayúscula inicial."
+      },
+      "cifra": {
+        "displayName": "Cifra",
+        "purpose": "Horas, precios y montos con números tabulares."
+      }
+    },
+    "shadows": [],
+    "motion": [
+      {
+        "name": "ease",
+        "value": "cubic-bezier(0.23, 1, 0.32, 1)",
+        "purpose": "Ease-out de toda la UI (Flutter: Cubic(0.23, 1, 0.32, 1))."
+      },
+      {
+        "name": "press",
+        "value": "120ms",
+        "purpose": "Respuesta al presionar: escala 0.97."
+      },
+      {
+        "name": "quick",
+        "value": "180ms",
+        "purpose": "Cambios de estado y selección."
+      },
+      {
+        "name": "entrance",
+        "value": "220ms",
+        "purpose": "La única entrada orquestada de una pantalla."
+      },
+      {
+        "name": "page",
+        "value": "240ms",
+        "purpose": "Transición entre rutas (desvanecido)."
+      },
+      {
+        "name": "stagger",
+        "value": "40ms",
+        "purpose": "Desfase entre elementos de una misma entrada."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "phone",
+        "value": "0dp"
+      },
+      {
+        "name": "rail",
+        "value": "720dp"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Botón principal",
+      "kind": "button",
+      "refersTo": "boton-principal",
+      "description": "La acción principal de la pantalla (Reservar, Confirmar, Cobrar). Una por pantalla.",
+      "html": "<button class=\"ds-btn-principal\">Reservar cita</button>",
+      "css": ":host{--laton:#D4AF37;--laton-hondo:#B8941F;--tinta:#0A120E;--cuero:#14211B;--cuero-claro:#1B2A23;--marfil:#F4F0E8;--niebla:#A6BAB0;--filo:#3D4F49;--ease:cubic-bezier(0.23,1,0.32,1);}.ds-btn-principal{background:#D4AF37;color:#0A120E;height:52px;padding:0 20px;border:none;border-radius:14px;font:700 15px Manrope,sans-serif;transition:transform 120ms cubic-bezier(0.23,1,0.32,1),background 120ms cubic-bezier(0.23,1,0.32,1);}.ds-btn-principal:active{transform:scale(0.97);background:#B8941F;}.ds-btn-principal:focus-visible{outline:2px solid #E2C76B;outline-offset:2px;}"
+    },
+    {
+      "name": "Botón tonal",
+      "kind": "button",
+      "refersTo": "boton-tonal",
+      "description": "Acción secundaria sobre capa tonal (Ver citas, Reprogramar).",
+      "html": "<button class=\"ds-btn-tonal\">Ver citas</button>",
+      "css": ".ds-btn-tonal{background:#1B2A23;color:#F4F0E8;height:52px;padding:0 20px;border:1px solid #3D4F49;border-radius:14px;font:700 15px Manrope,sans-serif;transition:transform 120ms cubic-bezier(0.23,1,0.32,1);}.ds-btn-tonal:active{transform:scale(0.97);}.ds-btn-tonal:focus-visible{outline:2px solid #D4AF37;}"
+    },
+    {
+      "name": "Botón contorno",
+      "kind": "button",
+      "refersTo": "boton-contorno",
+      "description": "Alternativa directa (Cerrar sesión, No asistió).",
+      "html": "<button class=\"ds-btn-contorno\">Cerrar sesión</button>",
+      "css": ".ds-btn-contorno{background:transparent;color:#D4AF37;height:52px;padding:0 20px;border:1.2px solid #D4AF37;border-radius:14px;font:700 15px Manrope,sans-serif;}.ds-btn-contorno:active{transform:scale(0.97);}"
+    },
+    {
+      "name": "Campo",
+      "kind": "input",
+      "refersTo": "campo",
+      "description": "Campo relleno de cuero verde; el foco pasa a latón.",
+      "html": "<label class=\"ds-campo\"><span>Correo o usuario</span><input value=\"cliente@correo.mx\"></label>",
+      "css": ".ds-campo{display:grid;gap:6px;font:600 13px Manrope,sans-serif;color:#A6BAB0;}.ds-campo input{background:#14211B;color:#EBF0E7;border:1px solid #3D4F49;border-radius:14px;padding:16px;font:500 15px Manrope,sans-serif;}.ds-campo input:focus{outline:none;border:1.4px solid #D4AF37;}"
+    },
+    {
+      "name": "Chip de estado",
+      "kind": "chip",
+      "refersTo": "chip-estado",
+      "description": "Estado de cita con punto y palabra en el color del estado.",
+      "html": "<span class=\"ds-chip\"><i></i>Confirmada</span>",
+      "css": ".ds-chip{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:999px;background:#1D3427;color:#34D66B;font:600 13px Manrope,sans-serif;}.ds-chip i{width:7px;height:7px;border-radius:50%;background:#34D66B;}"
+    },
+    {
+      "name": "Tarjeta",
+      "kind": "card",
+      "refersTo": "tarjeta",
+      "description": "Superficie tonal con borde filo; sin sombra ni tarjetas anidadas.",
+      "html": "<div class=\"ds-tarjeta\"><b>Corte clásico</b><span>$170.00</span></div>",
+      "css": ".ds-tarjeta{background:#14211B;border:1px solid #3D4F49;border-radius:18px;padding:16px;display:flex;justify-content:space-between;color:#F4F0E8;font:700 16px Manrope,sans-serif;}.ds-tarjeta span{color:#D4AF37;font-variant-numeric:tabular-nums;}"
+    },
+    {
+      "name": "Barra de navegación",
+      "kind": "nav",
+      "refersTo": "barra-navegacion",
+      "description": "Barra inferior de 72 dp; indicador en píldora de latón al 16 %.",
+      "html": "<nav class=\"ds-nav\"><a class=\"on\">Inicio</a><a>Citas</a><a>Agendar</a><a>Perfil</a></nav>",
+      "css": ".ds-nav{display:flex;height:72px;background:#0E1612;border-top:1px solid #3D4F49;}.ds-nav a{flex:1;display:grid;place-items:center;color:#A6BAB0;font:600 13px Manrope,sans-serif;}.ds-nav a.on{color:#F4F0E8;}.ds-nav a.on::before{content:\"\";width:56px;height:28px;border-radius:999px;background:rgba(212,175,55,0.16);display:block;margin-bottom:-24px;}"
+    },
+    {
+      "name": "Próxima cita",
+      "kind": "custom",
+      "refersTo": "tarjeta",
+      "description": "Tarjeta-boleto firma: hora en cifra marfil, estado y pares etiqueta–valor.",
+      "html": "<div class=\"ds-boleto\"><div><strong>10:30</strong><span class=\"ds-chip\"><i></i>Confirmada</span></div><dl><dt>Servicio</dt><dd>Corte Fade</dd><dt>Barbero</dt><dd>Barbero asignado</dd></dl></div>",
+      "css": ".ds-boleto{background:#1B2A23;border:1px solid #3D4F49;border-radius:18px;padding:20px;color:#EBF0E7;font:500 15px Manrope,sans-serif;}.ds-boleto div{display:flex;justify-content:space-between;align-items:center;}.ds-boleto strong{font:700 32px Manrope,sans-serif;color:#F4F0E8;font-variant-numeric:tabular-nums;}.ds-boleto dl{display:grid;grid-template-columns:108px 1fr;gap:6px;margin:16px 0 0;}.ds-boleto dt{color:#A6BAB0;font-size:13px;}.ds-boleto dd{margin:0;color:#F4F0E8;}"
+    }
+  ],
+  "narrative": {
+    "northStar": "Barbería de noche",
+    "overview": "La app se siente como Tony Stylo al final del día: cuero verde profundo, herrajes de latón y toallas marfil, la luz baja de un local donde el trabajo está bien hecho. El lujo está en el acabado. El latón marca la acción principal y el dinero, nada más. Los componentes son táctiles y seguros, y las superficies se distinguen por tono, no por sombra.",
+    "keyCharacteristics": [
+      "Fondo verde noche (invitado) y negro sillón (paneles con sesión), capas de cuero verde encima.",
+      "Latón solo para la acción principal y el dinero; el texto sobre latón siempre es tinta oscura.",
+      "Fraunces para títulos con carácter; Manrope para todo lo que se opera.",
+      "Fotos reales del backend (servicios, productos, logo). Sin imagen, un placeholder honesto, nunca una ilustración inventada.",
+      "Motion corto, con ease-out, que responde al usuario. Una sola entrada orquestada por pantalla."
+    ],
+    "rules": [
+      {
+        "name": "The Latón Escaso Rule",
+        "body": "El latón ocupa menos del 10 % de cualquier pantalla.",
+        "section": "colors"
+      },
+      {
+        "name": "The Tinta Oscura Rule",
+        "body": "Sobre latón el texto es tinta-sobre-laton. Nunca blanco.",
+        "section": "colors"
+      },
+      {
+        "name": "The Estado Con Palabra Rule",
+        "body": "El color de estado siempre va con su palabra.",
+        "section": "colors"
+      },
+      {
+        "name": "The Sin Versalitas Rule",
+        "body": "No hay etiquetas en mayúsculas espaciadas ni cejas sobre los títulos.",
+        "section": "typography"
+      },
+      {
+        "name": "The Dato Estructurado Rule",
+        "body": "Los metadatos van en pares etiqueta–valor, no unidos con puntos medios.",
+        "section": "typography"
+      },
+      {
+        "name": "The Sin Sombra Rule",
+        "body": "Ninguna superficie lleva sombra ni brillo de color.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do usar latón solo para la acción principal, precios y cobros (The Latón Escaso Rule).",
+      "Do mostrar las fotos reales del backend. Si falta una, poner un placeholder honesto con el icono del rubro.",
+      "Do dar a cada estado su palabra y su color (The Estado Con Palabra Rule).",
+      "Do usar ease-out Cubic(0.23, 1, 0.32, 1) por debajo de 300 ms y respetar \"reducir movimiento\" con un corte inmediato.",
+      "Do escribir errores que digan qué pasó y qué hacer (\"No se pudo cargar la agenda. Revisa tu conexión y reintenta\")."
+    ],
+    "donts": [
+      "Don't poner etiquetas en mayúsculas espaciadas ni cejas sobre los títulos (The Sin Versalitas Rule).",
+      "Don't unir metadatos con puntos medios (The Dato Estructurado Rule).",
+      "Don't usar sombras, brillos ni degradados como decoración (The Sin Sombra Rule).",
+      "Don't usar texto blanco sobre latón (The Tinta Oscura Rule).",
+      "Don't animar desde scale(0) ni repetir la misma entrada en cada sección.",
+      "Don't animar lo que la secretaría hace decenas de veces al día (marcar llegada, filtrar). Ahí solo hay respuesta táctil."
+    ]
+  }
+}

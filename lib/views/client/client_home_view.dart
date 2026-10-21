@@ -203,8 +203,12 @@ class _NextCitaCard extends StatelessWidget {
             const SizedBox(height: 12),
             Row(
               children: [
-                EstadoChip(estado: next.estado),
-                const Spacer(),
+                Expanded(
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: EstadoChip(estado: next.estado),
+                  ),
+                ),
                 TextButton(onPressed: onCitas, child: const Text('Ver citas')),
               ],
             ),
