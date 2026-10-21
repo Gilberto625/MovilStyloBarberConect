@@ -208,7 +208,7 @@ void main() {
         secretariaRepo: day,
         home: const SecretaryHomeView(),
       );
-      expect(find.text('Operación'), findsOneWidget);
+      expect(find.text('Hoy'), findsWidgets);
       await tester.scrollUntilVisible(
         find.text('Ana López'),
         80,
@@ -241,9 +241,11 @@ void main() {
     await tester.tap(find.text('Ana López'));
     await tester.pumpAndSettle();
     expect(find.text('Cliente llegó'), findsNothing);
-    expect(find.text('Cobrar restante'), findsNothing);
+    expect(find.byKey(const Key('detalle_cobrar')), findsNothing);
+    expect(find.byKey(const Key('detalle_no_asistio')), findsNothing);
     expect(find.text('Cita #15'), findsOneWidget);
     expect(find.text('45 min'), findsOneWidget);
+    await tester.scrollUntilVisible(find.text('Volver a la agenda'), 200);
     expect(find.text('Volver a la agenda'), findsOneWidget);
     expect(tester.takeException(), isNull);
     auth.dispose();

@@ -143,9 +143,9 @@ class _SecretaryNuevaCitaViewState extends State<SecretaryNuevaCitaView> {
   @override
   Widget build(BuildContext context) {
     return Theme(
-      data: AppTheme.guest(),
+      data: Theme.of(context),
       child: Scaffold(
-        backgroundColor: AppColors.guestBg,
+        backgroundColor: AppColors.panelBg,
         appBar: AppBar(title: const Text('Nueva cita')),
         body: SafeArea(
           child: Consumer<SecretariaGestionViewModel>(
@@ -472,9 +472,9 @@ class _SecretaryClienteCitasViewState extends State<SecretaryClienteCitasView> {
   @override
   Widget build(BuildContext context) {
     return Theme(
-      data: AppTheme.guest(),
+      data: Theme.of(context),
       child: Scaffold(
-        backgroundColor: AppColors.guestBg,
+        backgroundColor: AppColors.panelBg,
         appBar: AppBar(title: const Text('Citas del cliente')),
         body: SafeArea(
           child: Consumer<SecretariaGestionViewModel>(
@@ -689,9 +689,9 @@ class _SecretaryReprogramarViewState extends State<SecretaryReprogramarView> {
   @override
   Widget build(BuildContext context) {
     return Theme(
-      data: AppTheme.guest(),
+      data: Theme.of(context),
       child: Scaffold(
-        backgroundColor: AppColors.guestBg,
+        backgroundColor: AppColors.panelBg,
         appBar: AppBar(title: Text('Reprogramar #${widget.citaId}')),
         body: SafeArea(
           child: Consumer<SecretariaGestionViewModel>(
