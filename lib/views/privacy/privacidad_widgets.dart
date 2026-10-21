@@ -9,17 +9,24 @@ class PrivacidadScaffold extends StatelessWidget {
     super.key,
     required this.titulo,
     required this.body,
+    this.conRegreso = true,
   });
 
   final String titulo;
   final Widget body;
+
+  /// Falso cuando no hay a dónde volver (p. ej. cuenta ya cancelada).
+  final bool conRegreso;
 
   @override
   Widget build(BuildContext context) {
     return Theme(
       data: AppTheme.guest(),
       child: Scaffold(
-        appBar: AppBar(title: Text(titulo)),
+        appBar: AppBar(
+          title: Text(titulo),
+          automaticallyImplyLeading: conRegreso,
+        ),
         body: SafeArea(
           child: Align(
             alignment: Alignment.topCenter,

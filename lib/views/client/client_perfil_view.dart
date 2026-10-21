@@ -120,9 +120,14 @@ class _ClientPerfilTabState extends State<ClientPerfilTab> {
                   icon: Icons.privacy_tip_outlined,
                   title: 'Privacidad y mis datos',
                   onTap: () async {
+                    final auth = context.read<AuthViewModel>();
                     await Navigator.pushNamed(context, AppRoutes.privacidad);
-                    // Al volver, refleja lo que se haya corregido.
-                    if (mounted) await _load();
+                    // Al volver, refleja lo que se haya corregido; si la
+                    // cuenta se canceló ya no hay sesión que recargar.
+                    if (!mounted || auth.phase != AuthPhase.authenticated) {
+                      return;
+                    }
+                    await _load();
                   },
                 ),
                 _Opcion(

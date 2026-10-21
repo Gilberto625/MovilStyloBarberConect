@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -270,6 +271,38 @@ void main() {
       verifyNever(authRepo.logoutLocal());
     });
 
+    testWidgets('ya cancelada, no hay flecha y Atrás lleva al inicio', (
+      tester,
+    ) async {
+      final (repo, _) = await _pump(tester, home: const _Lanzador());
+      when(
+        repo.cancelarCuenta(
+          contrasena: anyNamed('contrasena'),
+          motivo: anyNamed('motivo'),
+        ),
+      ).thenAnswer((_) async => _hecho);
+      await tester.tap(find.text('abrir'));
+      await tester.pumpAndSettle();
+      expect(find.byType(BackButton), findsOneWidget);
+
+      await _escribir(tester, 'eliminar_contrasena', 'Clave#1');
+      await _escribir(tester, 'eliminar_confirmacion', 'ELIMINAR');
+      await _verBoton(tester);
+      await tester.tap(find.byKey(const Key('eliminar_confirmar')));
+      await tester.pumpAndSettle();
+      expect(find.byKey(const Key('eliminar_hecho')), findsOneWidget);
+      expect(
+        find.byType(BackButton),
+        findsNothing,
+        reason: 'Una flecha que no hace nada confunde',
+      );
+
+      // Botón Atrás del sistema.
+      await tester.binding.handlePopRoute();
+      await tester.pumpAndSettle();
+      expect(find.text('inicio-invitado'), findsOneWidget);
+    });
+
     testWidgets('Privacidad lleva a Eliminar mi cuenta', (tester) async {
       await _pump(tester, home: const PrivacidadView());
       await tester.tap(find.byKey(const Key('privacidad_eliminar_cuenta')));
@@ -282,4 +315,68 @@ void main() {
       expect(tester.takeException(), isNull);
     });
   });
+
+  group('Perfil con la sesión ya cerrada', () {
+    Future<(AuthViewModel, MockAuthRepository)> sesion() async {
+      final repo = MockAuthRepository();
+      when(repo.restoreSession()).thenAnswer(
+        (_) async => const AuthUser(
+          id: 4,
+          username: 'cliente.prueba',
+          email: 'c@example.test',
+          rol: UserRole.cliente,
+        ),
+      );
+      final auth = AuthViewModel(repo);
+      await auth.bootstrap();
+      return (auth, repo);
+    }
+
+    test('tras cerrar sesión no se pide el perfil ni queda error', () async {
+      final (auth, repo) = await sesion();
+      await auth.logout();
+
+      expect(await auth.loadPerfil(), isNull);
+      verifyNever(repo.getPerfil());
+      expect(
+        auth.errorMessage,
+        isNull,
+        reason: 'Un 401 aquí aparecía después en la pantalla de acceso',
+      );
+    });
+
+    test('un 401 que llega después de cerrar sesión se descarta', () async {
+      final (auth, repo) = await sesion();
+      final respuesta = Completer<PerfilDto>();
+      when(repo.getPerfil()).thenAnswer((_) => respuesta.future);
+
+      final carga = auth.loadPerfil();
+      await auth.logout();
+      respuesta.completeError(
+        ApiException('Las credenciales de autenticación no se proveyeron.'),
+      );
+
+      expect(await carga, isNull);
+      expect(auth.errorMessage, isNull);
+      expect(auth.perfil, isNull);
+    });
+  });
+}
+
+/// Abre Eliminar mi cuenta encima de otra pantalla, como en la app.
+class _Lanzador extends StatelessWidget {
+  const _Lanzador();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: TextButton(
+        onPressed: () => Navigator.push(
+          context,
+          MaterialPageRoute<void>(builder: (_) => const EliminarCuentaView()),
+        ),
+        child: const Text('abrir'),
+      ),
+    );
+  }
 }

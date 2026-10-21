@@ -43,10 +43,15 @@ class _EliminarCuentaViewState extends State<EliminarCuentaView> {
     final vm = context.watch<EliminarCuentaViewModel>();
     final resultado = vm.resultado;
     return PopScope(
-      // Con la cuenta ya cancelada no se vuelve a las pantallas con sesión.
+      // Con la cuenta ya cancelada no se vuelve a las pantallas con sesión:
+      // Atrás lleva al inicio de invitado, igual que "Entendido".
       canPop: resultado == null,
+      onPopInvokedWithResult: (didPop, _) {
+        if (!didPop && resultado != null) _salir();
+      },
       child: PrivacidadScaffold(
         titulo: 'Eliminar mi cuenta',
+        conRegreso: resultado == null,
         body: resultado != null
             ? _Hecho(
                 folio: resultado.folio,
