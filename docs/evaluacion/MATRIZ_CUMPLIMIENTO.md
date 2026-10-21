@@ -3,6 +3,7 @@
 **Proyecto:** Stylo Barber Connect Mobile (`/Movil`)  
 **Versión app:** `0.1.0+1`  
 **Fecha de elaboración:** 2026-10-06  
+**Última revisión parcial:** 2026-10-21, filas 6.4, 6.8c, 6.9, 6.10, 6.11 y 6.14. Las demás conservan el estado del 2026-10-06.  
 **Fuente de criterios:** Instrumento Integral de Evaluación Móvil (octubre–noviembre 2026), según requisitos oficiales comunicados.  
 **PDF adjunto en workspace:** **No encontrado** al momento de esta matriz (`[No comprobado]` búsqueda de `*Instrumento*` / PDF en `/Movil` y raíz). Los criterios se toman **literalmente** del enunciado oficial proporcionado por el profesor vía la consigna de esta fase.
 
@@ -87,14 +88,14 @@
 | 6.7 | Consentimiento Opt-In explícito (inicialmente desactivado) | **Pendiente** | No | No | No | No | Backend exige `acepto_privacidad` en **registro** web; mobile no tiene UI Opt-In | Checkbox off por defecto | Implementar en registro/login gate | Dev |
 | 6.8a | ARCO Acceso (consultar perfil) | **Parcial** | Sí (lectura) | Parcial | Parcial | No | `GET /api/perfil/` vía `AuthApiService.perfil()`; UI perfil cliente | Captura perfil | Completar | Dev |
 | 6.8b | ARCO Rectificación (editar perfil) | **Pendiente** | API `PUT` existe en `ApiClient`; **UI no edita** | No | No | No | Backend `PerfilView` PUT; mobile solo GET | Formulario edición → PUT `/perfil/` | Implementar UI | Dev |
-| 6.8c | ARCO Cancelación (eliminar cuenta) | **Cumple (falta fusionar backend)** | Sí: app (Perfil › Privacidad › Eliminar mi cuenta) y `POST /api/privacidad/cancelacion/` (backend PR #5): bloqueo inmediato y supresión a los 30 días | Sí: 10 pruebas Django, 12 de Flutter, E2E en emulador | Sí | Sí | `docs/evidencias/arco/2026-10-21-cancelacion/` | — | Fusionar backend PR #5 y programar `suprimir_cuentas_vencidas` (Cron de Render) | Dev |
+| 6.8c | ARCO Cancelación (eliminar cuenta) | **Cumple (falta el Cron en Render)** | Sí: app (Perfil › Privacidad › Eliminar mi cuenta, PR #101), `POST /api/privacidad/cancelacion/` (backend PR #5, fusionado y desplegado en Render) y página pública `/eliminar-cuenta` (front PR #3, en Vercel): bloqueo inmediato y supresión a los 30 días | Sí: 10 pruebas Django, 12 de Flutter, E2E en emulador | Sí | Sí | `docs/evidencias/arco/2026-10-21-cancelacion/` | — | Programar `python manage.py suprimir_cuentas_vencidas` como Cron Job diario en Render. Sin él, las cuentas quedan bloqueadas pero no se suprimen a los 30 días | Dev |
 | 6.8d | ARCO Oposición (Opt-Out) | **Pendiente** / parcial backend | No en mobile | No | No | No | Preferencia 2FA perfil existe; no Opt-Out marketing/datos genérico | Definir alcance Opt-Out con negocio | Coordinar contrato | Equipo |
 | 6.9 | R8/ProGuard (`minifyEnabled`, `shrinkResources`, reglas) | **Cumple** | Sí: `isMinifyEnabled`, `isShrinkResources`, `proguard-rules.pro` | Sí: 981 de 1 038 clases renombradas (95 %) en `mapping.txt` | Sí | Sí | `docs/evidencias/estatico-2026-10-21/ANALISIS_ESTATICO.md` | — | `mapping.txt` nunca se versiona; `release.yml` lo cifra | Android |
 | 6.10 | Ofuscación release | **Cumple** | Sí: `--obfuscate --split-debug-info` en `release.yml` | Sí: 14 identificadores de la app pasan de 1–2 apariciones a 0 en `libapp.so`; el APK ofuscado funciona en el emulador | Sí | Sí | `docs/evidencias/estatico-2026-10-21/` | — | Símbolos cifrados con `SYMBOLS_PASSPHRASE` | Dev |
 | 6.11 | Evaluación JADX/MobSF | **Parcial** | Análisis estático con aapt2, apksigner, zipalign y `tool/analisis_apk.py` (manifiesto, componentes exportados, firma, 16 KB, R8, Dart y secretos) | Sí | Sí | Sí | `docs/evidencias/estatico-2026-10-21/ANALISIS_ESTATICO.md` | Capturas de JADX-GUI y reporte MobSF | Bajar JADX/mobsfscan (decisión del equipo) | Seguridad |
 | 6.12 | Pruebas caja negra E2E | **Pendiente** | No | No | No | No | Sin `integration_test` E2E / Patrol | Flujos login/catálogo/secretaría en staging | Implementar | QA |
 | 6.13 | Matriz Debug/Release | **Pendiente** | No formal | No | No | No | — | Tabla casos Debug vs Release | Crear en docs | QA |
-| 6.14 | Registro de errores encontrados/corregidos | **Parcial** | Informal (auditoría/fase 3) | N/A | Parcial | No | Historial chat + EOCD path spaces, NDK | Bitácora formal `REGISTRO_ERRORES.md` | Crear registro | QA |
+| 6.14 | Registro de errores encontrados/corregidos | **Cumple** | Sí: `docs/evaluacion/REGISTRO_ERRORES.md`, con ERR-01 a ERR-13 (cómo se encontró, estado y evidencia) | Sí: cada error marcado "Corregido" tiene su prueba en `test/` | Sí | Sí | `REGISTRO_ERRORES.md`; evidencias en `docs/evidencias/pruebas/2026-10-19/`, `arco/2026-10-21-cancelacion/`, `red-2026-10-21/` y `encuadre-fotos-2026-10-21/` | — | Siguen abiertos ERR-02 y ERR-03 (backend, PM02), ERR-05 y ERR-06 | QA |
 
 ---
 
