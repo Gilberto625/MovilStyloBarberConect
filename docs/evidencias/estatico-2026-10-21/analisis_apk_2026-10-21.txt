@@ -1,0 +1,75 @@
+## 1. Paquete, SDK y permisos (aapt2 dump badging, APK ofuscado)
+package: name='com.tonystylo.stylo_barber_connect' versionCode='1' versionName='0.1.0' platformBuildVersionName='16' platformBuildVersionCode='36' compileSdkVersion='36' compileSdkVersionCodename='16'
+minSdkVersion:'24'
+targetSdkVersion:'36'
+uses-permission: name='android.permission.INTERNET'
+uses-permission: name='com.tonystylo.stylo_barber_connect.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION'
+application-label:'Stylo Barber Connect'
+native-code: 'arm64-v8a' 'armeabi-v7a' 'x86_64'
+
+## 2. Manifiesto (aapt2 dump xmltree)
+android:debuggable: (no declarado)
+android:allowBackup: false
+android:usesCleartextTraffic: (no declarado)
+android:networkSecurityConfig: (no declarado)
+activity: com.tonystylo.stylo_barber_connect.MainActivity exported=true
+activity: io.flutter.plugins.urllauncher.WebViewActivity exported=false
+provider: androidx.startup.InitializationProvider exported=false
+receiver: androidx.profileinstaller.ProfileInstallReceiver exported=true
+
+## 3. Firma (apksigner verify --print-certs)
+
+## 4. Páginas de 16 KB
+zipalign -c -P 16 -v 4: OK
+Verification successful
+lib/arm64-v8a/libapp.so: alineación LOAD mínima 65536 (64 KB) -> OK
+lib/arm64-v8a/libdartjni.so: alineación LOAD mínima 16384 (16 KB) -> OK
+lib/arm64-v8a/libflutter.so: alineación LOAD mínima 65536 (64 KB) -> OK
+lib/armeabi-v7a/libapp.so: alineación LOAD mínima 16384 (16 KB) -> OK
+lib/armeabi-v7a/libdartjni.so: alineación LOAD mínima 16384 (16 KB) -> OK
+lib/armeabi-v7a/libflutter.so: alineación LOAD mínima 65536 (64 KB) -> OK
+lib/x86_64/libapp.so: alineación LOAD mínima 65536 (64 KB) -> OK
+lib/x86_64/libdartjni.so: alineación LOAD mínima 16384 (16 KB) -> OK
+lib/x86_64/libflutter.so: alineación LOAD mínima 65536 (64 KB) -> OK
+
+## 5. R8 sobre Java/Kotlin (mapping.txt; el archivo no se versiona)
+clases en mapping.txt: 1038; renombradas: 981 (95 %)
+  com.google.*: 287 clases, 287 renombradas
+  io.flutter.*: 247 clases, 228 renombradas
+  kotlinx.coroutines.*: 154 clases, 154 renombradas
+  androidx.window.*: 61 clases, 52 renombradas
+  androidx.core.*: 50 clases, 45 renombradas
+  kotlin.jvm.*: 39 clases, 39 renombradas
+  kotlin.collections.*: 21 clases, 21 renombradas
+  androidx.lifecycle.*: 20 clases, 19 renombradas
+archivos dex: ['classes.dex']
+
+## 6. Código Dart en libapp.so (arm64), antes y después de --obfuscate
+tamaño libapp.so: sin ofuscar 7.41 MB, ofuscado 6.16 MB
+identificador                sin ofuscar  ofuscado
+AuthViewModel                          2         0
+ApiClient                              2         0
+SecureTokenStorage                     1         0
+PrivacidadRepository                   1         0
+EditarPerfilViewModel                  2         0
+SecretariaHoyViewModel                 2         0
+CitasRepository                        1         0
+TiendaViewModel                        2         0
+loadPerfil                             1         0
+guardarPreferencias                    1         0
+loadMisCitas                           1         0
+completeLogin                          1         0
+restoreSession                         1         0
+verify2fa                              1         0
+
+## 7. Cadenas en claro y búsqueda de secretos (libapp.so ofuscado)
+"/privacidad/preferencias/": presente
+"/auth/token/refresh/": presente
+"backendstylobarberconect-lo71.onrender.com": presente
+"BEGIN CERTIFICATE": ausente
+clave privada PEM: NINGUNO
+AWS access key: NINGUNO
+token tipo sk_/pk_ live: NINGUNO
+Google API key: NINGUNO
+JWT: NINGUNO
+Brevo/Sendinblue key: NINGUNO
