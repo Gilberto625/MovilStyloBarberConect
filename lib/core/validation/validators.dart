@@ -52,3 +52,62 @@ String? validarFechaNacimiento(String? value, {DateTime? hoy}) {
   }
   return null;
 }
+
+// Reglas de `POST /register/` (backend/core/views.py, RegisterView). La app
+// avisa antes de enviar; Django vuelve a validar y su mensaje manda.
+
+final _usuarioValido = RegExp(r'^[A-Za-z0-9_.+\-]{4,150}$');
+final _correoRegistro = RegExp(
+  r'^[a-zA-Z0-9._%+\-]{1,64}@[a-zA-Z0-9.\-]{1,253}\.[a-zA-Z]{2,}$',
+);
+final _especial = RegExp(r'''[!@#$%^&*(),.?":{}|<>\[\]\/_+\-=~`]''');
+
+/// Usuario de 4 a 150 caracteres: letras, números y `. _ + -`.
+String? validarUsuario(String? value) {
+  final text = value?.trim() ?? '';
+  if (text.isEmpty) return 'Obligatorio';
+  if (!_usuarioValido.hasMatch(text)) {
+    return 'Usa 4 o más letras o números, sin espacios';
+  }
+  return null;
+}
+
+/// Correo obligatorio con usuario, dominio y extensión.
+String? validarCorreo(String? value) {
+  final text = value?.trim() ?? '';
+  if (text.isEmpty) return 'Obligatorio';
+  if (!_correoRegistro.hasMatch(text)) return 'Correo no válido';
+  return null;
+}
+
+/// Teléfono obligatorio de 10 a 15 dígitos.
+String? validarTelefonoObligatorio(String? value) {
+  final digitos = (value ?? '').replaceAll(RegExp(r'\D'), '');
+  if (digitos.isEmpty) return 'Obligatorio';
+  return validarTelefono(value);
+}
+
+/// Cada requisito de la contraseña y si ya se cumple, para mostrarlos
+/// mientras se escribe.
+List<({String regla, bool cumple})> requisitosContrasena(String value) => [
+  (regla: '8 caracteres o más', cumple: value.length >= 8),
+  (regla: 'Una mayúscula', cumple: RegExp(r'[A-Z]').hasMatch(value)),
+  (regla: 'Una minúscula', cumple: RegExp(r'[a-z]').hasMatch(value)),
+  (regla: 'Un número', cumple: RegExp(r'\d').hasMatch(value)),
+  (regla: 'Un carácter especial', cumple: _especial.hasMatch(value)),
+];
+
+String? validarContrasenaNueva(String? value) {
+  final text = value ?? '';
+  if (text.isEmpty) return 'Obligatorio';
+  if (requisitosContrasena(text).any((r) => !r.cumple)) {
+    return 'Aún no cumple todos los requisitos';
+  }
+  return null;
+}
+
+String? validarConfirmacion(String? value, String original) {
+  if ((value ?? '').isEmpty) return 'Obligatorio';
+  if (value != original) return 'Las contraseñas no coinciden';
+  return null;
+}

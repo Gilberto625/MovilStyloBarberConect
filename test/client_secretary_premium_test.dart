@@ -378,6 +378,19 @@ class _FakeAuth implements AuthRepository {
   Future<void> resend2fa(String tempToken) async {}
 
   @override
+  Future<RegistroPendiente> registrar(RegistroRequest datos) async =>
+      throw UnimplementedError('registro no se usa en esta prueba');
+
+  @override
+  Future<AuthUser> verificarRegistro({
+    required String tempToken,
+    required String codigo,
+  }) async => throw UnimplementedError('registro no se usa en esta prueba');
+
+  @override
+  Future<String> reenviarCodigoRegistro(String correo) async => '';
+
+  @override
   Future<AuthUser?> restoreSession() async => user;
 
   @override

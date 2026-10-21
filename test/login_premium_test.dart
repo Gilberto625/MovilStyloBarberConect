@@ -68,6 +68,19 @@ class _FakeAuthRepository implements AuthRepository {
   }
 
   @override
+  Future<RegistroPendiente> registrar(RegistroRequest datos) async =>
+      throw UnimplementedError('registro no se usa en esta prueba');
+
+  @override
+  Future<AuthUser> verificarRegistro({
+    required String tempToken,
+    required String codigo,
+  }) async => throw UnimplementedError('registro no se usa en esta prueba');
+
+  @override
+  Future<String> reenviarCodigoRegistro(String correo) async => '';
+
+  @override
   Future<AuthUser?> restoreSession() async => null;
 
   @override
@@ -128,7 +141,7 @@ void main() {
       final auth = AuthViewModel(_FakeAuthRepository());
       await _pumpLogin(tester, size: size, auth: auth);
       expect(tester.takeException(), isNull);
-      expect(find.text('Bienvenido'), findsOneWidget);
+      expect(find.text('Inicia sesión'), findsOneWidget);
       expect(find.text('Entrar'), findsOneWidget);
       auth.dispose();
     }
@@ -144,7 +157,7 @@ void main() {
     );
     await tester.pump();
     expect(tester.takeException(), isNull);
-    expect(find.text('Bienvenido'), findsOneWidget);
+    expect(find.text('Inicia sesión'), findsOneWidget);
     auth.dispose();
   });
 
@@ -178,10 +191,14 @@ void main() {
     await _pumpLogin(tester, size: const Size(360, 800), auth: auth);
     await tester.enterText(find.byType(TextFormField).at(0), 'a@b.com');
     await tester.enterText(find.byType(TextFormField).at(1), 'secreto');
+    final antes = tester.getSize(find.byKey(const Key('login_entrar')));
     await tester.tap(find.text('Entrar'));
     await tester.pump();
+    // La etiqueta cede al spinner con un fundido corto (AppMotion.quick).
+    await tester.pump(const Duration(milliseconds: 200));
     expect(find.byType(CircularProgressIndicator), findsOneWidget);
     expect(find.text('Entrar'), findsNothing);
+    expect(tester.getSize(find.byKey(const Key('login_entrar'))), antes);
     expect(tester.takeException(), isNull);
     auth.dispose();
   });

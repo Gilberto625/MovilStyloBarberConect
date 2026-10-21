@@ -9,6 +9,7 @@ import '../models/cita_models.dart';
 import '../viewmodels/auth_viewmodel.dart';
 import '../viewmodels/privacidad_viewmodels.dart';
 import '../views/auth/login_views.dart';
+import '../views/auth/registro_views.dart';
 import '../views/client/client_home_view.dart';
 import '../views/guest/catalog_detail_views.dart';
 import '../views/guest/catalog_list_views.dart';
@@ -31,6 +32,8 @@ class AppRoutes {
   static const productoDetalle = '/producto';
   static const login = '/login';
   static const verify2fa = '/verify-2fa';
+  static const registro = '/registro';
+  static const registroVerificar = '/registro/verificar';
   static const clientHome = '/cliente';
   static const secretaryHome = '/secretaria';
   static const secretaryCitaDetail = '/secretaria/cita';
@@ -107,6 +110,10 @@ class AppRoutes {
         return const LoginView();
       case verify2fa:
         return const Verify2FAView();
+      case registro:
+        return const RegistroView();
+      case registroVerificar:
+        return const VerificarRegistroView();
       case clientHome:
         return const ClientHomeShell();
       case secretaryHome:

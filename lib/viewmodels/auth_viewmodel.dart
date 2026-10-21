@@ -103,6 +103,99 @@ class AuthViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  // Alta de cliente: el registro queda pendiente hasta confirmar el código.
+  String? registroTempToken;
+  String? registroDestino;
+  String? registroCorreo;
+  String? registroMensaje;
+
+  bool get hayRegistroPendiente =>
+      registroTempToken != null && registroTempToken!.isNotEmpty;
+
+  Future<bool> registrar(RegistroRequest datos) async {
+    busy = true;
+    errorMessage = null;
+    notifyListeners();
+    try {
+      final pendiente = await _repository.registrar(datos);
+      registroTempToken = pendiente.tempToken;
+      registroDestino = pendiente.destino;
+      registroCorreo = datos.correo.trim().toLowerCase();
+      registroMensaje = pendiente.mensaje;
+      busy = false;
+      notifyListeners();
+      return true;
+    } catch (e) {
+      errorMessage = e.toString();
+      busy = false;
+      notifyListeners();
+      return false;
+    }
+  }
+
+  Future<bool> verificarRegistro(String codigo) async {
+    final token = registroTempToken;
+    if (token == null || token.isEmpty) {
+      errorMessage = 'No hay un registro pendiente de confirmar.';
+      notifyListeners();
+      return false;
+    }
+    if (!RegExp(r'^\d{6}$').hasMatch(codigo.trim())) {
+      errorMessage = 'Escribe los 6 dígitos del código.';
+      notifyListeners();
+      return false;
+    }
+    busy = true;
+    errorMessage = null;
+    notifyListeners();
+    try {
+      user = await _repository.verificarRegistro(
+        tempToken: token,
+        codigo: codigo,
+      );
+      cancelarRegistro(notify: false);
+      phase = AuthPhase.authenticated;
+      busy = false;
+      notifyListeners();
+      return true;
+    } catch (e) {
+      errorMessage = e.toString();
+      busy = false;
+      notifyListeners();
+      return false;
+    }
+  }
+
+  Future<void> reenviarCodigoRegistro() async {
+    final correo = registroCorreo;
+    if (correo == null || correo.isEmpty) return;
+    busy = true;
+    errorMessage = null;
+    notifyListeners();
+    try {
+      registroMensaje = await _repository.reenviarCodigoRegistro(correo);
+    } catch (e) {
+      errorMessage = e.toString();
+    }
+    busy = false;
+    notifyListeners();
+  }
+
+  void cancelarRegistro({bool notify = true}) {
+    registroTempToken = null;
+    registroDestino = null;
+    registroCorreo = null;
+    registroMensaje = null;
+    if (notify) notifyListeners();
+  }
+
+  /// Limpia el error al cambiar de pantalla de acceso.
+  void limpiarError() {
+    if (errorMessage == null) return;
+    errorMessage = null;
+    notifyListeners();
+  }
+
   void cancel2fa() {
     pendingTempToken = null;
     pendingDestino = null;

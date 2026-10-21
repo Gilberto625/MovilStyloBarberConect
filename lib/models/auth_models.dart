@@ -150,3 +150,69 @@ class PerfilDto {
     );
   }
 }
+
+/// Alta de cliente (`POST /register/`). Los nombres de campo son los de
+/// Django (`RegisterView`), igual que en la web.
+class RegistroRequest {
+  const RegistroRequest({
+    required this.nombre,
+    required this.apellidoPaterno,
+    required this.apellidoMaterno,
+    required this.username,
+    required this.correo,
+    required this.telefono,
+    required this.contrasena,
+    required this.preguntaSecreta,
+    required this.respuestaSecreta,
+    required this.aceptaTerminos,
+  });
+
+  /// Las mismas opciones que ofrece la web (register.component.html).
+  static const preguntas = [
+    '¿Cuál es el nombre de tu primera mascota?',
+    '¿Cuál es el nombre de tu madre?',
+    '¿En qué ciudad naciste?',
+    '¿Cuál es el nombre de tu mejor amigo de la infancia?',
+    '¿Cuál es el modelo de tu primer automóvil?',
+    '¿Cuál es el nombre de tu escuela primaria?',
+  ];
+
+  final String nombre;
+  final String apellidoPaterno;
+  final String apellidoMaterno;
+  final String username;
+  final String correo;
+  final String telefono;
+  final String contrasena;
+  final String preguntaSecreta;
+  final String respuestaSecreta;
+  final bool aceptaTerminos;
+
+  Map<String, dynamic> toJson() => {
+    'nombre': nombre.trim(),
+    'apellidopaterno': apellidoPaterno.trim(),
+    'apellidomaterno': apellidoMaterno.trim(),
+    'username': username.trim(),
+    'correo': correo.trim().toLowerCase(),
+    'telefono': telefono.replaceAll(RegExp(r'\D'), ''),
+    'contrasena': contrasena,
+    'preguntasecreta': preguntaSecreta,
+    'respuestasecreta': respuestaSecreta.trim(),
+    'aceptaTerminos': aceptaTerminos,
+  };
+}
+
+/// Registro creado, pendiente de confirmar con el código del correo.
+class RegistroPendiente {
+  const RegistroPendiente({
+    required this.tempToken,
+    required this.destino,
+    required this.mensaje,
+  });
+
+  final String tempToken;
+
+  /// Correo enmascarado por el servidor (`j***e@correo.com`).
+  final String destino;
+  final String mensaje;
+}
