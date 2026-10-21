@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'core/config/app_config.dart';
+import 'core/config/app_locale.dart';
 import 'core/di/app_scope.dart';
 import 'core/theme/app_theme.dart';
 import 'routes/app_routes.dart';
@@ -49,6 +50,9 @@ class StyloBarberApp extends StatelessWidget {
         title: AppConfig.appName,
         debugShowCheckedModeBanner: false,
         theme: AppTheme.panel(),
+        locale: AppLocale.locale,
+        supportedLocales: AppLocale.supported,
+        localizationsDelegates: AppLocale.delegates,
         initialRoute: AppRoutes.splash,
         onGenerateRoute: AppRoutes.onGenerateRoute,
       ),

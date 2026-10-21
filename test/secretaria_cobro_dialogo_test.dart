@@ -103,7 +103,11 @@ void main() {
     (tester) async {
       final repo = await _abrirDetalle(tester);
 
-      await tester.tap(find.text('Cobrar restante'));
+      await tester.ensureVisible(find.byKey(const Key('detalle_cobrar')));
+
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byKey(const Key('detalle_cobrar')));
       await tester.pumpAndSettle();
       await tester.enterText(
         find.widgetWithText(TextField, 'Efectivo recibido'),
@@ -124,7 +128,11 @@ void main() {
   ) async {
     final repo = await _abrirDetalle(tester);
 
-    await tester.tap(find.text('Cobrar restante'));
+    await tester.ensureVisible(find.byKey(const Key('detalle_cobrar')));
+
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byKey(const Key('detalle_cobrar')));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Cancelar'));
     await tester.pumpAndSettle();
@@ -137,7 +145,11 @@ void main() {
   testWidgets('efectivo insuficiente avisa y no cobra', (tester) async {
     final repo = await _abrirDetalle(tester);
 
-    await tester.tap(find.text('Cobrar restante'));
+    await tester.ensureVisible(find.byKey(const Key('detalle_cobrar')));
+
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byKey(const Key('detalle_cobrar')));
     await tester.pumpAndSettle();
     await tester.enterText(
       find.widgetWithText(TextField, 'Efectivo recibido'),

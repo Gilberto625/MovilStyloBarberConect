@@ -258,8 +258,9 @@ class AppTheme {
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
           minimumSize: buttonSize,
-          foregroundColor: AppColors.gold,
-          side: const BorderSide(color: AppColors.gold, width: 1.2),
+          // Secundario neutro (Latón Escaso): marfil sobre filo.
+          foregroundColor: AppColors.ivory,
+          side: const BorderSide(color: AppColors.border, width: 1.2),
           textStyle: label,
           padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xl),
           shape: control,

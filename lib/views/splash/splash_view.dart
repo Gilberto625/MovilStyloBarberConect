@@ -53,12 +53,13 @@ class SplashView extends StatelessWidget {
                             RichText(
                               textAlign: TextAlign.center,
                               text: TextSpan(
-                                style: TextStyle(
-                                  fontSize: titleSize,
-                                  height: 1.05,
-                                  fontWeight: FontWeight.w500,
-                                  color: AppColors.text,
-                                ),
+                                // Fraunces del tema, como el resto de la marca.
+                                style: Theme.of(context).textTheme.displaySmall
+                                    ?.copyWith(
+                                      fontSize: titleSize,
+                                      height: 1.05,
+                                      color: AppColors.ivory,
+                                    ),
                                 children: const [
                                   TextSpan(text: 'Stylo'),
                                   TextSpan(
@@ -68,22 +69,16 @@ class SplashView extends StatelessWidget {
                                 ],
                               ),
                             ),
-                            SizedBox(height: gap * 0.7),
-                            Container(
-                              width: mark * 0.42,
-                              height: 1,
-                              color: AppColors.gold.withValues(alpha: 0.7),
-                            ),
-                            SizedBox(height: gap * 0.55),
+                            SizedBox(height: gap * 0.5),
+                            // Sin versalitas espaciadas (DESIGN.md).
                             Text(
-                              'BARBERÍA',
+                              'Barbería',
                               textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: AppColors.museum,
-                                fontSize: subtitleSize,
-                                letterSpacing: 4,
-                                fontWeight: FontWeight.w600,
-                              ),
+                              style: Theme.of(context).textTheme.titleMedium
+                                  ?.copyWith(
+                                    color: AppColors.muted,
+                                    fontSize: subtitleSize * 1.25,
+                                  ),
                             ),
                           ],
                         ),
@@ -105,55 +100,10 @@ class SplashView extends StatelessWidget {
 class _SplashBackdrop extends StatelessWidget {
   const _SplashBackdrop();
 
+  // Suelo plano de la marca: sin halos ni brillos (DESIGN.md › Sin Sombra).
   @override
-  Widget build(BuildContext context) {
-    return const DecoratedBox(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [Color(0xFF121C18), Color(0xFF0A100E), Color(0xFF080E0B)],
-        ),
-      ),
-      child: SizedBox.expand(
-        child: Stack(
-          children: [
-            Positioned(
-              top: -80,
-              right: -40,
-              child: _Glow(size: 280, color: Color(0x33D4AF37)),
-            ),
-            Positioned(
-              bottom: -100,
-              left: -60,
-              child: _Glow(size: 320, color: Color(0x33718F83)),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _Glow extends StatelessWidget {
-  const _Glow({required this.size, required this.color});
-
-  final double size;
-  final Color color;
-
-  @override
-  Widget build(BuildContext context) {
-    return IgnorePointer(
-      child: Container(
-        width: size,
-        height: size,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          gradient: RadialGradient(colors: [color, color.withValues(alpha: 0)]),
-        ),
-      ),
-    );
-  }
+  Widget build(BuildContext context) =>
+      const ColoredBox(color: AppColors.guestBg, child: SizedBox.expand());
 }
 
 class _BrandMark extends StatelessWidget {
@@ -179,17 +129,11 @@ class _BrandMark extends StatelessWidget {
         height: size * 0.78,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: const Color(0xFF101A16),
+          color: AppColors.surface,
           border: Border.all(
             color: AppColors.gold,
             width: (size * 0.02).clamp(1.4, 2.6),
           ),
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.gold.withValues(alpha: 0.22),
-              blurRadius: size * 0.22,
-            ),
-          ],
         ),
         child: Icon(
           Icons.content_cut,
@@ -216,7 +160,7 @@ class _SplashStatus extends StatelessWidget {
           child: const LinearProgressIndicator(
             minHeight: 2,
             color: AppColors.gold,
-            backgroundColor: Color(0xFF24302B),
+            backgroundColor: AppColors.border,
             borderRadius: BorderRadius.all(Radius.circular(2)),
           ),
         ),
@@ -226,7 +170,6 @@ class _SplashStatus extends StatelessWidget {
           style: TextStyle(
             color: AppColors.text.withValues(alpha: 0.55),
             fontSize: 12,
-            letterSpacing: 1.4,
           ),
         ),
       ],
