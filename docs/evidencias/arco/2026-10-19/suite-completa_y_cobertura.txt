@@ -1,0 +1,2 @@
+00:19 +160: All tests passed!
+Cobertura total (coverage/lcov.info): 2618/4232 líneas = 61.86%

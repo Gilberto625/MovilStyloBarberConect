@@ -3,10 +3,12 @@ import '../storage/secure_token_storage.dart';
 import '../../repositories/auth_repository.dart';
 import '../../repositories/catalog_repository.dart';
 import '../../repositories/citas_repository.dart';
+import '../../repositories/privacidad_repository.dart';
 import '../../repositories/secretaria_repository.dart';
 import '../../services/auth_api_service.dart';
 import '../../services/catalog_api_service.dart';
 import '../../services/citas_api_service.dart';
+import '../../services/privacidad_api_service.dart';
 import '../../services/secretaria_api_service.dart';
 import '../../viewmodels/auth_viewmodel.dart';
 import '../../viewmodels/catalog_list_viewmodel.dart';
@@ -24,6 +26,7 @@ class AppScope {
     required this.authRepository,
     required this.citasRepository,
     required this.secretariaRepository,
+    required this.privacidadRepository,
     required this.authViewModel,
     required this.homeGuestViewModel,
     required this.catalogListViewModel,
@@ -56,6 +59,12 @@ class AppScope {
     authRepository = AuthRepository(api: authApi, storage: storage);
     final citasRepository = CitasRepository(citasApi);
     final secretariaRepository = SecretariaRepository(secretariaApi);
+    final privacidadRepository = PrivacidadRepository(
+      auth: authApi,
+      citas: citasApi,
+      publico: catalogApi,
+      preferencias: PrivacidadApiService(api),
+    );
     authViewModel = AuthViewModel(authRepository);
 
     return AppScope._(
@@ -65,6 +74,7 @@ class AppScope {
       authRepository: authRepository,
       citasRepository: citasRepository,
       secretariaRepository: secretariaRepository,
+      privacidadRepository: privacidadRepository,
       authViewModel: authViewModel,
       homeGuestViewModel: HomeGuestViewModel(catalogRepository),
       catalogListViewModel: CatalogListViewModel(catalogRepository),
@@ -84,6 +94,10 @@ class AppScope {
   final AuthRepository authRepository;
   final CitasRepository citasRepository;
   final SecretariaRepository secretariaRepository;
+
+  /// Las pantallas de privacidad crean su ViewModel por ruta, así no queda
+  /// estado de un usuario al cambiar de cuenta (PM09).
+  final PrivacidadRepository privacidadRepository;
   final AuthViewModel authViewModel;
   final HomeGuestViewModel homeGuestViewModel;
   final CatalogListViewModel catalogListViewModel;

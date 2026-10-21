@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../../core/theme/app_theme.dart';
+import '../../core/validation/validators.dart';
 import '../../models/auth_models.dart';
 import '../../routes/app_routes.dart';
 import '../../viewmodels/auth_viewmodel.dart';
@@ -30,16 +31,6 @@ class _LoginViewState extends State<LoginView> {
     _email.dispose();
     _password.dispose();
     super.dispose();
-  }
-
-  String? _cuentaValidator(String? value) {
-    final text = value?.trim() ?? '';
-    if (text.isEmpty) return 'Obligatorio';
-    if (text.contains('@') &&
-        !RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$').hasMatch(text)) {
-      return 'Correo no válido';
-    }
-    return null;
   }
 
   Future<void> _submit() async {
@@ -114,7 +105,7 @@ class _LoginViewState extends State<LoginView> {
                 decoration: const InputDecoration(
                   labelText: 'Correo o usuario',
                 ),
-                validator: _cuentaValidator,
+                validator: validarCuenta,
               ),
               const SizedBox(height: 12),
               TextFormField(
@@ -163,6 +154,16 @@ class _LoginViewState extends State<LoginView> {
                         }
                       },
                 child: const Text('Volver al inicio'),
+              ),
+              TextButton(
+                key: const Key('login_aviso_privacidad'),
+                onPressed: auth.busy
+                    ? null
+                    : () => Navigator.pushNamed(
+                        context,
+                        AppRoutes.avisoPrivacidad,
+                      ),
+                child: const Text('Aviso de privacidad'),
               ),
             ],
           ),

@@ -1,6 +1,7 @@
 import '../core/errors/app_exception.dart';
 import '../core/network/api_client.dart';
 import '../models/auth_models.dart';
+import '../models/privacidad_models.dart';
 
 class AuthApiService {
   AuthApiService(this._api);
@@ -96,8 +97,24 @@ class AuthApiService {
 
   Future<PerfilDto> perfil() async {
     final raw = await _api.get('/perfil/');
+    return _perfilDesde(raw);
+  }
+
+  /// `PUT /perfil/` (rectificación ARCO). Django responde con el perfil ya
+  /// actualizado, en el mismo sobre que `GET /perfil/`.
+  Future<PerfilDto> actualizarPerfil(PerfilUpdate cambios) async {
+    final raw = await _api.put('/perfil/', body: cambios.toJson());
+    return _perfilDesde(raw);
+  }
+
+  PerfilDto _perfilDesde(Object? raw) {
     if (raw is! Map) throw ApiException('Respuesta de perfil inválida.');
     final map = Map<String, dynamic>.from(raw);
+    if (map['ok'] == false) {
+      throw ApiException(
+        (map['error'] ?? 'No se pudo cargar el perfil.').toString(),
+      );
+    }
     final perfil = map['perfil'];
     if (perfil is Map) {
       return PerfilDto.fromJson(Map<String, dynamic>.from(perfil));

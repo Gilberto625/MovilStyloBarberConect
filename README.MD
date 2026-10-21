@@ -87,9 +87,10 @@ La firma release actual usa claves debug temporalmente; no publicar en Play Stor
 
 | Área | Endpoints |
 |------|-----------|
-| Público | `GET /public/servicios/`, `/public/productos/`, `/public/contacto/` |
+| Público | `GET /public/servicios/`, `/public/productos/`, `/public/contacto/`, `/public/legal/?tipo=privacidad` (aviso de privacidad) |
 | Auth | `POST /login/`, `/login/2fa/verificar/`, `/login/2fa/solicitar-codigo/`, `POST /auth/token/refresh/`, `GET /auth/me/`, `GET /perfil/` |
 | Cliente | `GET /barberos/`, `/disponibilidad/`, `/citas/politica-pago/`, `/mis-citas/`, `POST /citas/` |
+| Privacidad (ARCO) | `GET /perfil/` + `GET /mis-citas/` (Mis datos, GH#42), `PUT /perfil/` (rectificación, GH#43). `PUT` reemplaza el perfil completo: la app reenvía `avatar_url` y `direccion` actuales. `GET`/`PUT /privacidad/preferencias/` (opt-in de finalidades secundarias guardado en la cuenta, GH#41/GH#45; backend `feature/movil-arco-preferencias`). La cancelación aún no tiene endpoint |
 | Secretaría | `GET /secretaria/citas/dia/`, `POST .../asistencia/`, `POST .../cobrar/` |
 
 ## Seguridad
@@ -105,10 +106,24 @@ La firma release actual usa claves debug temporalmente; no publicar en Play Stor
 
 ```bash
 flutter analyze
-flutter test
+flutter test --coverage
 ```
 
 Incluye ViewModels (auth, citas, secretaría), repositorios fake, widgets de home y manejo de errores/estados vacíos.
+
+Pruebas unitarias (Actividad 3):
+
+| Carpeta | Qué contiene |
+|---|---|
+| `test/unit/` | `PM-U01` (validador de correo), `fromJson` con fixtures y ViewModels con Mockito (`verify`, errores HTTP, timeout, doble toque) |
+| `test/fixtures/` | JSON con la forma real de las respuestas de Django, con datos ficticios |
+| `test/mocks/` | `mocks.dart` declara los mocks; `mocks.mocks.dart` es generado y se versiona para que CI no necesite `build_runner` |
+
+Si cambia la firma de un repository, regenera los mocks y súbelos en el mismo PR:
+
+```bash
+dart run build_runner build --delete-conflicting-outputs
+```
 
 ## Notas
 

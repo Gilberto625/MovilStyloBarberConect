@@ -1,5 +1,6 @@
 import '../core/network/api_client.dart';
 import '../models/catalog_models.dart';
+import '../models/privacidad_models.dart';
 
 class CatalogApiService {
   CatalogApiService(this._api);
@@ -31,6 +32,19 @@ class CatalogApiService {
       return ContactoDto.fromJson(Map<String, dynamic>.from(raw));
     }
     return ContactoDto.empty();
+  }
+
+  /// `GET /public/legal/?tipo=…` (aviso de privacidad, términos, misión…).
+  Future<List<ContenidoLegalDto>> fetchContenidoLegal({String? tipo}) async {
+    final raw = await _api.get(
+      '/public/legal/',
+      auth: false,
+      query: tipo == null ? null : {'tipo': tipo},
+    );
+    return _extractList(raw, key: 'contenidos')
+        .whereType<Map>()
+        .map((e) => ContenidoLegalDto.fromJson(Map<String, dynamic>.from(e)))
+        .toList();
   }
 
   List<dynamic> _extractList(dynamic raw, {required String key}) {
