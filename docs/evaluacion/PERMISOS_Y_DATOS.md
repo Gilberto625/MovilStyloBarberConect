@@ -28,6 +28,6 @@ Notas:
 | Ubicación, contactos, fotos, archivos | **No** | — | — |
 
 - **Contraseña:** viaja una sola vez al iniciar sesión o registrarse, por HTTPS. **No se guarda en el teléfono.**
-- **Terceros:** la app no tiene analítica ni publicidad. Las fotos del catálogo vienen de Cloudinary (URLs que publica el backend) y las tipografías de Google Fonts; ninguna de las dos peticiones lleva datos personales. WhatsApp, Maps y el marcador solo se abren cuando la persona lo pide.
+- **Terceros:** la app no tiene analítica ni publicidad. Las fotos del catálogo vienen de Cloudinary (URLs que publica el backend) sin datos personales. Las tipografías (Fraunces y Manrope, licencia OFL) van empaquetadas en la app: no se descargan. WhatsApp, Maps y el marcador solo se abren cuando la persona lo pide.
 - **Cifrado en tránsito:** sí, HTTPS en release.
 - **Eliminación de datos:** la cancelación ARCO (borrar la cuenta) **aún no tiene endpoint** en el backend (GH#44). Hasta que exista, se solicita a la barbería con los datos de contacto del aviso de privacidad. No se debe declarar "eliminación desde la app" en Play hasta tenerla.

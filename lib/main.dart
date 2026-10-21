@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'core/config/app_config.dart';
+import 'core/config/app_fonts.dart';
 import 'core/config/app_locale.dart';
 import 'core/di/app_scope.dart';
 import 'core/theme/app_theme.dart';
@@ -15,6 +16,7 @@ import 'viewmodels/secretaria_hoy_viewmodel.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  AppFonts.configurar();
   final scope = AppScope.create();
   runApp(StyloBarberApp(scope: scope));
 }
