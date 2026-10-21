@@ -1,0 +1,31 @@
+{
+  "citas": [
+    {
+      "id": 41,
+      "servicio_id": 3,
+      "servicio_nombre": "Corte clásico",
+      "servicio_imagen": "",
+      "fecha": "2026-10-21",
+      "hora": "11:30",
+      "duracion_minutos": 45,
+      "estado": "pendiente",
+      "precio_total": "180.00",
+      "anticipo_pagado": 90,
+      "saldo_pendiente": "90.00",
+      "notas": "",
+      "barbero_nombre": "Barbero Prueba",
+      "requiere_pago": true
+    },
+    {
+      "id": "42",
+      "servicio_id": "5",
+      "servicio_nombre": "Barba",
+      "fecha": "2026-10-28",
+      "hora": "17:00",
+      "duracion_minutos": "30",
+      "estado": "confirmada",
+      "precio_total": 120,
+      "requiere_pago": "true"
+    }
+  ]
+}

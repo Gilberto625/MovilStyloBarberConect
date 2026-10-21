@@ -1,0 +1,13 @@
+{
+  "ok": true,
+  "perfil": {
+    "email": "cliente.prueba@example.test",
+    "username": "cliente.prueba",
+    "nombre": "Cliente",
+    "apellido": "Prueba",
+    "telefono": "7710000000",
+    "fecha_nacimiento": "1999-05-04",
+    "avatar_url": "",
+    "direccion": "Calle Falsa #123 - Huejutla, Hidalgo"
+  }
+}

@@ -1,0 +1,1 @@
+Cobertura total (coverage/lcov.info): 2109/3666 líneas = 57.53%
