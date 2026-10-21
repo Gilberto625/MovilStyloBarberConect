@@ -175,6 +175,28 @@ class ContactoDto {
     );
   }
 
+  /// Estado de hoy según `horarios_por_dia` (0 = lunes, como el backend).
+  /// Devuelve `null` si el backend no publicó horario por día.
+  HorarioHoy? horarioHoy(DateTime now) {
+    if (horariosPorDia.isEmpty) return null;
+    final dia = now.weekday - 1;
+    final hoy = horariosPorDia.where((d) => d.diaSemana == dia).firstOrNull;
+    if (hoy == null) return const HorarioHoy(EstadoHoy.sinDato);
+    if (hoy.cerrado) return const HorarioHoy(EstadoHoy.cerrado);
+    final apertura = HorarioHoy.hhmm(hoy.apertura);
+    final cierre = HorarioHoy.hhmm(hoy.cierre);
+    if (apertura == null || cierre == null) {
+      return const HorarioHoy(EstadoHoy.sinDato);
+    }
+    final ahora = now.hour * 60 + now.minute;
+    final estado = ahora < HorarioHoy._minutos(apertura)
+        ? EstadoHoy.abrePronto
+        : ahora < HorarioHoy._minutos(cierre)
+        ? EstadoHoy.abierto
+        : EstadoHoy.yaCerro;
+    return HorarioHoy(estado, apertura: apertura, cierre: cierre);
+  }
+
   static List<HorarioDiaDto> _parseHorarios(Object? raw) {
     if (raw is! List) return const [];
     final horarios = <HorarioDiaDto>[];
@@ -200,4 +222,36 @@ class ContactoDto {
     whatsappUrl: '',
     googleMapsUrl: '',
   );
+}
+
+enum EstadoHoy { abierto, abrePronto, yaCerro, cerrado, sinDato }
+
+/// Horario de hoy ya interpretado; el texto lo pone la vista.
+class HorarioHoy {
+  const HorarioHoy(this.estado, {this.apertura, this.cierre});
+
+  final EstadoHoy estado;
+
+  /// `HH:MM`, sin segundos.
+  final String? apertura;
+  final String? cierre;
+
+  /// Normaliza `9:00`, `09:00` o `09:00:00` a `09:00`. Devuelve `null` si no
+  /// es una hora válida.
+  static String? hhmm(String? valor) {
+    if (valor == null) return null;
+    final partes = valor.trim().split(':');
+    if (partes.length < 2) return null;
+    final h = int.tryParse(partes[0]);
+    final m = int.tryParse(partes[1]);
+    if (h == null || m == null || h < 0 || h > 23 || m < 0 || m > 59) {
+      return null;
+    }
+    return '${h.toString().padLeft(2, '0')}:${m.toString().padLeft(2, '0')}';
+  }
+
+  static int _minutos(String hhmm) {
+    final partes = hhmm.split(':');
+    return int.parse(partes[0]) * 60 + int.parse(partes[1]);
+  }
 }

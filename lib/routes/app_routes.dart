@@ -3,11 +3,14 @@ import 'package:provider/provider.dart';
 
 import '../core/di/app_scope.dart';
 
+import '../core/theme/app_theme.dart';
+import '../models/catalog_models.dart';
 import '../models/cita_models.dart';
 import '../viewmodels/auth_viewmodel.dart';
 import '../viewmodels/privacidad_viewmodels.dart';
 import '../views/auth/login_views.dart';
 import '../views/client/client_home_view.dart';
+import '../views/guest/catalog_detail_views.dart';
 import '../views/guest/catalog_list_views.dart';
 import '../views/guest/guest_home_view.dart';
 import '../views/privacy/aviso_privacidad_view.dart';
@@ -24,6 +27,8 @@ class AppRoutes {
   static const guestHome = '/';
   static const servicios = '/servicios';
   static const productos = '/productos';
+  static const servicioDetalle = '/servicio';
+  static const productoDetalle = '/producto';
   static const login = '/login';
   static const verify2fa = '/verify-2fa';
   static const clientHome = '/cliente';
@@ -41,14 +46,26 @@ class AppRoutes {
     final page = _pageFor(settings);
     return PageRouteBuilder<void>(
       settings: settings,
-      transitionDuration: const Duration(milliseconds: 240),
-      reverseTransitionDuration: const Duration(milliseconds: 180),
+      transitionDuration: AppMotion.page,
+      reverseTransitionDuration: AppMotion.quick,
       pageBuilder: (context, animation, secondaryAnimation) => page,
       transitionsBuilder: (context, animation, secondaryAnimation, child) {
         if (MediaQuery.disableAnimationsOf(context)) return child;
+        final curved = CurvedAnimation(
+          parent: animation,
+          curve: AppMotion.ease,
+          reverseCurve: Curves.easeIn,
+        );
+        // Fundido con un ascenso corto (≈2 % del alto), sin escala ni rebote.
         return FadeTransition(
-          opacity: CurvedAnimation(parent: animation, curve: Curves.easeOut),
-          child: child,
+          opacity: curved,
+          child: SlideTransition(
+            position: Tween(
+              begin: const Offset(0, 0.02),
+              end: Offset.zero,
+            ).animate(curved),
+            child: child,
+          ),
         );
       },
     );
@@ -64,6 +81,28 @@ class AppRoutes {
         return const ServiciosListView();
       case productos:
         return const ProductosListView();
+      case servicioDetalle:
+        final args = settings.arguments;
+        if (args is CatalogDetailArgs<ServicioDto>) {
+          return ServicioDetailView(
+            servicio: args.item,
+            heroTag: args.heroTag,
+            accion: args.accion,
+          );
+        }
+        if (args is ServicioDto) return ServicioDetailView(servicio: args);
+        return const Scaffold(body: Center(child: Text('Servicio no válido')));
+      case productoDetalle:
+        final args = settings.arguments;
+        if (args is CatalogDetailArgs<ProductoDto>) {
+          return ProductoDetailView(
+            producto: args.item,
+            heroTag: args.heroTag,
+            accion: args.accion,
+          );
+        }
+        if (args is ProductoDto) return ProductoDetailView(producto: args);
+        return const Scaffold(body: Center(child: Text('Producto no válido')));
       case login:
         return const LoginView();
       case verify2fa:

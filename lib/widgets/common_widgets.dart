@@ -354,11 +354,13 @@ class SectionHeader extends StatelessWidget {
     required this.title,
     this.action,
     this.onAction,
+    this.actionKey,
   });
 
   final String title;
   final String? action;
   final VoidCallback? onAction;
+  final Key? actionKey;
 
   @override
   Widget build(BuildContext context) {
@@ -371,15 +373,22 @@ class SectionHeader extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Expanded(
-            child: Text(
-              title,
-              style: Theme.of(context).textTheme.titleLarge,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
+            child: Semantics(
+              header: true,
+              child: Text(
+                title,
+                style: Theme.of(context).textTheme.titleLarge,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
           ),
           if (action != null && onAction != null)
-            TextButton(onPressed: onAction, child: Text(action!)),
+            TextButton(
+              key: actionKey,
+              onPressed: onAction,
+              child: Text(action!),
+            ),
         ],
       ),
     );
