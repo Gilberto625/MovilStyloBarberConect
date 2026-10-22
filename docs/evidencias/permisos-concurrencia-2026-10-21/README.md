@@ -78,3 +78,24 @@ Con el aislamiento READ COMMITTED de PostgreSQL, dos transacciones simultáneas 
 - **PM02 y GH#23:** ejecutado. `mis-citas` está aislado, pero `politica-pago` filtra datos (ERR-02). Sigue bloqueado hasta el arreglo del backend.
 - **PM04, GH#24 y S5-05:** ejecutado y falla (ERR-14). Sigue bloqueado hasta el arreglo del backend.
 - **PC-03:** permisos y concurrencia ya probados contra la API, con dos defectos registrados.
+
+## Después del arreglo (backend `feature/movil-reservas-concurrencia`, `a20d0a2`)
+
+Se repitieron las mismas pruebas contra Django local con el arreglo aplicado. Los archivos están en `despues-del-arreglo/`; el script de permisos solo cambió la fecha de la cita de prueba de B al 22-oct, porque ya no quedaban horarios libres ese día.
+
+| Prueba | Antes | Después |
+|---|---|---|
+| Cliente contra endpoints de secretaría | 403 en los 5 | 403 en los 5 (sin cambios) |
+| A pide la política de B (`cliente_id=2`) | Recibía la de B: penalizado, 1 inasistencia | Recibe la suya: sin penalización, 0 inasistencias. B sigue viendo la suya |
+| Reservas simultáneas, 13 rondas | 11 rondas con 2 a 4 aceptadas | Las 13 rondas con **una sola** aceptada; las demás reciben "Ese horario ya está ocupado." |
+| Horarios con más de una cita activa en la base | 11 | 0 |
+
+**Arreglo:**
+- `pg_advisory_xact_lock(barbero, día)` antes de revisar los horarios ocupados, en la reserva del cliente, la creación y edición de secretaría y Alexa.
+- `politica-pago` usa el usuario de la sesión si el rol no es secretaría ni administrador.
+
+**Pruebas de Django:** `test_agenda_bloqueo` y `test_politica_pago_propia`, 13/13 en verde. La suite completa de `core.tests` da 358 pruebas, con los mismos 5 problemas previos de ML y WebAuthn (ERR-05).
+
+La base local se restauró otra vez: queda solo la cita 1.
+
+El arreglo todavía no está en `main` del backend ni en Render: falta el PR.
