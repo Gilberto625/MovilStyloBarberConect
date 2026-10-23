@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
+import 'package:stylo_barber_connect/views/client/client_widgets.dart';
 import 'package:stylo_barber_connect/core/errors/app_exception.dart';
 import 'package:stylo_barber_connect/core/theme/app_theme.dart';
 import 'package:stylo_barber_connect/models/auth_models.dart';
@@ -19,6 +20,10 @@ import 'package:stylo_barber_connect/views/client/client_home_view.dart';
 import 'package:stylo_barber_connect/views/secretary/secretary_home_view.dart';
 
 void main() {
+  // Las citas de estas pruebas tienen fechas fijas de octubre de 2026.
+  setUp(() => relojCliente = () => DateTime(2026, 10, 1));
+  tearDown(() => relojCliente = DateTime.now);
+
   testWidgets('client home empty, next appointment and error retry', (
     tester,
   ) async {
@@ -431,6 +436,17 @@ class _FakeAuth implements AuthRepository {
 }
 
 class _FakeCitas implements CitasRepository {
+  @override
+  Future<Map<String, dynamic>> cancelarCita(int citaId, {String motivo = ''}) =>
+      throw UnimplementedError();
+
+  @override
+  Future<Map<String, dynamic>> reprogramarCita(
+    int citaId, {
+    required String fecha,
+    required String hora,
+  }) => throw UnimplementedError();
+
   List<CitaDto> misCitas = const [];
   Object? citasError;
   Object? createError;

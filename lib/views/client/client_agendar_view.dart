@@ -223,7 +223,7 @@ class _ClientAgendarTabState extends State<ClientAgendarTab> {
                       seleccionado: _barbero,
                       onElegir: _elegirBarbero,
                     ),
-                    2 => _PasoHorario(
+                    2 => SelectorHorario(
                       hoy: _hoy,
                       fecha: _fecha,
                       hora: _hora,
@@ -242,13 +242,13 @@ class _ClientAgendarTabState extends State<ClientAgendarTab> {
               ),
             ),
             if (_paso == 2 && _hora != null)
-              _BarraAccion(
+              BarraAccion(
                 key: const Key('agendar_continuar'),
                 label: 'Revisar y confirmar',
                 onPressed: _resumen,
               ),
             if (_paso == 3)
-              _BarraAccion(
+              BarraAccion(
                 key: const Key('agendar_confirmar'),
                 label: 'Confirmar reserva',
                 busy: vm.bookingBusy,
@@ -297,8 +297,9 @@ class _Progreso extends StatelessWidget {
   }
 }
 
-class _BarraAccion extends StatelessWidget {
-  const _BarraAccion({
+/// Botón principal fijo al pie: agendar y reprogramar lo comparten.
+class BarraAccion extends StatelessWidget {
+  const BarraAccion({
     super.key,
     required this.label,
     required this.onPressed,
@@ -525,16 +526,23 @@ class _PasoBarbero extends StatelessWidget {
   }
 }
 
-class _PasoHorario extends StatelessWidget {
-  const _PasoHorario({
+/// Días de las próximas dos semanas y horarios libres del barbero elegido.
+/// Los horarios salen de `ClientCitasViewModel.slots`.
+class SelectorHorario extends StatelessWidget {
+  const SelectorHorario({
+    super.key,
     required this.hoy,
     required this.fecha,
     required this.hora,
     required this.onFecha,
     required this.onOtraFecha,
     required this.onHora,
+    this.keyPrefix = 'agendar',
   });
 
+  /// Prefijo de las `Key` de días y horas, para que las pruebas distingan
+  /// agendar de reprogramar.
+  final String keyPrefix;
   final DateTime hoy;
   final DateTime fecha;
   final String? hora;
@@ -562,7 +570,7 @@ class _PasoHorario extends StatelessWidget {
             itemBuilder: (context, i) {
               if (i == dias.length) {
                 return _DiaChip(
-                  key: const Key('agendar_otra_fecha'),
+                  key: Key('${keyPrefix}_otra_fecha'),
                   arriba: 'Otra',
                   abajo: 'fecha',
                   selected: false,
@@ -572,7 +580,7 @@ class _PasoHorario extends StatelessWidget {
               }
               final d = dias[i];
               return _DiaChip(
-                key: ValueKey('agendar-dia-${isoFecha(d)}'),
+                key: ValueKey('$keyPrefix-dia-${isoFecha(d)}'),
                 arriba: i == 0 ? 'Hoy' : diaSemanaCorto(d),
                 abajo: '${d.day}',
                 selected: isoFecha(d) == isoFecha(fecha),
@@ -603,7 +611,7 @@ class _PasoHorario extends StatelessWidget {
             children: [
               for (final s in libres)
                 ChoiceChip(
-                  key: ValueKey('agendar-hora-${s.hora}'),
+                  key: ValueKey('$keyPrefix-hora-${s.hora}'),
                   label: Text(
                     horaCorta(s.hora),
                     style: AppText.cifra(

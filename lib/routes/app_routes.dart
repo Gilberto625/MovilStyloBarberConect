@@ -4,11 +4,14 @@ import 'package:provider/provider.dart';
 import '../core/di/app_scope.dart';
 
 import '../core/theme/app_theme.dart';
+import '../models/auth_models.dart';
 import '../models/catalog_models.dart';
 import '../models/cita_models.dart';
 import '../viewmodels/auth_viewmodel.dart';
+import '../viewmodels/barbero_agenda_viewmodel.dart';
 import '../viewmodels/privacidad_viewmodels.dart';
 import '../views/auth/login_views.dart';
+import '../views/barber/barbero_agenda_view.dart';
 import '../views/auth/registro_views.dart';
 import '../views/client/client_home_view.dart';
 import '../views/guest/catalog_detail_views.dart';
@@ -23,6 +26,7 @@ import '../views/secretary/secretary_gestion_views.dart';
 import '../views/secretary/secretary_home_view.dart';
 import '../views/secretary/secretary_shell.dart';
 import '../views/splash/splash_view.dart';
+import 'route_guard.dart';
 
 class AppRoutes {
   static const splash = '/splash';
@@ -46,9 +50,50 @@ class AppRoutes {
   static const editarPerfil = '/privacidad/editar-perfil';
   static const avisoPrivacidad = '/aviso-privacidad';
   static const eliminarCuenta = '/privacidad/eliminar-cuenta';
+  static const barberHome = '/barbero';
+
+  /// Inicio de cada rol después de entrar o al abrir la app con sesión.
+  static String homeFor(UserRole role) {
+    if (role.isStaffPanel) return secretaryHome;
+    if (role == UserRole.barbero) return barberHome;
+    return clientHome;
+  }
+
+  static bool _esCliente(UserRole r) =>
+      !r.isStaffPanel && r != UserRole.barbero;
+  static bool _esSecretaria(UserRole r) => r.isStaffPanel;
+  static bool _esBarbero(UserRole r) => r == UserRole.barbero;
+  static bool _conSesion(UserRole r) => true;
+
+  static Widget _guard(bool Function(UserRole) permite, Widget child) =>
+      RouteGuard(
+        permite: permite,
+        loginRoute: login,
+        homeFor: homeFor,
+        child: child,
+      );
 
   static Route<dynamic> onGenerateRoute(RouteSettings settings) =>
-      page<void>(_pageFor(settings), settings: settings);
+      page<void>(_guarded(settings), settings: settings);
+
+  /// GH#70: cada panel pasa por la guarda de sesión y rol.
+  static Widget _guarded(RouteSettings settings) {
+    final page = _pageFor(settings);
+    return switch (settings.name) {
+      clientHome => _guard(_esCliente, page),
+      barberHome => _guard(_esBarbero, page),
+      secretaryHome ||
+      secretaryCitaDetail ||
+      secretaryNuevaCita ||
+      secretaryClienteCitas ||
+      secretaryReprogramar => _guard(_esSecretaria, page),
+      privacidad ||
+      misDatos ||
+      editarPerfil ||
+      eliminarCuenta => _guard(_conSesion, page),
+      _ => page,
+    };
+  }
 
   /// Ruta con la transición de la marca. Sirve también para pantallas que
   /// reciben su ViewModel por constructor (carrito, detalle de cita).
@@ -124,6 +169,14 @@ class AppRoutes {
         return const ClientHomeShell();
       case secretaryHome:
         return const SecretaryShell();
+      // Se crea por ruta: la agenda no pasa de una cuenta a otra (PM09).
+      case barberHome:
+        return ChangeNotifierProvider(
+          create: (context) => BarberoAgendaViewModel(
+            context.read<AppScope>().barberoRepository,
+          ),
+          child: const BarberoAgendaView(),
+        );
       case secretaryCitaDetail:
         final cita = settings.arguments;
         if (cita is! SecretariaCitaDto) {

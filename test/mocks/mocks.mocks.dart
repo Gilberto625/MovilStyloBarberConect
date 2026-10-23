@@ -4,26 +4,29 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 
-import 'dart:async' as _i8;
+import 'dart:async' as _i9;
 
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:mockito/src/dummies.dart' as _i9;
+import 'package:mockito/src/dummies.dart' as _i10;
 import 'package:stylo_barber_connect/models/auth_models.dart' as _i2;
-import 'package:stylo_barber_connect/models/catalog_models.dart' as _i3;
-import 'package:stylo_barber_connect/models/cita_models.dart' as _i4;
-import 'package:stylo_barber_connect/models/pedido_models.dart' as _i5;
-import 'package:stylo_barber_connect/models/privacidad_models.dart' as _i6;
-import 'package:stylo_barber_connect/repositories/auth_repository.dart' as _i7;
-import 'package:stylo_barber_connect/repositories/catalog_repository.dart'
-    as _i10;
-import 'package:stylo_barber_connect/repositories/citas_repository.dart'
+import 'package:stylo_barber_connect/models/barbero_models.dart' as _i3;
+import 'package:stylo_barber_connect/models/catalog_models.dart' as _i4;
+import 'package:stylo_barber_connect/models/cita_models.dart' as _i5;
+import 'package:stylo_barber_connect/models/pedido_models.dart' as _i6;
+import 'package:stylo_barber_connect/models/privacidad_models.dart' as _i7;
+import 'package:stylo_barber_connect/repositories/auth_repository.dart' as _i8;
+import 'package:stylo_barber_connect/repositories/barbero_repository.dart'
     as _i11;
-import 'package:stylo_barber_connect/repositories/pedidos_repository.dart'
+import 'package:stylo_barber_connect/repositories/catalog_repository.dart'
     as _i12;
-import 'package:stylo_barber_connect/repositories/privacidad_repository.dart'
+import 'package:stylo_barber_connect/repositories/citas_repository.dart'
     as _i13;
-import 'package:stylo_barber_connect/repositories/secretaria_repository.dart'
+import 'package:stylo_barber_connect/repositories/pedidos_repository.dart'
     as _i14;
+import 'package:stylo_barber_connect/repositories/privacidad_repository.dart'
+    as _i15;
+import 'package:stylo_barber_connect/repositories/secretaria_repository.dart'
+    as _i16;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -57,95 +60,101 @@ class _FakePerfilDto_2 extends _i1.SmartFake implements _i2.PerfilDto {
     : super(parent, parentInvocation);
 }
 
-class _FakeContactoDto_3 extends _i1.SmartFake implements _i3.ContactoDto {
-  _FakeContactoDto_3(Object parent, Invocation parentInvocation)
+class _FakeBarberoAgendaDto_3 extends _i1.SmartFake
+    implements _i3.BarberoAgendaDto {
+  _FakeBarberoAgendaDto_3(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakePoliticaPagoDto_4 extends _i1.SmartFake
-    implements _i4.PoliticaPagoDto {
-  _FakePoliticaPagoDto_4(Object parent, Invocation parentInvocation)
+class _FakeContactoDto_4 extends _i1.SmartFake implements _i4.ContactoDto {
+  _FakeContactoDto_4(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakePedidoCreado_5 extends _i1.SmartFake implements _i5.PedidoCreado {
-  _FakePedidoCreado_5(Object parent, Invocation parentInvocation)
+class _FakePoliticaPagoDto_5 extends _i1.SmartFake
+    implements _i5.PoliticaPagoDto {
+  _FakePoliticaPagoDto_5(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakeConsentimientoPrivacidad_6 extends _i1.SmartFake
-    implements _i6.ConsentimientoPrivacidad {
-  _FakeConsentimientoPrivacidad_6(Object parent, Invocation parentInvocation)
+class _FakePedidoCreado_6 extends _i1.SmartFake implements _i6.PedidoCreado {
+  _FakePedidoCreado_6(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakeCancelacionCuenta_7 extends _i1.SmartFake
-    implements _i6.CancelacionCuenta {
-  _FakeCancelacionCuenta_7(Object parent, Invocation parentInvocation)
+class _FakeConsentimientoPrivacidad_7 extends _i1.SmartFake
+    implements _i7.ConsentimientoPrivacidad {
+  _FakeConsentimientoPrivacidad_7(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakeSecretariaDiaDto_8 extends _i1.SmartFake
-    implements _i4.SecretariaDiaDto {
-  _FakeSecretariaDiaDto_8(Object parent, Invocation parentInvocation)
+class _FakeCancelacionCuenta_8 extends _i1.SmartFake
+    implements _i7.CancelacionCuenta {
+  _FakeCancelacionCuenta_8(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakeSecretariaClienteDto_9 extends _i1.SmartFake
-    implements _i4.SecretariaClienteDto {
-  _FakeSecretariaClienteDto_9(Object parent, Invocation parentInvocation)
+class _FakeSecretariaDiaDto_9 extends _i1.SmartFake
+    implements _i5.SecretariaDiaDto {
+  _FakeSecretariaDiaDto_9(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakeSecretariaCitaEditableDto_10 extends _i1.SmartFake
-    implements _i4.SecretariaCitaEditableDto {
-  _FakeSecretariaCitaEditableDto_10(Object parent, Invocation parentInvocation)
+class _FakeSecretariaClienteDto_10 extends _i1.SmartFake
+    implements _i5.SecretariaClienteDto {
+  _FakeSecretariaClienteDto_10(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
+}
+
+class _FakeSecretariaCitaEditableDto_11 extends _i1.SmartFake
+    implements _i5.SecretariaCitaEditableDto {
+  _FakeSecretariaCitaEditableDto_11(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
 /// A class which mocks [AuthRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockAuthRepository extends _i1.Mock implements _i7.AuthRepository {
+class MockAuthRepository extends _i1.Mock implements _i8.AuthRepository {
   @override
-  _i8.Future<_i2.LoginResult> login({
+  _i9.Future<_i2.LoginResult> login({
     required String? email,
     required String? password,
   }) => (super.noSuchMethod(
     Invocation.method(#login, [], {#email: email, #password: password}),
-    returnValue: _i8.Future<_i2.LoginResult>.value(
-      _i9.dummyValue<_i2.LoginResult>(
+    returnValue: _i9.Future<_i2.LoginResult>.value(
+      _i10.dummyValue<_i2.LoginResult>(
         this,
         Invocation.method(#login, [], {#email: email, #password: password}),
       ),
     ),
-    returnValueForMissingStub: _i8.Future<_i2.LoginResult>.value(
-      _i9.dummyValue<_i2.LoginResult>(
+    returnValueForMissingStub: _i9.Future<_i2.LoginResult>.value(
+      _i10.dummyValue<_i2.LoginResult>(
         this,
         Invocation.method(#login, [], {#email: email, #password: password}),
       ),
     ),
-  ) as _i8.Future<_i2.LoginResult>);
+  ) as _i9.Future<_i2.LoginResult>);
 
   @override
-  _i8.Future<_i2.AuthUser> completeLogin(_i2.LoginSuccess? success) =>
+  _i9.Future<_i2.AuthUser> completeLogin(_i2.LoginSuccess? success) =>
       (super.noSuchMethod(
         Invocation.method(#completeLogin, [success]),
-        returnValue: _i8.Future<_i2.AuthUser>.value(
+        returnValue: _i9.Future<_i2.AuthUser>.value(
           _FakeAuthUser_0(this, Invocation.method(#completeLogin, [success])),
         ),
-        returnValueForMissingStub: _i8.Future<_i2.AuthUser>.value(
+        returnValueForMissingStub: _i9.Future<_i2.AuthUser>.value(
           _FakeAuthUser_0(this, Invocation.method(#completeLogin, [success])),
         ),
-      ) as _i8.Future<_i2.AuthUser>);
+      ) as _i9.Future<_i2.AuthUser>);
 
   @override
-  _i8.Future<_i2.AuthUser> verify2fa({
+  _i9.Future<_i2.AuthUser> verify2fa({
     required String? tempToken,
     required String? codigo,
   }) => (super.noSuchMethod(
     Invocation.method(#verify2fa, [], {#tempToken: tempToken, #codigo: codigo}),
-    returnValue: _i8.Future<_i2.AuthUser>.value(
+    returnValue: _i9.Future<_i2.AuthUser>.value(
       _FakeAuthUser_0(
         this,
         Invocation.method(#verify2fa, [], {
@@ -154,7 +163,7 @@ class MockAuthRepository extends _i1.Mock implements _i7.AuthRepository {
         }),
       ),
     ),
-    returnValueForMissingStub: _i8.Future<_i2.AuthUser>.value(
+    returnValueForMissingStub: _i9.Future<_i2.AuthUser>.value(
       _FakeAuthUser_0(
         this,
         Invocation.method(#verify2fa, [], {
@@ -163,30 +172,30 @@ class MockAuthRepository extends _i1.Mock implements _i7.AuthRepository {
         }),
       ),
     ),
-  ) as _i8.Future<_i2.AuthUser>);
+  ) as _i9.Future<_i2.AuthUser>);
 
   @override
-  _i8.Future<void> resend2fa(String? tempToken) => (super.noSuchMethod(
+  _i9.Future<void> resend2fa(String? tempToken) => (super.noSuchMethod(
     Invocation.method(#resend2fa, [tempToken]),
-    returnValue: _i8.Future<void>.value(),
-    returnValueForMissingStub: _i8.Future<void>.value(),
-  ) as _i8.Future<void>);
+    returnValue: _i9.Future<void>.value(),
+    returnValueForMissingStub: _i9.Future<void>.value(),
+  ) as _i9.Future<void>);
 
   @override
-  _i8.Future<_i2.RegistroPendiente> registrar(
+  _i9.Future<_i2.RegistroPendiente> registrar(
     _i2.RegistroRequest? datos,
   ) => (super.noSuchMethod(
     Invocation.method(#registrar, [datos]),
-    returnValue: _i8.Future<_i2.RegistroPendiente>.value(
+    returnValue: _i9.Future<_i2.RegistroPendiente>.value(
       _FakeRegistroPendiente_1(this, Invocation.method(#registrar, [datos])),
     ),
-    returnValueForMissingStub: _i8.Future<_i2.RegistroPendiente>.value(
+    returnValueForMissingStub: _i9.Future<_i2.RegistroPendiente>.value(
       _FakeRegistroPendiente_1(this, Invocation.method(#registrar, [datos])),
     ),
-  ) as _i8.Future<_i2.RegistroPendiente>);
+  ) as _i9.Future<_i2.RegistroPendiente>);
 
   @override
-  _i8.Future<_i2.AuthUser> verificarRegistro({
+  _i9.Future<_i2.AuthUser> verificarRegistro({
     required String? tempToken,
     required String? codigo,
   }) => (super.noSuchMethod(
@@ -194,7 +203,7 @@ class MockAuthRepository extends _i1.Mock implements _i7.AuthRepository {
       #tempToken: tempToken,
       #codigo: codigo,
     }),
-    returnValue: _i8.Future<_i2.AuthUser>.value(
+    returnValue: _i9.Future<_i2.AuthUser>.value(
       _FakeAuthUser_0(
         this,
         Invocation.method(#verificarRegistro, [], {
@@ -203,7 +212,7 @@ class MockAuthRepository extends _i1.Mock implements _i7.AuthRepository {
         }),
       ),
     ),
-    returnValueForMissingStub: _i8.Future<_i2.AuthUser>.value(
+    returnValueForMissingStub: _i9.Future<_i2.AuthUser>.value(
       _FakeAuthUser_0(
         this,
         Invocation.method(#verificarRegistro, [], {
@@ -212,131 +221,178 @@ class MockAuthRepository extends _i1.Mock implements _i7.AuthRepository {
         }),
       ),
     ),
-  ) as _i8.Future<_i2.AuthUser>);
+  ) as _i9.Future<_i2.AuthUser>);
 
   @override
-  _i8.Future<String> reenviarCodigoRegistro(String? correo) =>
+  _i9.Future<String> reenviarCodigoRegistro(String? correo) =>
       (super.noSuchMethod(
         Invocation.method(#reenviarCodigoRegistro, [correo]),
-        returnValue: _i8.Future<String>.value(
-          _i9.dummyValue<String>(
+        returnValue: _i9.Future<String>.value(
+          _i10.dummyValue<String>(
             this,
             Invocation.method(#reenviarCodigoRegistro, [correo]),
           ),
         ),
-        returnValueForMissingStub: _i8.Future<String>.value(
-          _i9.dummyValue<String>(
+        returnValueForMissingStub: _i9.Future<String>.value(
+          _i10.dummyValue<String>(
             this,
             Invocation.method(#reenviarCodigoRegistro, [correo]),
           ),
         ),
-      ) as _i8.Future<String>);
+      ) as _i9.Future<String>);
 
   @override
-  _i8.Future<_i2.AuthUser?> restoreSession() => (super.noSuchMethod(
+  _i9.Future<_i2.AuthUser?> restoreSession() => (super.noSuchMethod(
     Invocation.method(#restoreSession, []),
-    returnValue: _i8.Future<_i2.AuthUser?>.value(),
-    returnValueForMissingStub: _i8.Future<_i2.AuthUser?>.value(),
-  ) as _i8.Future<_i2.AuthUser?>);
+    returnValue: _i9.Future<_i2.AuthUser?>.value(),
+    returnValueForMissingStub: _i9.Future<_i2.AuthUser?>.value(),
+  ) as _i9.Future<_i2.AuthUser?>);
 
   @override
-  _i8.Future<_i2.PerfilDto> getPerfil() => (super.noSuchMethod(
+  _i9.Future<_i2.PerfilDto> getPerfil() => (super.noSuchMethod(
     Invocation.method(#getPerfil, []),
-    returnValue: _i8.Future<_i2.PerfilDto>.value(
+    returnValue: _i9.Future<_i2.PerfilDto>.value(
       _FakePerfilDto_2(this, Invocation.method(#getPerfil, [])),
     ),
-    returnValueForMissingStub: _i8.Future<_i2.PerfilDto>.value(
+    returnValueForMissingStub: _i9.Future<_i2.PerfilDto>.value(
       _FakePerfilDto_2(this, Invocation.method(#getPerfil, [])),
     ),
-  ) as _i8.Future<_i2.PerfilDto>);
+  ) as _i9.Future<_i2.PerfilDto>);
 
   @override
-  _i8.Future<void> logoutLocal() => (super.noSuchMethod(
+  _i9.Future<void> logoutLocal() => (super.noSuchMethod(
     Invocation.method(#logoutLocal, []),
-    returnValue: _i8.Future<void>.value(),
-    returnValueForMissingStub: _i8.Future<void>.value(),
-  ) as _i8.Future<void>);
+    returnValue: _i9.Future<void>.value(),
+    returnValueForMissingStub: _i9.Future<void>.value(),
+  ) as _i9.Future<void>);
+}
+
+/// A class which mocks [BarberoRepository].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockBarberoRepository extends _i1.Mock implements _i11.BarberoRepository {
+  @override
+  _i9.Future<_i3.BarberoAgendaDto> getAgenda({String? fecha}) =>
+      (super.noSuchMethod(
+        Invocation.method(#getAgenda, [], {#fecha: fecha}),
+        returnValue: _i9.Future<_i3.BarberoAgendaDto>.value(
+          _FakeBarberoAgendaDto_3(
+            this,
+            Invocation.method(#getAgenda, [], {#fecha: fecha}),
+          ),
+        ),
+        returnValueForMissingStub: _i9.Future<_i3.BarberoAgendaDto>.value(
+          _FakeBarberoAgendaDto_3(
+            this,
+            Invocation.method(#getAgenda, [], {#fecha: fecha}),
+          ),
+        ),
+      ) as _i9.Future<_i3.BarberoAgendaDto>);
+
+  @override
+  _i9.Future<Map<String, dynamic>> iniciarAtencion(int? citaId) =>
+      (super.noSuchMethod(
+        Invocation.method(#iniciarAtencion, [citaId]),
+        returnValue: _i9.Future<Map<String, dynamic>>.value(
+          <String, dynamic>{},
+        ),
+        returnValueForMissingStub: _i9.Future<Map<String, dynamic>>.value(
+          <String, dynamic>{},
+        ),
+      ) as _i9.Future<Map<String, dynamic>>);
+
+  @override
+  _i9.Future<Map<String, dynamic>> terminarAtencion(int? citaId) =>
+      (super.noSuchMethod(
+        Invocation.method(#terminarAtencion, [citaId]),
+        returnValue: _i9.Future<Map<String, dynamic>>.value(
+          <String, dynamic>{},
+        ),
+        returnValueForMissingStub: _i9.Future<Map<String, dynamic>>.value(
+          <String, dynamic>{},
+        ),
+      ) as _i9.Future<Map<String, dynamic>>);
 }
 
 /// A class which mocks [CatalogRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockCatalogRepository extends _i1.Mock implements _i10.CatalogRepository {
+class MockCatalogRepository extends _i1.Mock implements _i12.CatalogRepository {
   @override
-  _i8.Future<List<_i3.ServicioDto>> getServicios() => (super.noSuchMethod(
+  _i9.Future<List<_i4.ServicioDto>> getServicios() => (super.noSuchMethod(
     Invocation.method(#getServicios, []),
-    returnValue: _i8.Future<List<_i3.ServicioDto>>.value(<_i3.ServicioDto>[]),
-    returnValueForMissingStub: _i8.Future<List<_i3.ServicioDto>>.value(
-      <_i3.ServicioDto>[],
+    returnValue: _i9.Future<List<_i4.ServicioDto>>.value(<_i4.ServicioDto>[]),
+    returnValueForMissingStub: _i9.Future<List<_i4.ServicioDto>>.value(
+      <_i4.ServicioDto>[],
     ),
-  ) as _i8.Future<List<_i3.ServicioDto>>);
+  ) as _i9.Future<List<_i4.ServicioDto>>);
 
   @override
-  _i8.Future<List<_i3.ProductoDto>> getProductos() => (super.noSuchMethod(
+  _i9.Future<List<_i4.ProductoDto>> getProductos() => (super.noSuchMethod(
     Invocation.method(#getProductos, []),
-    returnValue: _i8.Future<List<_i3.ProductoDto>>.value(<_i3.ProductoDto>[]),
-    returnValueForMissingStub: _i8.Future<List<_i3.ProductoDto>>.value(
-      <_i3.ProductoDto>[],
+    returnValue: _i9.Future<List<_i4.ProductoDto>>.value(<_i4.ProductoDto>[]),
+    returnValueForMissingStub: _i9.Future<List<_i4.ProductoDto>>.value(
+      <_i4.ProductoDto>[],
     ),
-  ) as _i8.Future<List<_i3.ProductoDto>>);
+  ) as _i9.Future<List<_i4.ProductoDto>>);
 
   @override
-  _i8.Future<_i3.ContactoDto> getContacto() => (super.noSuchMethod(
+  _i9.Future<_i4.ContactoDto> getContacto() => (super.noSuchMethod(
     Invocation.method(#getContacto, []),
-    returnValue: _i8.Future<_i3.ContactoDto>.value(
-      _FakeContactoDto_3(this, Invocation.method(#getContacto, [])),
+    returnValue: _i9.Future<_i4.ContactoDto>.value(
+      _FakeContactoDto_4(this, Invocation.method(#getContacto, [])),
     ),
-    returnValueForMissingStub: _i8.Future<_i3.ContactoDto>.value(
-      _FakeContactoDto_3(this, Invocation.method(#getContacto, [])),
+    returnValueForMissingStub: _i9.Future<_i4.ContactoDto>.value(
+      _FakeContactoDto_4(this, Invocation.method(#getContacto, [])),
     ),
-  ) as _i8.Future<_i3.ContactoDto>);
+  ) as _i9.Future<_i4.ContactoDto>);
 
   @override
-  _i8.Future<
+  _i9.Future<
     ({
-      _i3.ContactoDto contacto,
-      List<_i3.ProductoDto> productos,
-      List<_i3.ServicioDto> servicios,
+      _i4.ContactoDto contacto,
+      List<_i4.ProductoDto> productos,
+      List<_i4.ServicioDto> servicios,
     })
   >
   loadHomeGuest() =>
       (super.noSuchMethod(
         Invocation.method(#loadHomeGuest, []),
         returnValue:
-            _i8.Future<
+            _i9.Future<
               ({
-                _i3.ContactoDto contacto,
-                List<_i3.ProductoDto> productos,
-                List<_i3.ServicioDto> servicios,
+                _i4.ContactoDto contacto,
+                List<_i4.ProductoDto> productos,
+                List<_i4.ServicioDto> servicios,
               })
             >.value((
-              contacto: _FakeContactoDto_3(
+              contacto: _FakeContactoDto_4(
                 this,
                 Invocation.method(#loadHomeGuest, []),
               ),
-              productos: <_i3.ProductoDto>[],
-              servicios: <_i3.ServicioDto>[],
+              productos: <_i4.ProductoDto>[],
+              servicios: <_i4.ServicioDto>[],
             )),
         returnValueForMissingStub:
-            _i8.Future<
+            _i9.Future<
               ({
-                _i3.ContactoDto contacto,
-                List<_i3.ProductoDto> productos,
-                List<_i3.ServicioDto> servicios,
+                _i4.ContactoDto contacto,
+                List<_i4.ProductoDto> productos,
+                List<_i4.ServicioDto> servicios,
               })
             >.value((
-              contacto: _FakeContactoDto_3(
+              contacto: _FakeContactoDto_4(
                 this,
                 Invocation.method(#loadHomeGuest, []),
               ),
-              productos: <_i3.ProductoDto>[],
-              servicios: <_i3.ServicioDto>[],
+              productos: <_i4.ProductoDto>[],
+              servicios: <_i4.ServicioDto>[],
             )),
-      ) as _i8.Future<
+      ) as _i9.Future<
         ({
-          _i3.ContactoDto contacto,
-          List<_i3.ProductoDto> productos,
-          List<_i3.ServicioDto> servicios,
+          _i4.ContactoDto contacto,
+          List<_i4.ProductoDto> productos,
+          List<_i4.ServicioDto> servicios,
         })
       >);
 }
@@ -344,28 +400,28 @@ class MockCatalogRepository extends _i1.Mock implements _i10.CatalogRepository {
 /// A class which mocks [CitasRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockCitasRepository extends _i1.Mock implements _i11.CitasRepository {
+class MockCitasRepository extends _i1.Mock implements _i13.CitasRepository {
   @override
-  _i8.Future<List<_i4.CitaDto>> getMisCitas() => (super.noSuchMethod(
+  _i9.Future<List<_i5.CitaDto>> getMisCitas() => (super.noSuchMethod(
     Invocation.method(#getMisCitas, []),
-    returnValue: _i8.Future<List<_i4.CitaDto>>.value(<_i4.CitaDto>[]),
-    returnValueForMissingStub: _i8.Future<List<_i4.CitaDto>>.value(
-      <_i4.CitaDto>[],
+    returnValue: _i9.Future<List<_i5.CitaDto>>.value(<_i5.CitaDto>[]),
+    returnValueForMissingStub: _i9.Future<List<_i5.CitaDto>>.value(
+      <_i5.CitaDto>[],
     ),
-  ) as _i8.Future<List<_i4.CitaDto>>);
+  ) as _i9.Future<List<_i5.CitaDto>>);
 
   @override
-  _i8.Future<List<_i4.BarberoDto>> getBarberos({int? servicioId}) =>
+  _i9.Future<List<_i5.BarberoDto>> getBarberos({int? servicioId}) =>
       (super.noSuchMethod(
         Invocation.method(#getBarberos, [], {#servicioId: servicioId}),
-        returnValue: _i8.Future<List<_i4.BarberoDto>>.value(<_i4.BarberoDto>[]),
-        returnValueForMissingStub: _i8.Future<List<_i4.BarberoDto>>.value(
-          <_i4.BarberoDto>[],
+        returnValue: _i9.Future<List<_i5.BarberoDto>>.value(<_i5.BarberoDto>[]),
+        returnValueForMissingStub: _i9.Future<List<_i5.BarberoDto>>.value(
+          <_i5.BarberoDto>[],
         ),
-      ) as _i8.Future<List<_i4.BarberoDto>>);
+      ) as _i9.Future<List<_i5.BarberoDto>>);
 
   @override
-  _i8.Future<List<_i4.SlotDisponibilidad>> getDisponibilidad({
+  _i9.Future<List<_i5.SlotDisponibilidad>> getDisponibilidad({
     required int? barberoId,
     required String? fecha,
     required int? duracion,
@@ -375,34 +431,34 @@ class MockCitasRepository extends _i1.Mock implements _i11.CitasRepository {
       #fecha: fecha,
       #duracion: duracion,
     }),
-    returnValue: _i8.Future<List<_i4.SlotDisponibilidad>>.value(
-      <_i4.SlotDisponibilidad>[],
+    returnValue: _i9.Future<List<_i5.SlotDisponibilidad>>.value(
+      <_i5.SlotDisponibilidad>[],
     ),
-    returnValueForMissingStub: _i8.Future<List<_i4.SlotDisponibilidad>>.value(
-      <_i4.SlotDisponibilidad>[],
+    returnValueForMissingStub: _i9.Future<List<_i5.SlotDisponibilidad>>.value(
+      <_i5.SlotDisponibilidad>[],
     ),
-  ) as _i8.Future<List<_i4.SlotDisponibilidad>>);
+  ) as _i9.Future<List<_i5.SlotDisponibilidad>>);
 
   @override
-  _i8.Future<_i4.PoliticaPagoDto> getPoliticaPago(int? clienteId) =>
+  _i9.Future<_i5.PoliticaPagoDto> getPoliticaPago(int? clienteId) =>
       (super.noSuchMethod(
         Invocation.method(#getPoliticaPago, [clienteId]),
-        returnValue: _i8.Future<_i4.PoliticaPagoDto>.value(
-          _FakePoliticaPagoDto_4(
+        returnValue: _i9.Future<_i5.PoliticaPagoDto>.value(
+          _FakePoliticaPagoDto_5(
             this,
             Invocation.method(#getPoliticaPago, [clienteId]),
           ),
         ),
-        returnValueForMissingStub: _i8.Future<_i4.PoliticaPagoDto>.value(
-          _FakePoliticaPagoDto_4(
+        returnValueForMissingStub: _i9.Future<_i5.PoliticaPagoDto>.value(
+          _FakePoliticaPagoDto_5(
             this,
             Invocation.method(#getPoliticaPago, [clienteId]),
           ),
         ),
-      ) as _i8.Future<_i4.PoliticaPagoDto>);
+      ) as _i9.Future<_i5.PoliticaPagoDto>);
 
   @override
-  _i8.Future<Map<String, dynamic>> crearCita({
+  _i9.Future<Map<String, dynamic>> crearCita({
     required int? clienteId,
     required int? barberoId,
     required int? servicioId,
@@ -428,133 +484,158 @@ class MockCitasRepository extends _i1.Mock implements _i11.CitasRepository {
       #comprobantePago: comprobantePago,
       #notas: notas,
     }),
-    returnValue: _i8.Future<Map<String, dynamic>>.value(<String, dynamic>{}),
-    returnValueForMissingStub: _i8.Future<Map<String, dynamic>>.value(
+    returnValue: _i9.Future<Map<String, dynamic>>.value(<String, dynamic>{}),
+    returnValueForMissingStub: _i9.Future<Map<String, dynamic>>.value(
       <String, dynamic>{},
     ),
-  ) as _i8.Future<Map<String, dynamic>>);
+  ) as _i9.Future<Map<String, dynamic>>);
+
+  @override
+  _i9.Future<Map<String, dynamic>> cancelarCita(
+    int? citaId, {
+    String? motivo = '',
+  }) => (super.noSuchMethod(
+    Invocation.method(#cancelarCita, [citaId], {#motivo: motivo}),
+    returnValue: _i9.Future<Map<String, dynamic>>.value(<String, dynamic>{}),
+    returnValueForMissingStub: _i9.Future<Map<String, dynamic>>.value(
+      <String, dynamic>{},
+    ),
+  ) as _i9.Future<Map<String, dynamic>>);
+
+  @override
+  _i9.Future<Map<String, dynamic>> reprogramarCita(
+    int? citaId, {
+    required String? fecha,
+    required String? hora,
+  }) => (super.noSuchMethod(
+    Invocation.method(#reprogramarCita, [citaId], {#fecha: fecha, #hora: hora}),
+    returnValue: _i9.Future<Map<String, dynamic>>.value(<String, dynamic>{}),
+    returnValueForMissingStub: _i9.Future<Map<String, dynamic>>.value(
+      <String, dynamic>{},
+    ),
+  ) as _i9.Future<Map<String, dynamic>>);
 }
 
 /// A class which mocks [PedidosRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockPedidosRepository extends _i1.Mock implements _i12.PedidosRepository {
+class MockPedidosRepository extends _i1.Mock implements _i14.PedidosRepository {
   @override
-  _i8.Future<List<_i5.PedidoDto>> misPedidos() => (super.noSuchMethod(
+  _i9.Future<List<_i6.PedidoDto>> misPedidos() => (super.noSuchMethod(
     Invocation.method(#misPedidos, []),
-    returnValue: _i8.Future<List<_i5.PedidoDto>>.value(<_i5.PedidoDto>[]),
-    returnValueForMissingStub: _i8.Future<List<_i5.PedidoDto>>.value(
-      <_i5.PedidoDto>[],
+    returnValue: _i9.Future<List<_i6.PedidoDto>>.value(<_i6.PedidoDto>[]),
+    returnValueForMissingStub: _i9.Future<List<_i6.PedidoDto>>.value(
+      <_i6.PedidoDto>[],
     ),
-  ) as _i8.Future<List<_i5.PedidoDto>>);
+  ) as _i9.Future<List<_i6.PedidoDto>>);
 
   @override
-  _i8.Future<_i5.PedidoCreado> crearPedido({
-    required List<_i5.CarritoLinea>? lineas,
+  _i9.Future<_i6.PedidoCreado> crearPedido({
+    required List<_i6.CarritoLinea>? lineas,
     String? notas = '',
   }) => (super.noSuchMethod(
     Invocation.method(#crearPedido, [], {#lineas: lineas, #notas: notas}),
-    returnValue: _i8.Future<_i5.PedidoCreado>.value(
-      _FakePedidoCreado_5(
+    returnValue: _i9.Future<_i6.PedidoCreado>.value(
+      _FakePedidoCreado_6(
         this,
         Invocation.method(#crearPedido, [], {#lineas: lineas, #notas: notas}),
       ),
     ),
-    returnValueForMissingStub: _i8.Future<_i5.PedidoCreado>.value(
-      _FakePedidoCreado_5(
+    returnValueForMissingStub: _i9.Future<_i6.PedidoCreado>.value(
+      _FakePedidoCreado_6(
         this,
         Invocation.method(#crearPedido, [], {#lineas: lineas, #notas: notas}),
       ),
     ),
-  ) as _i8.Future<_i5.PedidoCreado>);
+  ) as _i9.Future<_i6.PedidoCreado>);
 }
 
 /// A class which mocks [PrivacidadRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockPrivacidadRepository extends _i1.Mock
-    implements _i13.PrivacidadRepository {
+    implements _i15.PrivacidadRepository {
   @override
-  _i8.Future<_i2.PerfilDto> getPerfil() => (super.noSuchMethod(
+  _i9.Future<_i2.PerfilDto> getPerfil() => (super.noSuchMethod(
     Invocation.method(#getPerfil, []),
-    returnValue: _i8.Future<_i2.PerfilDto>.value(
+    returnValue: _i9.Future<_i2.PerfilDto>.value(
       _FakePerfilDto_2(this, Invocation.method(#getPerfil, [])),
     ),
-    returnValueForMissingStub: _i8.Future<_i2.PerfilDto>.value(
+    returnValueForMissingStub: _i9.Future<_i2.PerfilDto>.value(
       _FakePerfilDto_2(this, Invocation.method(#getPerfil, [])),
     ),
-  ) as _i8.Future<_i2.PerfilDto>);
+  ) as _i9.Future<_i2.PerfilDto>);
 
   @override
-  _i8.Future<List<_i4.CitaDto>> getHistorialCitas() => (super.noSuchMethod(
+  _i9.Future<List<_i5.CitaDto>> getHistorialCitas() => (super.noSuchMethod(
     Invocation.method(#getHistorialCitas, []),
-    returnValue: _i8.Future<List<_i4.CitaDto>>.value(<_i4.CitaDto>[]),
-    returnValueForMissingStub: _i8.Future<List<_i4.CitaDto>>.value(
-      <_i4.CitaDto>[],
+    returnValue: _i9.Future<List<_i5.CitaDto>>.value(<_i5.CitaDto>[]),
+    returnValueForMissingStub: _i9.Future<List<_i5.CitaDto>>.value(
+      <_i5.CitaDto>[],
     ),
-  ) as _i8.Future<List<_i4.CitaDto>>);
+  ) as _i9.Future<List<_i5.CitaDto>>);
 
   @override
-  _i8.Future<_i2.PerfilDto> actualizarPerfil(
-    _i6.PerfilUpdate? cambios,
+  _i9.Future<_i2.PerfilDto> actualizarPerfil(
+    _i7.PerfilUpdate? cambios,
   ) => (super.noSuchMethod(
     Invocation.method(#actualizarPerfil, [cambios]),
-    returnValue: _i8.Future<_i2.PerfilDto>.value(
+    returnValue: _i9.Future<_i2.PerfilDto>.value(
       _FakePerfilDto_2(this, Invocation.method(#actualizarPerfil, [cambios])),
     ),
-    returnValueForMissingStub: _i8.Future<_i2.PerfilDto>.value(
+    returnValueForMissingStub: _i9.Future<_i2.PerfilDto>.value(
       _FakePerfilDto_2(this, Invocation.method(#actualizarPerfil, [cambios])),
     ),
-  ) as _i8.Future<_i2.PerfilDto>);
+  ) as _i9.Future<_i2.PerfilDto>);
 
   @override
-  _i8.Future<_i6.ContenidoLegalDto?> getAvisoPrivacidad() =>
+  _i9.Future<_i7.ContenidoLegalDto?> getAvisoPrivacidad() =>
       (super.noSuchMethod(
         Invocation.method(#getAvisoPrivacidad, []),
-        returnValue: _i8.Future<_i6.ContenidoLegalDto?>.value(),
-        returnValueForMissingStub: _i8.Future<_i6.ContenidoLegalDto?>.value(),
-      ) as _i8.Future<_i6.ContenidoLegalDto?>);
+        returnValue: _i9.Future<_i7.ContenidoLegalDto?>.value(),
+        returnValueForMissingStub: _i9.Future<_i7.ContenidoLegalDto?>.value(),
+      ) as _i9.Future<_i7.ContenidoLegalDto?>);
 
   @override
-  _i8.Future<_i6.ConsentimientoPrivacidad> getConsentimiento() =>
+  _i9.Future<_i7.ConsentimientoPrivacidad> getConsentimiento() =>
       (super.noSuchMethod(
         Invocation.method(#getConsentimiento, []),
-        returnValue: _i8.Future<_i6.ConsentimientoPrivacidad>.value(
-          _FakeConsentimientoPrivacidad_6(
+        returnValue: _i9.Future<_i7.ConsentimientoPrivacidad>.value(
+          _FakeConsentimientoPrivacidad_7(
             this,
             Invocation.method(#getConsentimiento, []),
           ),
         ),
         returnValueForMissingStub:
-            _i8.Future<_i6.ConsentimientoPrivacidad>.value(
-              _FakeConsentimientoPrivacidad_6(
+            _i9.Future<_i7.ConsentimientoPrivacidad>.value(
+              _FakeConsentimientoPrivacidad_7(
                 this,
                 Invocation.method(#getConsentimiento, []),
               ),
             ),
-      ) as _i8.Future<_i6.ConsentimientoPrivacidad>);
+      ) as _i9.Future<_i7.ConsentimientoPrivacidad>);
 
   @override
-  _i8.Future<_i6.ConsentimientoPrivacidad> guardarConsentimiento(
-    _i6.ConsentimientoPrivacidad? c,
+  _i9.Future<_i7.ConsentimientoPrivacidad> guardarConsentimiento(
+    _i7.ConsentimientoPrivacidad? c,
   ) => (super.noSuchMethod(
     Invocation.method(#guardarConsentimiento, [c]),
-    returnValue: _i8.Future<_i6.ConsentimientoPrivacidad>.value(
-      _FakeConsentimientoPrivacidad_6(
+    returnValue: _i9.Future<_i7.ConsentimientoPrivacidad>.value(
+      _FakeConsentimientoPrivacidad_7(
         this,
         Invocation.method(#guardarConsentimiento, [c]),
       ),
     ),
-    returnValueForMissingStub: _i8.Future<_i6.ConsentimientoPrivacidad>.value(
-      _FakeConsentimientoPrivacidad_6(
+    returnValueForMissingStub: _i9.Future<_i7.ConsentimientoPrivacidad>.value(
+      _FakeConsentimientoPrivacidad_7(
         this,
         Invocation.method(#guardarConsentimiento, [c]),
       ),
     ),
-  ) as _i8.Future<_i6.ConsentimientoPrivacidad>);
+  ) as _i9.Future<_i7.ConsentimientoPrivacidad>);
 
   @override
-  _i8.Future<_i6.CancelacionCuenta> cancelarCuenta({
+  _i9.Future<_i7.CancelacionCuenta> cancelarCuenta({
     required String? contrasena,
     String? motivo = '',
   }) => (super.noSuchMethod(
@@ -562,8 +643,8 @@ class MockPrivacidadRepository extends _i1.Mock
       #contrasena: contrasena,
       #motivo: motivo,
     }),
-    returnValue: _i8.Future<_i6.CancelacionCuenta>.value(
-      _FakeCancelacionCuenta_7(
+    returnValue: _i9.Future<_i7.CancelacionCuenta>.value(
+      _FakeCancelacionCuenta_8(
         this,
         Invocation.method(#cancelarCuenta, [], {
           #contrasena: contrasena,
@@ -571,8 +652,8 @@ class MockPrivacidadRepository extends _i1.Mock
         }),
       ),
     ),
-    returnValueForMissingStub: _i8.Future<_i6.CancelacionCuenta>.value(
-      _FakeCancelacionCuenta_7(
+    returnValueForMissingStub: _i9.Future<_i7.CancelacionCuenta>.value(
+      _FakeCancelacionCuenta_8(
         this,
         Invocation.method(#cancelarCuenta, [], {
           #contrasena: contrasena,
@@ -580,58 +661,58 @@ class MockPrivacidadRepository extends _i1.Mock
         }),
       ),
     ),
-  ) as _i8.Future<_i6.CancelacionCuenta>);
+  ) as _i9.Future<_i7.CancelacionCuenta>);
 }
 
 /// A class which mocks [SecretariaRepository].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockSecretariaRepository extends _i1.Mock
-    implements _i14.SecretariaRepository {
+    implements _i16.SecretariaRepository {
   @override
-  _i8.Future<_i4.SecretariaDiaDto> getCitasDia({String? fecha}) =>
+  _i9.Future<_i5.SecretariaDiaDto> getCitasDia({String? fecha}) =>
       (super.noSuchMethod(
         Invocation.method(#getCitasDia, [], {#fecha: fecha}),
-        returnValue: _i8.Future<_i4.SecretariaDiaDto>.value(
-          _FakeSecretariaDiaDto_8(
+        returnValue: _i9.Future<_i5.SecretariaDiaDto>.value(
+          _FakeSecretariaDiaDto_9(
             this,
             Invocation.method(#getCitasDia, [], {#fecha: fecha}),
           ),
         ),
-        returnValueForMissingStub: _i8.Future<_i4.SecretariaDiaDto>.value(
-          _FakeSecretariaDiaDto_8(
+        returnValueForMissingStub: _i9.Future<_i5.SecretariaDiaDto>.value(
+          _FakeSecretariaDiaDto_9(
             this,
             Invocation.method(#getCitasDia, [], {#fecha: fecha}),
           ),
         ),
-      ) as _i8.Future<_i4.SecretariaDiaDto>);
+      ) as _i9.Future<_i5.SecretariaDiaDto>);
 
   @override
-  _i8.Future<Map<String, dynamic>> marcarLlego(int? citaId) =>
+  _i9.Future<Map<String, dynamic>> marcarLlego(int? citaId) =>
       (super.noSuchMethod(
         Invocation.method(#marcarLlego, [citaId]),
-        returnValue: _i8.Future<Map<String, dynamic>>.value(
+        returnValue: _i9.Future<Map<String, dynamic>>.value(
           <String, dynamic>{},
         ),
-        returnValueForMissingStub: _i8.Future<Map<String, dynamic>>.value(
+        returnValueForMissingStub: _i9.Future<Map<String, dynamic>>.value(
           <String, dynamic>{},
         ),
-      ) as _i8.Future<Map<String, dynamic>>);
+      ) as _i9.Future<Map<String, dynamic>>);
 
   @override
-  _i8.Future<Map<String, dynamic>> marcarNoAsistio(int? citaId) =>
+  _i9.Future<Map<String, dynamic>> marcarNoAsistio(int? citaId) =>
       (super.noSuchMethod(
         Invocation.method(#marcarNoAsistio, [citaId]),
-        returnValue: _i8.Future<Map<String, dynamic>>.value(
+        returnValue: _i9.Future<Map<String, dynamic>>.value(
           <String, dynamic>{},
         ),
-        returnValueForMissingStub: _i8.Future<Map<String, dynamic>>.value(
+        returnValueForMissingStub: _i9.Future<Map<String, dynamic>>.value(
           <String, dynamic>{},
         ),
-      ) as _i8.Future<Map<String, dynamic>>);
+      ) as _i9.Future<Map<String, dynamic>>);
 
   @override
-  _i8.Future<Map<String, dynamic>> cobrar({
+  _i9.Future<Map<String, dynamic>> cobrar({
     required int? citaId,
     required String? metodoPago,
     String? comprobante,
@@ -645,27 +726,27 @@ class MockSecretariaRepository extends _i1.Mock
       #referencia: referencia,
       #efectivoRecibido: efectivoRecibido,
     }),
-    returnValue: _i8.Future<Map<String, dynamic>>.value(<String, dynamic>{}),
-    returnValueForMissingStub: _i8.Future<Map<String, dynamic>>.value(
+    returnValue: _i9.Future<Map<String, dynamic>>.value(<String, dynamic>{}),
+    returnValueForMissingStub: _i9.Future<Map<String, dynamic>>.value(
       <String, dynamic>{},
     ),
-  ) as _i8.Future<Map<String, dynamic>>);
+  ) as _i9.Future<Map<String, dynamic>>);
 
   @override
-  _i8.Future<List<_i4.SecretariaClienteDto>> buscarClientes(String? q) =>
+  _i9.Future<List<_i5.SecretariaClienteDto>> buscarClientes(String? q) =>
       (super.noSuchMethod(
         Invocation.method(#buscarClientes, [q]),
-        returnValue: _i8.Future<List<_i4.SecretariaClienteDto>>.value(
-          <_i4.SecretariaClienteDto>[],
+        returnValue: _i9.Future<List<_i5.SecretariaClienteDto>>.value(
+          <_i5.SecretariaClienteDto>[],
         ),
         returnValueForMissingStub:
-            _i8.Future<List<_i4.SecretariaClienteDto>>.value(
-              <_i4.SecretariaClienteDto>[],
+            _i9.Future<List<_i5.SecretariaClienteDto>>.value(
+              <_i5.SecretariaClienteDto>[],
             ),
-      ) as _i8.Future<List<_i4.SecretariaClienteDto>>);
+      ) as _i9.Future<List<_i5.SecretariaClienteDto>>);
 
   @override
-  _i8.Future<_i4.SecretariaClienteDto> crearClientePaso({
+  _i9.Future<_i5.SecretariaClienteDto> crearClientePaso({
     required String? nombres,
     String? apellido = '',
     required String? telefono,
@@ -675,8 +756,8 @@ class MockSecretariaRepository extends _i1.Mock
       #apellido: apellido,
       #telefono: telefono,
     }),
-    returnValue: _i8.Future<_i4.SecretariaClienteDto>.value(
-      _FakeSecretariaClienteDto_9(
+    returnValue: _i9.Future<_i5.SecretariaClienteDto>.value(
+      _FakeSecretariaClienteDto_10(
         this,
         Invocation.method(#crearClientePaso, [], {
           #nombres: nombres,
@@ -685,8 +766,8 @@ class MockSecretariaRepository extends _i1.Mock
         }),
       ),
     ),
-    returnValueForMissingStub: _i8.Future<_i4.SecretariaClienteDto>.value(
-      _FakeSecretariaClienteDto_9(
+    returnValueForMissingStub: _i9.Future<_i5.SecretariaClienteDto>.value(
+      _FakeSecretariaClienteDto_10(
         this,
         Invocation.method(#crearClientePaso, [], {
           #nombres: nombres,
@@ -695,10 +776,10 @@ class MockSecretariaRepository extends _i1.Mock
         }),
       ),
     ),
-  ) as _i8.Future<_i4.SecretariaClienteDto>);
+  ) as _i9.Future<_i5.SecretariaClienteDto>);
 
   @override
-  _i8.Future<Map<String, dynamic>> crearCita({
+  _i9.Future<Map<String, dynamic>> crearCita({
     required int? clienteId,
     required int? barberoId,
     required int? servicioId,
@@ -724,47 +805,47 @@ class MockSecretariaRepository extends _i1.Mock
       #comprobantePago: comprobantePago,
       #notas: notas,
     }),
-    returnValue: _i8.Future<Map<String, dynamic>>.value(<String, dynamic>{}),
-    returnValueForMissingStub: _i8.Future<Map<String, dynamic>>.value(
+    returnValue: _i9.Future<Map<String, dynamic>>.value(<String, dynamic>{}),
+    returnValueForMissingStub: _i9.Future<Map<String, dynamic>>.value(
       <String, dynamic>{},
     ),
-  ) as _i8.Future<Map<String, dynamic>>);
+  ) as _i9.Future<Map<String, dynamic>>);
 
   @override
-  _i8.Future<List<_i4.SecretariaCitaResumenDto>> citasDeCliente(
+  _i9.Future<List<_i5.SecretariaCitaResumenDto>> citasDeCliente(
     int? clienteId,
   ) => (super.noSuchMethod(
     Invocation.method(#citasDeCliente, [clienteId]),
-    returnValue: _i8.Future<List<_i4.SecretariaCitaResumenDto>>.value(
-      <_i4.SecretariaCitaResumenDto>[],
+    returnValue: _i9.Future<List<_i5.SecretariaCitaResumenDto>>.value(
+      <_i5.SecretariaCitaResumenDto>[],
     ),
     returnValueForMissingStub:
-        _i8.Future<List<_i4.SecretariaCitaResumenDto>>.value(
-          <_i4.SecretariaCitaResumenDto>[],
+        _i9.Future<List<_i5.SecretariaCitaResumenDto>>.value(
+          <_i5.SecretariaCitaResumenDto>[],
         ),
-  ) as _i8.Future<List<_i4.SecretariaCitaResumenDto>>);
+  ) as _i9.Future<List<_i5.SecretariaCitaResumenDto>>);
 
   @override
-  _i8.Future<_i4.SecretariaCitaEditableDto> citaEditable(int? citaId) =>
+  _i9.Future<_i5.SecretariaCitaEditableDto> citaEditable(int? citaId) =>
       (super.noSuchMethod(
         Invocation.method(#citaEditable, [citaId]),
-        returnValue: _i8.Future<_i4.SecretariaCitaEditableDto>.value(
-          _FakeSecretariaCitaEditableDto_10(
+        returnValue: _i9.Future<_i5.SecretariaCitaEditableDto>.value(
+          _FakeSecretariaCitaEditableDto_11(
             this,
             Invocation.method(#citaEditable, [citaId]),
           ),
         ),
         returnValueForMissingStub:
-            _i8.Future<_i4.SecretariaCitaEditableDto>.value(
-              _FakeSecretariaCitaEditableDto_10(
+            _i9.Future<_i5.SecretariaCitaEditableDto>.value(
+              _FakeSecretariaCitaEditableDto_11(
                 this,
                 Invocation.method(#citaEditable, [citaId]),
               ),
             ),
-      ) as _i8.Future<_i4.SecretariaCitaEditableDto>);
+      ) as _i9.Future<_i5.SecretariaCitaEditableDto>);
 
   @override
-  _i8.Future<Map<String, dynamic>> actualizarCita({
+  _i9.Future<Map<String, dynamic>> actualizarCita({
     required int? citaId,
     required int? barberoId,
     required int? servicioId,
@@ -788,9 +869,9 @@ class MockSecretariaRepository extends _i1.Mock
       #notas: notas,
       #cancelar: cancelar,
     }),
-    returnValue: _i8.Future<Map<String, dynamic>>.value(<String, dynamic>{}),
-    returnValueForMissingStub: _i8.Future<Map<String, dynamic>>.value(
+    returnValue: _i9.Future<Map<String, dynamic>>.value(<String, dynamic>{}),
+    returnValueForMissingStub: _i9.Future<Map<String, dynamic>>.value(
       <String, dynamic>{},
     ),
-  ) as _i8.Future<Map<String, dynamic>>);
+  ) as _i9.Future<Map<String, dynamic>>);
 }

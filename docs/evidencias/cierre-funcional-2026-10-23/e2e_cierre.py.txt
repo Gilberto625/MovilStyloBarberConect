@@ -1,0 +1,223 @@
+"""Recorrido de API del cierre funcional contra Django LOCAL (nunca producción).
+
+Cliente: cancelar y reprogramar su cita (S6-02, S6-03, PM05).
+Barbero: agenda propia y atención (S7-01..03, PM06).
+Uso: python -I e2e_cierre.py SALIDA_DIR
+"""
+import datetime as dt
+import json
+import os
+import sys
+import time
+import urllib.error
+import urllib.parse
+import urllib.request
+
+BASE = "http://127.0.0.1:8000/api"
+HOY = dt.date(2026, 10, 23)  # viernes
+MARTES = dt.date(2026, 10, 27).isoformat()
+MIERCOLES = dt.date(2026, 10, 28).isoformat()
+SABADO = dt.date(2026, 10, 24).isoformat()
+BARBERO_1 = 2  # empleado de barbero1.prueba
+BARBERO_2 = 3
+SENSIBLES = {"access", "refresh", "token", "tempToken", "email", "correo", "telefono",
+             "banco_cuenta", "banco_titular", "banco_nombre", "password"}
+
+cred = json.load(open(os.path.expanduser("~/.stylo-local/dart_defines.local.json"), encoding="utf-8"))
+registro = []
+fallas = []
+creadas = []
+
+
+def limpiar(valor):
+    if isinstance(valor, dict):
+        return {k: ("[omitido]" if k in SENSIBLES else limpiar(v)) for k, v in valor.items()}
+    if isinstance(valor, list):
+        return [limpiar(v) for v in valor]
+    return valor
+
+
+def llamar(metodo, ruta, token=None, cuerpo=None, query=None):
+    url = BASE + ruta + ("?" + urllib.parse.urlencode(query) if query else "")
+    datos = json.dumps(cuerpo).encode("utf-8") if cuerpo is not None else None
+    req = urllib.request.Request(url, data=datos, method=metodo)
+    req.add_header("Content-Type", "application/json")
+    if token:
+        req.add_header("Authorization", "Bearer " + token)
+    try:
+        with urllib.request.urlopen(req, timeout=90) as r:
+            estado, crudo = r.status, r.read()
+    except urllib.error.HTTPError as e:
+        estado, crudo = e.code, e.read()
+    try:
+        return estado, json.loads(crudo.decode("utf-8") or "null")
+    except ValueError:
+        return estado, {"_texto": crudo[:200].decode("utf-8", "replace")}
+
+
+def caso(nombre, quien, metodo, ruta, token, esperado, cuerpo=None, query=None, chequeo=None):
+    estado, resp = llamar(metodo, ruta, token, cuerpo, query)
+    ok = estado == esperado
+    detalle = ""
+    if ok and chequeo:
+        try:
+            detalle = chequeo(resp) or ""
+        except AssertionError as e:
+            ok, detalle = False, f"chequeo: {e}"
+    fila = {"caso": nombre, "quien": quien, "peticion": f"{metodo} {ruta}", "cuerpo": cuerpo,
+            "esperado": esperado, "http": estado, "resultado": "pasa" if ok else "FALLA",
+            "detalle": detalle, "respuesta": limpiar(resp)}
+    registro.append(fila)
+    if not ok:
+        fallas.append(nombre)
+    msg = resp.get("error") or resp.get("mensaje") if isinstance(resp, dict) else ""
+    print(f"{'OK ' if ok else 'XX '} {nombre:<58} {quien:<10} {estado} {msg or ''} {detalle}")
+    return resp
+
+
+def login(u, p):
+    estado, resp = llamar("POST", "/login/", cuerpo={"email": cred[u], "password": cred[p]})
+    if estado != 200 or not resp.get("access"):
+        raise SystemExit(f"Login {u} falló: HTTP {estado}")
+    return resp["access"]
+
+
+def servicio_y_libre(token, barbero, fecha, saltar=0):
+    _, srv = llamar("GET", "/public/servicios/")
+    lista = srv["servicios"] if isinstance(srv, dict) else srv
+    _, bar = llamar("GET", "/barberos/", token)
+    cubiertos = next(b for b in bar["barberos"] if int(b["id"]) == barbero)["servicios_ids"]
+    s = next(x for x in lista if int(x["id"]) in [int(i) for i in cubiertos])
+    _, disp = llamar("GET", "/disponibilidad/", token,
+                     query={"barbero_id": barbero, "fecha": fecha, "duracion": s["duracion_minutos"]})
+    libres = [h["hora"] for h in disp.get("horarios", []) if h.get("disponible")]
+    return s, libres[saltar] if len(libres) > saltar else None, libres
+
+
+def reservar(token, barbero, fecha, hora, s):
+    estado, resp = llamar("POST", "/citas/", token, {
+        "cliente_id": 1, "barbero_id": barbero, "servicio_id": s["id"],
+        "duracion_minutos": s["duracion_minutos"], "fecha": fecha, "hora": hora,
+        "precio_total": s["precio"], "anticipo_pagado": 0})
+    cid = resp.get("cita_id") or resp.get("id") or (resp.get("cita") or {}).get("id")
+    if estado not in (200, 201) or not cid:
+        raise SystemExit(f"No se pudo crear la cita de preparación: {estado} {resp}")
+    creadas.append(int(cid))
+    return int(cid)
+
+
+def mis(token):
+    _, resp = llamar("GET", "/mis-citas/", token)
+    return {c["id"]: c for c in resp["citas"]}
+
+
+def main():
+    salida = sys.argv[1]
+    os.makedirs(salida, exist_ok=True)
+    a = login("TEST_CLIENT_USER", "TEST_CLIENT_PASS")
+    b = login("TEST_CLIENT_B_USER", "TEST_CLIENT_B_PASS")
+    sec = login("TEST_SECRETARIA_USER", "TEST_SECRETARIA_PASS")
+    bar = login("TEST_BARBERO_USER", "TEST_BARBERO_PASS")
+
+    print("\n== Cliente: cancelar y reprogramar (PM05)")
+    s, hora_x, _ = servicio_y_libre(a, BARBERO_1, MARTES)
+    x = reservar(a, BARBERO_1, MARTES, hora_x, s)
+
+    def puede(cid, esperado):
+        def _c(resp):
+            c = next(c for c in resp["citas"] if c["id"] == cid)
+            assert c["puede_modificar"] is esperado, f"puede_modificar={c['puede_modificar']}"
+            assert c["barbero_id"] == BARBERO_1, f"barbero_id={c['barbero_id']}"
+            return f"puede_modificar={c['puede_modificar']} límite={c['limite_modificacion']} {c['motivo_no_modificable']}"
+        return _c
+
+    caso("PM05-01 mis-citas indica que X se puede cambiar", "cliente A", "GET", "/mis-citas/", a, 200, chequeo=puede(x, True))
+    caso("PM05-02 B no puede cancelar la cita de A", "cliente B", "POST", f"/mis-citas/{x}/cancelar/", b, 404)
+    caso("PM05-03 B no puede reprogramar la cita de A", "cliente B", "POST", f"/mis-citas/{x}/reprogramar/", b, 404,
+         cuerpo={"fecha": MIERCOLES, "hora": "12:00"})
+    caso("PM05-04 sin sesión", "anónimo", "POST", f"/mis-citas/{x}/cancelar/", None, 401)
+
+    _, hora_nueva, libres_mie = servicio_y_libre(a, BARBERO_1, MIERCOLES)
+    caso("PM05-05 A reprograma X a un horario libre", "cliente A", "POST", f"/mis-citas/{x}/reprogramar/", a, 200,
+         cuerpo={"fecha": MIERCOLES, "hora": hora_nueva},
+         chequeo=lambda r: f"{r['fecha']} {r['hora']}")
+    caso("PM05-06 mis-citas refleja la nueva fecha", "cliente A", "GET", "/mis-citas/", a, 200,
+         chequeo=lambda r: (lambda c: (assert_(c["fecha"] == MIERCOLES and c["hora"] == hora_nueva, c), f"{c['fecha']} {c['hora']}")[1])(
+             next(c for c in r["citas"] if c["id"] == x)))
+
+    otra_hora = libres_mie[3]
+    yb = reservar(b, BARBERO_1, MIERCOLES, otra_hora, s)
+    caso("PM05-07 no se puede mover encima de otra cita (B)", "cliente A", "POST", f"/mis-citas/{x}/reprogramar/", a, 409,
+         cuerpo={"fecha": MIERCOLES, "hora": otra_hora})
+    caso("PM05-08 domingo: el barbero no trabaja", "cliente A", "POST", f"/mis-citas/{x}/reprogramar/", a, 409,
+         cuerpo={"fecha": "2026-11-01", "hora": "12:00"})
+    caso("PM05-09 hora fuera de bloque", "cliente A", "POST", f"/mis-citas/{x}/reprogramar/", a, 400,
+         cuerpo={"fecha": MIERCOLES, "hora": "12:10"})
+
+    s2, hora_sab, _ = servicio_y_libre(a, BARBERO_1, SABADO)
+    y = reservar(a, BARBERO_1, SABADO, hora_sab, s2)
+    caso("PM05-10 cita del sábado (menos de 2 días) no se puede cambiar", "cliente A", "GET", "/mis-citas/", a, 200,
+         chequeo=lambda r: (lambda c: (assert_(c["puede_modificar"] is False, c), c["motivo_no_modificable"])[1])(
+             next(c for c in r["citas"] if c["id"] == y)))
+    caso("PM05-11 cancelar fuera de plazo responde 409", "cliente A", "POST", f"/mis-citas/{y}/cancelar/", a, 409)
+
+    caso("PM05-12 A cancela X", "cliente A", "POST", f"/mis-citas/{x}/cancelar/", a, 200,
+         cuerpo={"motivo": "Prueba de cierre"})
+    caso("PM05-13 X queda cancelada en mis-citas", "cliente A", "GET", "/mis-citas/", a, 200,
+         chequeo=lambda r: (lambda c: (assert_(c["estado"] == "cancelada" and c["puede_modificar"] is False, c), c["estado"])[1])(
+             next(c for c in r["citas"] if c["id"] == x)))
+    caso("PM05-14 el horario de X se liberó", "cliente A", "GET", "/disponibilidad/", a, 200,
+         query={"barbero_id": BARBERO_1, "fecha": MIERCOLES, "duracion": s["duracion_minutos"]},
+         chequeo=lambda r: (assert_(any(h["hora"] == hora_nueva and h["disponible"] for h in r["horarios"]), hora_nueva), f"{hora_nueva} libre")[1])
+    caso("PM05-15 cancelar otra vez responde 409", "cliente A", "POST", f"/mis-citas/{x}/cancelar/", a, 409)
+
+    print("\n== Barbero: agenda y atención (PM06)")
+    ahora = dt.datetime.now()
+    s3, _, libres_hoy = servicio_y_libre(a, BARBERO_1, HOY.isoformat())
+    futuras = [h for h in libres_hoy if h > ahora.strftime("%H:%M")]
+    z = reservar(a, BARBERO_1, HOY.isoformat(), futuras[0], s3)
+    s4, _, libres_b2 = servicio_y_libre(b, BARBERO_2, HOY.isoformat())
+    w = reservar(b, BARBERO_2, HOY.isoformat(), [h for h in libres_b2 if h > ahora.strftime("%H:%M")][0], s4)
+
+    def agenda_ok(resp):
+        ids = [c["id"] for c in resp["citas"]]
+        assert z in ids and w not in ids, f"ids={ids}"
+        c = next(c for c in resp["citas"] if c["id"] == z)
+        assert c["puede_iniciar"] and c["atencion"] == "por_atender", c
+        return f"ids={ids}; cita {z}: {c['atencion']}"
+
+    caso("PM06-01 el barbero ve solo sus citas de hoy", "barbero1", "GET", "/barbero/agenda/", bar, 200, chequeo=agenda_ok)
+    caso("PM06-02 un cliente no entra a la agenda", "cliente A", "GET", "/barbero/agenda/", a, 403)
+    caso("PM06-03 secretaría no entra a la agenda del barbero", "secretaría", "GET", "/barbero/agenda/", sec, 403)
+    caso("PM06-04 la cita de otro barbero responde 404", "barbero1", "POST", f"/barbero/citas/{w}/atencion/", bar, 404,
+         cuerpo={"accion": "iniciar"})
+    caso("PM06-05 terminar antes de iniciar responde 409", "barbero1", "POST", f"/barbero/citas/{z}/atencion/", bar, 409,
+         cuerpo={"accion": "terminar"})
+    caso("PM06-06 una cita de otro día no se opera", "barbero1", "POST", f"/barbero/citas/{y}/atencion/", bar, 409,
+         cuerpo={"accion": "iniciar"})
+    caso("PM06-07 'no_asistio' no es acción del barbero", "barbero1", "POST", f"/barbero/citas/{z}/atencion/", bar, 400,
+         cuerpo={"accion": "no_asistio"})
+    caso("PM06-08 iniciar la atención", "barbero1", "POST", f"/barbero/citas/{z}/atencion/", bar, 200,
+         cuerpo={"accion": "iniciar"}, chequeo=lambda r: (assert_(r["atencion"] == "en_silla", r), r["atencion"])[1])
+    caso("PM06-09 terminar el servicio", "barbero1", "POST", f"/barbero/citas/{z}/atencion/", bar, 200,
+         cuerpo={"accion": "terminar"}, chequeo=lambda r: (assert_(r["atencion"] == "terminada" and r["estado"] == "en_curso", r), r["atencion"])[1])
+    caso("PM06-10 terminar dos veces responde 409", "barbero1", "POST", f"/barbero/citas/{z}/atencion/", bar, 409,
+         cuerpo={"accion": "terminar"})
+    caso("PM06-11 secretaría la ve en curso y lista para cobrar", "secretaría", "GET", "/secretaria/citas/dia/", sec, 200,
+         chequeo=lambda r: (lambda c: (assert_(c["estado"] == "en_curso" and c["puede_cobrar"], c), f"estado={c['estado']} puede_cobrar={c['puede_cobrar']}")[1])(
+             next(c for c in r["citas"] if c["id"] == z)))
+    caso("PM06-12 el cliente no puede cancelar una cita en curso", "cliente A", "POST", f"/mis-citas/{z}/cancelar/", a, 409)
+
+    json.dump({"fecha": HOY.isoformat(), "servidor": BASE, "casos": registro, "fallas": fallas},
+              open(os.path.join(salida, "e2e_api_resultados.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=2)
+    print(f"\n{len(registro) - len(fallas)}/{len(registro)} casos pasan. Citas creadas: {creadas + [yb]}")
+    open(os.path.join(salida, "citas_creadas.txt"), "w").write(",".join(str(c) for c in sorted(set(creadas + [yb]))))
+
+
+def assert_(cond, info):
+    if not cond:
+        raise AssertionError(str(info)[:200])
+
+
+if __name__ == "__main__":
+    main()

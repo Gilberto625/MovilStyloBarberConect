@@ -1,0 +1,33 @@
+
+== Cliente: cancelar y reprogramar (PM05)
+OK  PM05-01 mis-citas indica que X se puede cambiar            cliente A  200  puede_modificar=True límite=2026-10-26T10:00:00-06:00 
+OK  PM05-02 B no puede cancelar la cita de A                   cliente B  404 Cita no encontrada. 
+OK  PM05-03 B no puede reprogramar la cita de A                cliente B  404 Cita no encontrada. 
+OK  PM05-04 sin sesión                                         anónimo    401  
+OK  PM05-05 A reprograma X a un horario libre                  cliente A  200 Tu cita se movió al nuevo horario. 2026-10-28 10:00
+OK  PM05-06 mis-citas refleja la nueva fecha                   cliente A  200  2026-10-28 10:00
+OK  PM05-07 no se puede mover encima de otra cita (B)          cliente A  409 Ese horario ya está ocupado. 
+OK  PM05-08 domingo: el barbero no trabaja                     cliente A  409 El negocio no abre ese día. 
+OK  PM05-09 hora fuera de bloque                               cliente A  400 Ese horario no está disponible. 
+OK  PM05-10 cita del sábado (menos de 2 días) no se puede cambiar cliente A  200  Los cambios se hacen con al menos 2 días de anticipación. Para esta cita, comunícate con la barbería.
+OK  PM05-11 cancelar fuera de plazo responde 409               cliente A  409 Los cambios se hacen con al menos 2 días de anticipación. Para esta cita, comunícate con la barbería. 
+OK  PM05-12 A cancela X                                        cliente A  200 Tu cita quedó cancelada y el horario se liberó. 
+OK  PM05-13 X queda cancelada en mis-citas                     cliente A  200  cancelada
+OK  PM05-14 el horario de X se liberó                          cliente A  200  10:00 libre
+OK  PM05-15 cancelar otra vez responde 409                     cliente A  409 Esta cita ya no se puede cambiar. 
+
+== Barbero: agenda y atención (PM06)
+OK  PM06-01 el barbero ve solo sus citas de hoy                barbero1   200  ids=[60]; cita 60: por_atender
+OK  PM06-02 un cliente no entra a la agenda                    cliente A  403 No autorizado. 
+OK  PM06-03 secretaría no entra a la agenda del barbero        secretaría 403 No autorizado. 
+OK  PM06-04 la cita de otro barbero responde 404               barbero1   404 Cita no encontrada. 
+OK  PM06-05 terminar antes de iniciar responde 409             barbero1   409 Primero inicia la atención de esta cita. 
+OK  PM06-06 una cita de otro día no se opera                   barbero1   409 Solo puedes cambiar la atención de las citas de hoy. 
+OK  PM06-07 'no_asistio' no es acción del barbero              barbero1   400 Acción inválida. Usa 'iniciar' o 'terminar'. 
+OK  PM06-08 iniciar la atención                                barbero1   200 Atención iniciada. en_silla
+OK  PM06-09 terminar el servicio                               barbero1   200 Servicio terminado. Secretaría hará el cobro. terminada
+OK  PM06-10 terminar dos veces responde 409                    barbero1   409 Primero inicia la atención de esta cita. 
+OK  PM06-11 secretaría la ve en curso y lista para cobrar      secretaría 200  estado=en_curso puede_cobrar=True
+OK  PM06-12 el cliente no puede cancelar una cita en curso     cliente A  409 Esta cita ya no se puede cambiar. 
+
+27/27 casos pasan. Citas creadas: [57, 58, 59, 60, 61, 58]

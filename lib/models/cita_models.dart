@@ -14,6 +14,10 @@ class CitaDto {
     required this.notas,
     required this.barberoNombre,
     required this.requierePago,
+    this.barberoId,
+    this.puedeModificar = false,
+    this.motivoNoModificable = '',
+    this.limiteModificacion,
   });
 
   final int id;
@@ -31,6 +35,19 @@ class CitaDto {
   final String barberoNombre;
   final bool requierePago;
 
+  /// Empleado que atiende; sirve para pedir horarios al reprogramar.
+  final int? barberoId;
+
+  /// El backend decide si el cliente aún puede cancelar o reprogramar
+  /// (estado y anticipación mínima). La app no recalcula esa regla.
+  final bool puedeModificar;
+  final String motivoNoModificable;
+
+  /// Hasta cuándo se puede cambiar, en la hora de la barbería (México).
+  /// Se conserva la hora de pared que manda Django, sin pasarla a la zona
+  /// del teléfono.
+  final DateTime? limiteModificacion;
+
   factory CitaDto.fromJson(Map<String, dynamic> json) {
     return CitaDto(
       id: _i(json['id']),
@@ -47,7 +64,18 @@ class CitaDto {
       notas: (json['notas'] ?? '').toString(),
       barberoNombre: (json['barbero_nombre'] ?? 'Barbero').toString(),
       requierePago: json['requiere_pago'] == true,
+      barberoId: int.tryParse('${json['barbero_id']}'),
+      puedeModificar: json['puede_modificar'] == true,
+      motivoNoModificable: (json['motivo_no_modificable'] ?? '').toString(),
+      limiteModificacion: _horaDePared(json['limite_modificacion']),
     );
+  }
+
+  /// `2026-10-26T12:00:00-06:00` → 26/10/2026 12:00, sin zona.
+  static DateTime? _horaDePared(Object? v) {
+    final raw = (v ?? '').toString();
+    if (raw.length < 16) return null;
+    return DateTime.tryParse(raw.substring(0, raw.length < 19 ? 16 : 19));
   }
 
   static int _i(Object? v) => int.tryParse('$v') ?? 0;

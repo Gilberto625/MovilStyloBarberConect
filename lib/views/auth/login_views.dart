@@ -170,7 +170,7 @@ class _LoginViewState extends State<LoginView> {
 void goHomeByRole(BuildContext context, UserRole role) {
   Navigator.pushNamedAndRemoveUntil(
     context,
-    role.isStaffPanel ? AppRoutes.secretaryHome : AppRoutes.clientHome,
+    AppRoutes.homeFor(role),
     (_) => false,
   );
 }

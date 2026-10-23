@@ -21,6 +21,13 @@ class ClientCitasViewModel extends ChangeNotifier {
   bool slotsLoading = false;
   String? bookingMessage;
 
+  /// Cancelar o reprogramar en curso; evita un segundo envío.
+  bool cambioBusy = false;
+  String? cambioError;
+
+  /// Mensaje del servidor tras el último cambio, para mostrarlo al cliente.
+  String? cambioMensaje;
+
   Future<void> loadMisCitas() async {
     state = LoadState.loading;
     errorMessage = null;
@@ -89,6 +96,8 @@ class ClientCitasViewModel extends ChangeNotifier {
     required String hora,
     required double precioTotal,
   }) async {
+    // ERR-06: un segundo toque mientras se envía no crea otra cita.
+    if (bookingBusy) return false;
     bookingBusy = true;
     bookingMessage = null;
     errorMessage = null;
@@ -116,5 +125,44 @@ class ClientCitasViewModel extends ChangeNotifier {
       notifyListeners();
       return false;
     }
+  }
+
+  Future<bool> cancelarCita(CitaDto cita, {String motivo = ''}) =>
+      _cambiar(() => _repository.cancelarCita(cita.id, motivo: motivo));
+
+  Future<bool> reprogramarCita(
+    CitaDto cita, {
+    required String fecha,
+    required String hora,
+  }) => _cambiar(
+    () => _repository.reprogramarCita(cita.id, fecha: fecha, hora: hora),
+  );
+
+  void limpiarCambio() {
+    cambioError = null;
+    cambioMensaje = null;
+    notifyListeners();
+  }
+
+  Future<bool> _cambiar(Future<Map<String, dynamic>> Function() accion) async {
+    if (cambioBusy) return false;
+    cambioBusy = true;
+    cambioError = null;
+    cambioMensaje = null;
+    notifyListeners();
+    try {
+      final result = await accion();
+      cambioMensaje = (result['mensaje'] ?? '').toString();
+    } catch (e) {
+      cambioError = e.toString();
+      cambioBusy = false;
+      notifyListeners();
+      return false;
+    }
+    cambioBusy = false;
+    notifyListeners();
+    // La lista refleja lo que guardó el servidor, no un cambio local.
+    await loadMisCitas();
+    return true;
   }
 }

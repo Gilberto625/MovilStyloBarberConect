@@ -46,6 +46,12 @@ String fechaLarga(String yyyyMmDd) {
   return '${_dias[d.weekday - 1]} ${d.day} de ${_meses[d.month - 1]}';
 }
 
+/// "martes 14 de octubre", para usarla a media frase.
+String fechaEnFrase(String yyyyMmDd) {
+  final f = fechaLarga(yyyyMmDd);
+  return f.isEmpty ? f : f[0].toLowerCase() + f.substring(1);
+}
+
 /// "14 oct".
 ({String dia, String mes})? fechaCorta(String yyyyMmDd) {
   final d = _parse(yyyyMmDd);
@@ -68,6 +74,16 @@ String horaCorta(String hora) {
 }
 
 const estadosCerrados = {'cancelada', 'completada', 'no_asistio'};
+
+/// Reloj de las pantallas del cliente; las pruebas lo fijan.
+@visibleForTesting
+DateTime Function() relojCliente = DateTime.now;
+
+/// Próxima = sigue abierta y es de hoy en adelante. Una cita de un día que
+/// ya pasó y que la barbería no cerró va al historial, no a "Próximas".
+bool esCitaProxima(CitaDto c) =>
+    !estadosCerrados.contains(c.estado.toLowerCase()) &&
+    c.fecha.compareTo(isoFecha(relojCliente())) >= 0;
 
 /// Encabezado de cada pestaña del cliente.
 class ClientHeader extends StatelessWidget {

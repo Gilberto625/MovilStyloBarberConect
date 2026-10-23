@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../core/theme/app_theme.dart';
-import '../../models/auth_models.dart';
 import '../../routes/app_routes.dart';
 import '../../viewmodels/auth_viewmodel.dart';
 
@@ -205,8 +204,7 @@ class _SplashGateState extends State<SplashGate> {
 
   String _routeFor(AuthViewModel auth) {
     if (auth.phase == AuthPhase.authenticated) {
-      if (auth.role.isStaffPanel) return AppRoutes.secretaryHome;
-      return AppRoutes.clientHome;
+      return AppRoutes.homeFor(auth.role);
     }
     return AppRoutes.guestHome;
   }
