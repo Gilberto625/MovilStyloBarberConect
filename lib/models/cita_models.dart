@@ -14,6 +14,10 @@ class CitaDto {
     required this.notas,
     required this.barberoNombre,
     required this.requierePago,
+    this.barberoId,
+    this.puedeModificar = false,
+    this.motivoNoModificable = '',
+    this.limiteModificacion,
   });
 
   final int id;
@@ -31,6 +35,17 @@ class CitaDto {
   final String barberoNombre;
   final bool requierePago;
 
+  /// Empleado que atiende; sirve para pedir horarios al reprogramar.
+  final int? barberoId;
+
+  /// El backend decide si el cliente aún puede cancelar o reprogramar
+  /// (estado y anticipación mínima). La app no recalcula esa regla.
+  final bool puedeModificar;
+  final String motivoNoModificable;
+
+  /// Hasta cuándo se puede cambiar, en ISO 8601 con zona horaria.
+  final DateTime? limiteModificacion;
+
   factory CitaDto.fromJson(Map<String, dynamic> json) {
     return CitaDto(
       id: _i(json['id']),
@@ -47,6 +62,12 @@ class CitaDto {
       notas: (json['notas'] ?? '').toString(),
       barberoNombre: (json['barbero_nombre'] ?? 'Barbero').toString(),
       requierePago: json['requiere_pago'] == true,
+      barberoId: int.tryParse('${json['barbero_id']}'),
+      puedeModificar: json['puede_modificar'] == true,
+      motivoNoModificable: (json['motivo_no_modificable'] ?? '').toString(),
+      limiteModificacion: DateTime.tryParse(
+        (json['limite_modificacion'] ?? '').toString(),
+      ),
     );
   }
 

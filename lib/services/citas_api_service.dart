@@ -104,4 +104,32 @@ class CitasApiService {
     }
     return map;
   }
+
+  Future<Map<String, dynamic>> cancelarCita(int citaId, {String motivo = ''}) =>
+      _accionCita('/mis-citas/$citaId/cancelar/', {
+        if (motivo.isNotEmpty) 'motivo': motivo,
+      }, 'No se pudo cancelar la cita.');
+
+  Future<Map<String, dynamic>> reprogramarCita(
+    int citaId, {
+    required String fecha,
+    required String hora,
+  }) => _accionCita('/mis-citas/$citaId/reprogramar/', {
+    'fecha': fecha,
+    'hora': hora,
+  }, 'No se pudo reprogramar la cita.');
+
+  Future<Map<String, dynamic>> _accionCita(
+    String path,
+    Map<String, dynamic> body,
+    String fallback,
+  ) async {
+    final raw = await _api.post(path, body: body);
+    if (raw is! Map) throw ApiException(fallback);
+    final map = Map<String, dynamic>.from(raw);
+    if (map['ok'] == false) {
+      throw ApiException((map['error'] ?? fallback).toString());
+    }
+    return map;
+  }
 }

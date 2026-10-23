@@ -201,6 +201,17 @@ class _Catalogo implements CatalogRepository {
 
 class _Citas implements CitasRepository {
   @override
+  Future<Map<String, dynamic>> cancelarCita(int citaId, {String motivo = ''}) =>
+      throw UnimplementedError();
+
+  @override
+  Future<Map<String, dynamic>> reprogramarCita(
+    int citaId, {
+    required String fecha,
+    required String hora,
+  }) => throw UnimplementedError();
+
+  @override
   Future<List<BarberoDto>> getBarberos({int? servicioId}) async => const [
     BarberoDto(
       id: 2,
