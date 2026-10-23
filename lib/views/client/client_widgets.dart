@@ -75,6 +75,16 @@ String horaCorta(String hora) {
 
 const estadosCerrados = {'cancelada', 'completada', 'no_asistio'};
 
+/// Reloj de las pantallas del cliente; las pruebas lo fijan.
+@visibleForTesting
+DateTime Function() relojCliente = DateTime.now;
+
+/// Próxima = sigue abierta y es de hoy en adelante. Una cita de un día que
+/// ya pasó y que la barbería no cerró va al historial, no a "Próximas".
+bool esCitaProxima(CitaDto c) =>
+    !estadosCerrados.contains(c.estado.toLowerCase()) &&
+    c.fecha.compareTo(isoFecha(relojCliente())) >= 0;
+
 /// Encabezado de cada pestaña del cliente.
 class ClientHeader extends StatelessWidget {
   const ClientHeader({

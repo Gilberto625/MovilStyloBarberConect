@@ -189,6 +189,10 @@ Future<void> _tab(WidgetTester tester, String tab) async {
 }
 
 void main() {
+  // Las citas de estas pruebas tienen fechas fijas de octubre de 2026.
+  setUp(() => relojCliente = () => DateTime(2026, 10, 1));
+  tearDown(() => relojCliente = DateTime.now);
+
   group('Fechas legibles', () {
     test('fecha larga, corta, ISO y hora sin segundos', () {
       expect(fechaLarga('2026-10-14'), 'Miércoles 14 de octubre');

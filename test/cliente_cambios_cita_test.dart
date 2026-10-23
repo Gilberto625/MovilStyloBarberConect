@@ -18,6 +18,7 @@ import 'package:stylo_barber_connect/services/citas_api_service.dart';
 import 'package:stylo_barber_connect/viewmodels/client_citas_viewmodel.dart';
 import 'package:stylo_barber_connect/views/client/client_citas_view.dart';
 import 'package:stylo_barber_connect/views/client/client_reprogramar_view.dart';
+import 'package:stylo_barber_connect/views/client/client_widgets.dart';
 
 import 'mocks/mocks.mocks.dart';
 import 'support/memory_token_storage.dart';
@@ -171,6 +172,18 @@ void main() {
         ),
       );
     });
+  });
+
+  test('una cita abierta de un día que ya pasó no cuenta como próxima', () {
+    relojCliente = () => DateTime(2026, 11, 4, 18);
+    addTearDown(() => relojCliente = DateTime.now);
+    CitaDto con(String fecha, String estado) =>
+        CitaDto.fromJson({'id': 1, 'fecha': fecha, 'estado': estado});
+
+    expect(esCitaProxima(con('2026-11-04', 'confirmada')), isTrue);
+    expect(esCitaProxima(con('2026-11-05', 'pendiente')), isTrue);
+    expect(esCitaProxima(con('2026-11-03', 'confirmada')), isFalse);
+    expect(esCitaProxima(con('2026-11-05', 'cancelada')), isFalse);
   });
 
   group('ClientCitasViewModel', () {

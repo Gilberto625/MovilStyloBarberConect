@@ -29,16 +29,14 @@ class _ClientCitasTabState extends State<ClientCitasTab> {
   @override
   Widget build(BuildContext context) {
     final vm = context.watch<ClientCitasViewModel>();
-    final proximas =
-        vm.citas.where((c) => !estadosCerrados.contains(c.estado)).toList()
-          ..sort(
-            (a, b) => '${a.fecha} ${a.hora}'.compareTo('${b.fecha} ${b.hora}'),
-          );
-    final historial =
-        vm.citas.where((c) => estadosCerrados.contains(c.estado)).toList()
-          ..sort(
-            (a, b) => '${b.fecha} ${b.hora}'.compareTo('${a.fecha} ${a.hora}'),
-          );
+    final proximas = vm.citas.where(esCitaProxima).toList()
+      ..sort(
+        (a, b) => '${a.fecha} ${a.hora}'.compareTo('${b.fecha} ${b.hora}'),
+      );
+    final historial = vm.citas.where((c) => !esCitaProxima(c)).toList()
+      ..sort(
+        (a, b) => '${b.fecha} ${b.hora}'.compareTo('${a.fecha} ${a.hora}'),
+      );
     final visibles = _filtro == _Filtro.proximas ? proximas : historial;
 
     return SafeArea(
