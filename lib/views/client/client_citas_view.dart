@@ -239,11 +239,10 @@ class CitaDetalleView extends StatelessWidget {
 
   final CitaDto cita;
 
-  static String _limiteTexto(DateTime limite) {
-    final l = limite.toLocal();
+  static String _limiteTexto(DateTime l) {
     final hh = l.hour.toString().padLeft(2, '0');
     final mm = l.minute.toString().padLeft(2, '0');
-    return '${fechaLarga(isoFecha(l))} a las $hh:$mm';
+    return '${fechaEnFrase(isoFecha(l))} a las $hh:$mm';
   }
 
   Future<void> _reprogramar(BuildContext context) async {
@@ -455,7 +454,7 @@ class _CancelarCitaDialogState extends State<_CancelarCitaDialog> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              '${c.servicioNombre}, ${fechaLarga(c.fecha)} a las '
+              '${c.servicioNombre}, ${fechaEnFrase(c.fecha)} a las '
               '${horaCorta(c.hora)}. El horario queda libre para otra persona.',
               style: theme.bodyLarge,
             ),

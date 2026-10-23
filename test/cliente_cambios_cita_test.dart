@@ -45,7 +45,7 @@ CitaDto _cita({bool puede = true, double anticipo = 0, int? barberoId = 3}) =>
       barberoId: barberoId,
       puedeModificar: puede,
       motivoNoModificable: puede ? '' : _fueraDePlazo,
-      limiteModificacion: DateTime.parse('2026-11-03T12:00:00-06:00'),
+      limiteModificacion: DateTime(2026, 11, 3, 12),
     );
 
 http.Response _json(Object body, int status) => http.Response(
@@ -109,7 +109,8 @@ void main() {
       });
       expect(c.barberoId, 3);
       expect(c.puedeModificar, isTrue);
-      expect(c.limiteModificacion, DateTime.parse('2026-11-03T18:00:00Z'));
+      // Hora de la barbería, sin importar la zona del teléfono.
+      expect(c.limiteModificacion, DateTime(2026, 11, 3, 12));
 
       // Un backend anterior no manda los campos: no se ofrecen cambios.
       final viejo = CitaDto.fromJson({'id': 8, 'estado': 'confirmada'});
@@ -294,7 +295,13 @@ void main() {
 
       expect(find.byKey(const Key('cita_reprogramar')), findsOneWidget);
       expect(find.byKey(const Key('cita_cancelar')), findsOneWidget);
-      expect(find.textContaining('hasta el'), findsOneWidget);
+      expect(
+        find.text(
+          'Puedes moverla a otro horario o cancelarla hasta el martes 3 de '
+          'noviembre a las 12:00.',
+        ),
+        findsOneWidget,
+      );
     });
 
     testWidgets('fuera de plazo: explica por qué y no ofrece botones', (
@@ -436,6 +443,10 @@ void main() {
 
       await tester.tap(find.byKey(const ValueKey('reprogramar-hora-15:00')));
       await tester.pumpAndSettle();
+      expect(
+        find.text('Mover al jueves 5 de noviembre, 15:00'),
+        findsOneWidget,
+      );
       await tester.tap(find.byKey(const Key('reprogramar_confirmar')));
       await tester.pumpAndSettle();
 

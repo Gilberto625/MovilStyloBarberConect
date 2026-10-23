@@ -43,7 +43,9 @@ class CitaDto {
   final bool puedeModificar;
   final String motivoNoModificable;
 
-  /// Hasta cuándo se puede cambiar, en ISO 8601 con zona horaria.
+  /// Hasta cuándo se puede cambiar, en la hora de la barbería (México).
+  /// Se conserva la hora de pared que manda Django, sin pasarla a la zona
+  /// del teléfono.
   final DateTime? limiteModificacion;
 
   factory CitaDto.fromJson(Map<String, dynamic> json) {
@@ -65,10 +67,15 @@ class CitaDto {
       barberoId: int.tryParse('${json['barbero_id']}'),
       puedeModificar: json['puede_modificar'] == true,
       motivoNoModificable: (json['motivo_no_modificable'] ?? '').toString(),
-      limiteModificacion: DateTime.tryParse(
-        (json['limite_modificacion'] ?? '').toString(),
-      ),
+      limiteModificacion: _horaDePared(json['limite_modificacion']),
     );
+  }
+
+  /// `2026-10-26T12:00:00-06:00` → 26/10/2026 12:00, sin zona.
+  static DateTime? _horaDePared(Object? v) {
+    final raw = (v ?? '').toString();
+    if (raw.length < 16) return null;
+    return DateTime.tryParse(raw.substring(0, raw.length < 19 ? 16 : 19));
   }
 
   static int _i(Object? v) => int.tryParse('$v') ?? 0;

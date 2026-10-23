@@ -46,6 +46,12 @@ String fechaLarga(String yyyyMmDd) {
   return '${_dias[d.weekday - 1]} ${d.day} de ${_meses[d.month - 1]}';
 }
 
+/// "martes 14 de octubre", para usarla a media frase.
+String fechaEnFrase(String yyyyMmDd) {
+  final f = fechaLarga(yyyyMmDd);
+  return f.isEmpty ? f : f[0].toLowerCase() + f.substring(1);
+}
+
 /// "14 oct".
 ({String dia, String mes})? fechaCorta(String yyyyMmDd) {
   final d = _parse(yyyyMmDd);

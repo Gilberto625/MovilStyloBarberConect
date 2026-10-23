@@ -170,7 +170,7 @@ class _ReprogramarCitaViewState extends State<ReprogramarCitaView> {
               BarraAccion(
                 key: const Key('reprogramar_confirmar'),
                 label:
-                    'Mover al ${fechaLarga(isoFecha(_fecha))}, '
+                    'Mover al ${fechaEnFrase(isoFecha(_fecha))}, '
                     '${horaCorta(hora)}',
                 busy: vm.cambioBusy,
                 onPressed: _confirmar,
