@@ -3,6 +3,7 @@
 //   dart run build_runner build --delete-conflicting-outputs
 import 'package:mockito/annotations.dart';
 import 'package:stylo_barber_connect/repositories/auth_repository.dart';
+import 'package:stylo_barber_connect/repositories/barbero_repository.dart';
 import 'package:stylo_barber_connect/repositories/catalog_repository.dart';
 import 'package:stylo_barber_connect/repositories/citas_repository.dart';
 import 'package:stylo_barber_connect/repositories/pedidos_repository.dart';
@@ -11,6 +12,7 @@ import 'package:stylo_barber_connect/repositories/secretaria_repository.dart';
 
 @GenerateNiceMocks([
   MockSpec<AuthRepository>(),
+  MockSpec<BarberoRepository>(),
   MockSpec<CatalogRepository>(),
   MockSpec<CitasRepository>(),
   MockSpec<PedidosRepository>(),

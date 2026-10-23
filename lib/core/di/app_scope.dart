@@ -3,12 +3,14 @@ import '../network/api_client.dart';
 import '../network/cliente_http.dart';
 import '../storage/secure_token_storage.dart';
 import '../../repositories/auth_repository.dart';
+import '../../repositories/barbero_repository.dart';
 import '../../repositories/catalog_repository.dart';
 import '../../repositories/citas_repository.dart';
 import '../../repositories/pedidos_repository.dart';
 import '../../repositories/privacidad_repository.dart';
 import '../../repositories/secretaria_repository.dart';
 import '../../services/auth_api_service.dart';
+import '../../services/barbero_api_service.dart';
 import '../../services/catalog_api_service.dart';
 import '../../services/citas_api_service.dart';
 import '../../services/pedidos_api_service.dart';
@@ -30,6 +32,7 @@ class AppScope {
     required this.authRepository,
     required this.citasRepository,
     required this.secretariaRepository,
+    required this.barberoRepository,
     required this.privacidadRepository,
     required this.pedidosRepository,
     required this.authViewModel,
@@ -59,6 +62,7 @@ class AppScope {
     final authApi = AuthApiService(api);
     final citasApi = CitasApiService(api);
     final secretariaApi = SecretariaApiService(api);
+    final barberoRepository = BarberoRepository(BarberoApiService(api));
 
     final CatalogRepository catalogRepository = CatalogRepositoryImpl(
       catalogApi,
@@ -82,6 +86,7 @@ class AppScope {
       authRepository: authRepository,
       citasRepository: citasRepository,
       secretariaRepository: secretariaRepository,
+      barberoRepository: barberoRepository,
       privacidadRepository: privacidadRepository,
       pedidosRepository: pedidosRepository,
       authViewModel: authViewModel,
@@ -103,6 +108,9 @@ class AppScope {
   final AuthRepository authRepository;
   final CitasRepository citasRepository;
   final SecretariaRepository secretariaRepository;
+
+  /// El panel del barbero crea su ViewModel por ruta (PM09).
+  final BarberoRepository barberoRepository;
 
   /// Las pantallas de privacidad crean su ViewModel por ruta, así no queda
   /// estado de un usuario al cambiar de cuenta (PM09).
