@@ -51,4 +51,13 @@ class CitasRepository {
       if (notas.isNotEmpty) 'notas': notas,
     });
   }
+
+  Future<Map<String, dynamic>> cancelarCita(int citaId, {String motivo = ''}) =>
+      _api.cancelarCita(citaId, motivo: motivo);
+
+  Future<Map<String, dynamic>> reprogramarCita(
+    int citaId, {
+    required String fecha,
+    required String hora,
+  }) => _api.reprogramarCita(citaId, fecha: fecha, hora: hora);
 }

@@ -345,9 +345,7 @@ class _ProximaCita extends StatelessWidget {
   }
 
   CitaDto? _proxima(List<CitaDto> citas) {
-    final abiertas = citas
-        .where((c) => !estadosCerrados.contains(c.estado.toLowerCase()))
-        .toList();
+    final abiertas = citas.where(esCitaProxima).toList();
     if (abiertas.isEmpty) return null;
     abiertas.sort(
       (a, b) => '${a.fecha} ${a.hora}'.compareTo('${b.fecha} ${b.hora}'),

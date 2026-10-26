@@ -1,0 +1,842 @@
+{
+  "fecha": "2026-10-23",
+  "servidor": "http://127.0.0.1:8000/api",
+  "casos": [
+    {
+      "caso": "PM05-01 mis-citas indica que X se puede cambiar",
+      "quien": "cliente A",
+      "peticion": "GET /mis-citas/",
+      "cuerpo": null,
+      "esperado": 200,
+      "http": 200,
+      "resultado": "pasa",
+      "detalle": "puede_modificar=True límite=2026-10-26T10:00:00-06:00 ",
+      "respuesta": {
+        "ok": true,
+        "citas": [
+          {
+            "id": 57,
+            "servicio_id": 1,
+            "servicio_nombre": "Corte clásico",
+            "servicio_imagen": "",
+            "fecha": "2026-10-27",
+            "hora": "10:00",
+            "duracion_minutos": 45,
+            "estado": "confirmada",
+            "precio_total": 150.0,
+            "anticipo_pagado": 0.0,
+            "saldo_pendiente": 150.0,
+            "notas": "",
+            "complementos": "",
+            "fecha_creacion": "2026-10-23T12:51:34.972114+00:00",
+            "barbero_nombre": "Barbero Uno Prueba",
+            "requiere_pago": false,
+            "barbero_id": 2,
+            "puede_modificar": true,
+            "motivo_no_modificable": "",
+            "limite_modificacion": "2026-10-26T10:00:00-06:00"
+          },
+          {
+            "id": 1,
+            "servicio_id": 1,
+            "servicio_nombre": "Corte clásico",
+            "servicio_imagen": "",
+            "fecha": "2026-10-22",
+            "hora": "11:00",
+            "duracion_minutos": 45,
+            "estado": "confirmada",
+            "precio_total": 150.0,
+            "anticipo_pagado": 0.0,
+            "saldo_pendiente": 150.0,
+            "notas": "",
+            "complementos": "",
+            "fecha_creacion": "2026-10-20T22:45:47.975583+00:00",
+            "barbero_nombre": "Barbero Uno Prueba",
+            "requiere_pago": false,
+            "barbero_id": 2,
+            "puede_modificar": false,
+            "motivo_no_modificable": "Los cambios se hacen con al menos 1 día de anticipación. Para esta cita, comunícate con la barbería.",
+            "limite_modificacion": "2026-10-21T11:00:00-06:00"
+          }
+        ]
+      }
+    },
+    {
+      "caso": "PM05-02 B no puede cancelar la cita de A",
+      "quien": "cliente B",
+      "peticion": "POST /mis-citas/57/cancelar/",
+      "cuerpo": null,
+      "esperado": 404,
+      "http": 404,
+      "resultado": "pasa",
+      "detalle": "",
+      "respuesta": {
+        "ok": false,
+        "error": "Cita no encontrada."
+      }
+    },
+    {
+      "caso": "PM05-03 B no puede reprogramar la cita de A",
+      "quien": "cliente B",
+      "peticion": "POST /mis-citas/57/reprogramar/",
+      "cuerpo": {
+        "fecha": "2026-10-28",
+        "hora": "12:00"
+      },
+      "esperado": 404,
+      "http": 404,
+      "resultado": "pasa",
+      "detalle": "",
+      "respuesta": {
+        "ok": false,
+        "error": "Cita no encontrada."
+      }
+    },
+    {
+      "caso": "PM05-04 sin sesión",
+      "quien": "anónimo",
+      "peticion": "POST /mis-citas/57/cancelar/",
+      "cuerpo": null,
+      "esperado": 401,
+      "http": 401,
+      "resultado": "pasa",
+      "detalle": "",
+      "respuesta": {
+        "detail": "Las credenciales de autenticación no se proveyeron."
+      }
+    },
+    {
+      "caso": "PM05-05 A reprograma X a un horario libre",
+      "quien": "cliente A",
+      "peticion": "POST /mis-citas/57/reprogramar/",
+      "cuerpo": {
+        "fecha": "2026-10-28",
+        "hora": "10:00"
+      },
+      "esperado": 200,
+      "http": 200,
+      "resultado": "pasa",
+      "detalle": "2026-10-28 10:00",
+      "respuesta": {
+        "ok": true,
+        "estado": "confirmada",
+        "fecha": "2026-10-28",
+        "hora": "10:00",
+        "mensaje": "Tu cita se movió al nuevo horario."
+      }
+    },
+    {
+      "caso": "PM05-06 mis-citas refleja la nueva fecha",
+      "quien": "cliente A",
+      "peticion": "GET /mis-citas/",
+      "cuerpo": null,
+      "esperado": 200,
+      "http": 200,
+      "resultado": "pasa",
+      "detalle": "2026-10-28 10:00",
+      "respuesta": {
+        "ok": true,
+        "citas": [
+          {
+            "id": 57,
+            "servicio_id": 1,
+            "servicio_nombre": "Corte clásico",
+            "servicio_imagen": "",
+            "fecha": "2026-10-28",
+            "hora": "10:00",
+            "duracion_minutos": 45,
+            "estado": "confirmada",
+            "precio_total": 150.0,
+            "anticipo_pagado": 0.0,
+            "saldo_pendiente": 150.0,
+            "notas": "",
+            "complementos": "",
+            "fecha_creacion": "2026-10-23T12:51:34.972114+00:00",
+            "barbero_nombre": "Barbero Uno Prueba",
+            "requiere_pago": false,
+            "barbero_id": 2,
+            "puede_modificar": true,
+            "motivo_no_modificable": "",
+            "limite_modificacion": "2026-10-27T10:00:00-06:00"
+          },
+          {
+            "id": 1,
+            "servicio_id": 1,
+            "servicio_nombre": "Corte clásico",
+            "servicio_imagen": "",
+            "fecha": "2026-10-22",
+            "hora": "11:00",
+            "duracion_minutos": 45,
+            "estado": "confirmada",
+            "precio_total": 150.0,
+            "anticipo_pagado": 0.0,
+            "saldo_pendiente": 150.0,
+            "notas": "",
+            "complementos": "",
+            "fecha_creacion": "2026-10-20T22:45:47.975583+00:00",
+            "barbero_nombre": "Barbero Uno Prueba",
+            "requiere_pago": false,
+            "barbero_id": 2,
+            "puede_modificar": false,
+            "motivo_no_modificable": "Los cambios se hacen con al menos 1 día de anticipación. Para esta cita, comunícate con la barbería.",
+            "limite_modificacion": "2026-10-21T11:00:00-06:00"
+          }
+        ]
+      }
+    },
+    {
+      "caso": "PM05-07 no se puede mover encima de otra cita (B)",
+      "quien": "cliente A",
+      "peticion": "POST /mis-citas/57/reprogramar/",
+      "cuerpo": {
+        "fecha": "2026-10-28",
+        "hora": "11:00"
+      },
+      "esperado": 409,
+      "http": 409,
+      "resultado": "pasa",
+      "detalle": "",
+      "respuesta": {
+        "ok": false,
+        "error": "Ese horario ya está ocupado."
+      }
+    },
+    {
+      "caso": "PM05-08 domingo: el barbero no trabaja",
+      "quien": "cliente A",
+      "peticion": "POST /mis-citas/57/reprogramar/",
+      "cuerpo": {
+        "fecha": "2026-11-01",
+        "hora": "12:00"
+      },
+      "esperado": 409,
+      "http": 409,
+      "resultado": "pasa",
+      "detalle": "",
+      "respuesta": {
+        "ok": false,
+        "error": "El negocio no abre ese día."
+      }
+    },
+    {
+      "caso": "PM05-09 hora fuera de bloque",
+      "quien": "cliente A",
+      "peticion": "POST /mis-citas/57/reprogramar/",
+      "cuerpo": {
+        "fecha": "2026-10-28",
+        "hora": "12:10"
+      },
+      "esperado": 400,
+      "http": 400,
+      "resultado": "pasa",
+      "detalle": "",
+      "respuesta": {
+        "ok": false,
+        "error": "Ese horario no está disponible."
+      }
+    },
+    {
+      "caso": "PM05-10 cita del sábado (menos de 2 días) no se puede cambiar",
+      "quien": "cliente A",
+      "peticion": "GET /mis-citas/",
+      "cuerpo": null,
+      "esperado": 200,
+      "http": 200,
+      "resultado": "pasa",
+      "detalle": "Los cambios se hacen con al menos 2 días de anticipación. Para esta cita, comunícate con la barbería.",
+      "respuesta": {
+        "ok": true,
+        "citas": [
+          {
+            "id": 57,
+            "servicio_id": 1,
+            "servicio_nombre": "Corte clásico",
+            "servicio_imagen": "",
+            "fecha": "2026-10-28",
+            "hora": "10:00",
+            "duracion_minutos": 45,
+            "estado": "confirmada",
+            "precio_total": 150.0,
+            "anticipo_pagado": 0.0,
+            "saldo_pendiente": 150.0,
+            "notas": "",
+            "complementos": "",
+            "fecha_creacion": "2026-10-23T12:51:34.972114+00:00",
+            "barbero_nombre": "Barbero Uno Prueba",
+            "requiere_pago": false,
+            "barbero_id": 2,
+            "puede_modificar": true,
+            "motivo_no_modificable": "",
+            "limite_modificacion": "2026-10-27T10:00:00-06:00"
+          },
+          {
+            "id": 59,
+            "servicio_id": 1,
+            "servicio_nombre": "Corte clásico",
+            "servicio_imagen": "",
+            "fecha": "2026-10-24",
+            "hora": "10:00",
+            "duracion_minutos": 45,
+            "estado": "confirmada",
+            "precio_total": 150.0,
+            "anticipo_pagado": 0.0,
+            "saldo_pendiente": 150.0,
+            "notas": "",
+            "complementos": "",
+            "fecha_creacion": "2026-10-23T12:51:36.578711+00:00",
+            "barbero_nombre": "Barbero Uno Prueba",
+            "requiere_pago": false,
+            "barbero_id": 2,
+            "puede_modificar": false,
+            "motivo_no_modificable": "Los cambios se hacen con al menos 2 días de anticipación. Para esta cita, comunícate con la barbería.",
+            "limite_modificacion": "2026-10-22T10:00:00-06:00"
+          },
+          {
+            "id": 1,
+            "servicio_id": 1,
+            "servicio_nombre": "Corte clásico",
+            "servicio_imagen": "",
+            "fecha": "2026-10-22",
+            "hora": "11:00",
+            "duracion_minutos": 45,
+            "estado": "confirmada",
+            "precio_total": 150.0,
+            "anticipo_pagado": 0.0,
+            "saldo_pendiente": 150.0,
+            "notas": "",
+            "complementos": "",
+            "fecha_creacion": "2026-10-20T22:45:47.975583+00:00",
+            "barbero_nombre": "Barbero Uno Prueba",
+            "requiere_pago": false,
+            "barbero_id": 2,
+            "puede_modificar": false,
+            "motivo_no_modificable": "Los cambios se hacen con al menos 1 día de anticipación. Para esta cita, comunícate con la barbería.",
+            "limite_modificacion": "2026-10-21T11:00:00-06:00"
+          }
+        ]
+      }
+    },
+    {
+      "caso": "PM05-11 cancelar fuera de plazo responde 409",
+      "quien": "cliente A",
+      "peticion": "POST /mis-citas/59/cancelar/",
+      "cuerpo": null,
+      "esperado": 409,
+      "http": 409,
+      "resultado": "pasa",
+      "detalle": "",
+      "respuesta": {
+        "ok": false,
+        "error": "Los cambios se hacen con al menos 2 días de anticipación. Para esta cita, comunícate con la barbería."
+      }
+    },
+    {
+      "caso": "PM05-12 A cancela X",
+      "quien": "cliente A",
+      "peticion": "POST /mis-citas/57/cancelar/",
+      "cuerpo": {
+        "motivo": "Prueba de cierre"
+      },
+      "esperado": 200,
+      "http": 200,
+      "resultado": "pasa",
+      "detalle": "",
+      "respuesta": {
+        "ok": true,
+        "estado": "cancelada",
+        "mensaje": "Tu cita quedó cancelada y el horario se liberó.",
+        "anticipo_pagado": 0.0,
+        "horario_liberado": true
+      }
+    },
+    {
+      "caso": "PM05-13 X queda cancelada en mis-citas",
+      "quien": "cliente A",
+      "peticion": "GET /mis-citas/",
+      "cuerpo": null,
+      "esperado": 200,
+      "http": 200,
+      "resultado": "pasa",
+      "detalle": "cancelada",
+      "respuesta": {
+        "ok": true,
+        "citas": [
+          {
+            "id": 57,
+            "servicio_id": 1,
+            "servicio_nombre": "Corte clásico",
+            "servicio_imagen": "",
+            "fecha": "2026-10-28",
+            "hora": "10:00",
+            "duracion_minutos": 45,
+            "estado": "cancelada",
+            "precio_total": 150.0,
+            "anticipo_pagado": 0.0,
+            "saldo_pendiente": 150.0,
+            "notas": "",
+            "complementos": "",
+            "fecha_creacion": "2026-10-23T12:51:34.972114+00:00",
+            "barbero_nombre": "Barbero Uno Prueba",
+            "requiere_pago": false,
+            "barbero_id": 2,
+            "puede_modificar": false,
+            "motivo_no_modificable": "Esta cita ya no se puede cambiar.",
+            "limite_modificacion": "2026-10-27T10:00:00-06:00"
+          },
+          {
+            "id": 59,
+            "servicio_id": 1,
+            "servicio_nombre": "Corte clásico",
+            "servicio_imagen": "",
+            "fecha": "2026-10-24",
+            "hora": "10:00",
+            "duracion_minutos": 45,
+            "estado": "confirmada",
+            "precio_total": 150.0,
+            "anticipo_pagado": 0.0,
+            "saldo_pendiente": 150.0,
+            "notas": "",
+            "complementos": "",
+            "fecha_creacion": "2026-10-23T12:51:36.578711+00:00",
+            "barbero_nombre": "Barbero Uno Prueba",
+            "requiere_pago": false,
+            "barbero_id": 2,
+            "puede_modificar": false,
+            "motivo_no_modificable": "Los cambios se hacen con al menos 2 días de anticipación. Para esta cita, comunícate con la barbería.",
+            "limite_modificacion": "2026-10-22T10:00:00-06:00"
+          },
+          {
+            "id": 1,
+            "servicio_id": 1,
+            "servicio_nombre": "Corte clásico",
+            "servicio_imagen": "",
+            "fecha": "2026-10-22",
+            "hora": "11:00",
+            "duracion_minutos": 45,
+            "estado": "confirmada",
+            "precio_total": 150.0,
+            "anticipo_pagado": 0.0,
+            "saldo_pendiente": 150.0,
+            "notas": "",
+            "complementos": "",
+            "fecha_creacion": "2026-10-20T22:45:47.975583+00:00",
+            "barbero_nombre": "Barbero Uno Prueba",
+            "requiere_pago": false,
+            "barbero_id": 2,
+            "puede_modificar": false,
+            "motivo_no_modificable": "Los cambios se hacen con al menos 1 día de anticipación. Para esta cita, comunícate con la barbería.",
+            "limite_modificacion": "2026-10-21T11:00:00-06:00"
+          }
+        ]
+      }
+    },
+    {
+      "caso": "PM05-14 el horario de X se liberó",
+      "quien": "cliente A",
+      "peticion": "GET /disponibilidad/",
+      "cuerpo": null,
+      "esperado": 200,
+      "http": 200,
+      "resultado": "pasa",
+      "detalle": "10:00 libre",
+      "respuesta": {
+        "ok": true,
+        "horarios": [
+          {
+            "hora": "10:00",
+            "disponible": true
+          },
+          {
+            "hora": "10:20",
+            "disponible": false
+          },
+          {
+            "hora": "10:40",
+            "disponible": false
+          },
+          {
+            "hora": "11:00",
+            "disponible": false
+          },
+          {
+            "hora": "11:20",
+            "disponible": false
+          },
+          {
+            "hora": "11:40",
+            "disponible": false
+          },
+          {
+            "hora": "12:00",
+            "disponible": true
+          },
+          {
+            "hora": "12:20",
+            "disponible": true
+          },
+          {
+            "hora": "12:40",
+            "disponible": true
+          },
+          {
+            "hora": "13:00",
+            "disponible": true
+          },
+          {
+            "hora": "13:20",
+            "disponible": true
+          },
+          {
+            "hora": "13:40",
+            "disponible": true
+          },
+          {
+            "hora": "14:00",
+            "disponible": true
+          },
+          {
+            "hora": "14:20",
+            "disponible": true
+          },
+          {
+            "hora": "14:40",
+            "disponible": true
+          },
+          {
+            "hora": "15:00",
+            "disponible": true
+          },
+          {
+            "hora": "15:20",
+            "disponible": true
+          },
+          {
+            "hora": "15:40",
+            "disponible": true
+          },
+          {
+            "hora": "16:00",
+            "disponible": true
+          },
+          {
+            "hora": "16:20",
+            "disponible": true
+          },
+          {
+            "hora": "16:40",
+            "disponible": true
+          },
+          {
+            "hora": "17:00",
+            "disponible": true
+          },
+          {
+            "hora": "17:20",
+            "disponible": true
+          },
+          {
+            "hora": "17:40",
+            "disponible": true
+          },
+          {
+            "hora": "18:00",
+            "disponible": true
+          },
+          {
+            "hora": "18:20",
+            "disponible": true
+          },
+          {
+            "hora": "18:40",
+            "disponible": true
+          },
+          {
+            "hora": "19:00",
+            "disponible": true
+          }
+        ]
+      }
+    },
+    {
+      "caso": "PM05-15 cancelar otra vez responde 409",
+      "quien": "cliente A",
+      "peticion": "POST /mis-citas/57/cancelar/",
+      "cuerpo": null,
+      "esperado": 409,
+      "http": 409,
+      "resultado": "pasa",
+      "detalle": "",
+      "respuesta": {
+        "ok": false,
+        "error": "Esta cita ya no se puede cambiar."
+      }
+    },
+    {
+      "caso": "PM06-01 el barbero ve solo sus citas de hoy",
+      "quien": "barbero1",
+      "peticion": "GET /barbero/agenda/",
+      "cuerpo": null,
+      "esperado": 200,
+      "http": 200,
+      "resultado": "pasa",
+      "detalle": "ids=[60]; cita 60: por_atender",
+      "respuesta": {
+        "ok": true,
+        "fecha": "2026-10-23",
+        "es_hoy": true,
+        "citas": [
+          {
+            "id": 60,
+            "hora": "13:00",
+            "duracion_minutos": 45,
+            "servicio_nombre": "Corte clásico",
+            "cliente_nombre": "Cliente Prueba",
+            "estado": "confirmada",
+            "atencion": "por_atender",
+            "notas": "",
+            "complementos": "",
+            "puede_iniciar": true,
+            "puede_terminar": false
+          }
+        ]
+      }
+    },
+    {
+      "caso": "PM06-02 un cliente no entra a la agenda",
+      "quien": "cliente A",
+      "peticion": "GET /barbero/agenda/",
+      "cuerpo": null,
+      "esperado": 403,
+      "http": 403,
+      "resultado": "pasa",
+      "detalle": "",
+      "respuesta": {
+        "ok": false,
+        "error": "No autorizado."
+      }
+    },
+    {
+      "caso": "PM06-03 secretaría no entra a la agenda del barbero",
+      "quien": "secretaría",
+      "peticion": "GET /barbero/agenda/",
+      "cuerpo": null,
+      "esperado": 403,
+      "http": 403,
+      "resultado": "pasa",
+      "detalle": "",
+      "respuesta": {
+        "ok": false,
+        "error": "No autorizado."
+      }
+    },
+    {
+      "caso": "PM06-04 la cita de otro barbero responde 404",
+      "quien": "barbero1",
+      "peticion": "POST /barbero/citas/61/atencion/",
+      "cuerpo": {
+        "accion": "iniciar"
+      },
+      "esperado": 404,
+      "http": 404,
+      "resultado": "pasa",
+      "detalle": "",
+      "respuesta": {
+        "ok": false,
+        "error": "Cita no encontrada."
+      }
+    },
+    {
+      "caso": "PM06-05 terminar antes de iniciar responde 409",
+      "quien": "barbero1",
+      "peticion": "POST /barbero/citas/60/atencion/",
+      "cuerpo": {
+        "accion": "terminar"
+      },
+      "esperado": 409,
+      "http": 409,
+      "resultado": "pasa",
+      "detalle": "",
+      "respuesta": {
+        "ok": false,
+        "error": "Primero inicia la atención de esta cita."
+      }
+    },
+    {
+      "caso": "PM06-06 una cita de otro día no se opera",
+      "quien": "barbero1",
+      "peticion": "POST /barbero/citas/59/atencion/",
+      "cuerpo": {
+        "accion": "iniciar"
+      },
+      "esperado": 409,
+      "http": 409,
+      "resultado": "pasa",
+      "detalle": "",
+      "respuesta": {
+        "ok": false,
+        "error": "Solo puedes cambiar la atención de las citas de hoy."
+      }
+    },
+    {
+      "caso": "PM06-07 'no_asistio' no es acción del barbero",
+      "quien": "barbero1",
+      "peticion": "POST /barbero/citas/60/atencion/",
+      "cuerpo": {
+        "accion": "no_asistio"
+      },
+      "esperado": 400,
+      "http": 400,
+      "resultado": "pasa",
+      "detalle": "",
+      "respuesta": {
+        "ok": false,
+        "error": "Acción inválida. Usa 'iniciar' o 'terminar'."
+      }
+    },
+    {
+      "caso": "PM06-08 iniciar la atención",
+      "quien": "barbero1",
+      "peticion": "POST /barbero/citas/60/atencion/",
+      "cuerpo": {
+        "accion": "iniciar"
+      },
+      "esperado": 200,
+      "http": 200,
+      "resultado": "pasa",
+      "detalle": "en_silla",
+      "respuesta": {
+        "ok": true,
+        "estado": "en_curso",
+        "atencion": "en_silla",
+        "mensaje": "Atención iniciada."
+      }
+    },
+    {
+      "caso": "PM06-09 terminar el servicio",
+      "quien": "barbero1",
+      "peticion": "POST /barbero/citas/60/atencion/",
+      "cuerpo": {
+        "accion": "terminar"
+      },
+      "esperado": 200,
+      "http": 200,
+      "resultado": "pasa",
+      "detalle": "terminada",
+      "respuesta": {
+        "ok": true,
+        "estado": "en_curso",
+        "atencion": "terminada",
+        "mensaje": "Servicio terminado. Secretaría hará el cobro."
+      }
+    },
+    {
+      "caso": "PM06-10 terminar dos veces responde 409",
+      "quien": "barbero1",
+      "peticion": "POST /barbero/citas/60/atencion/",
+      "cuerpo": {
+        "accion": "terminar"
+      },
+      "esperado": 409,
+      "http": 409,
+      "resultado": "pasa",
+      "detalle": "",
+      "respuesta": {
+        "ok": false,
+        "error": "Primero inicia la atención de esta cita."
+      }
+    },
+    {
+      "caso": "PM06-11 secretaría la ve en curso y lista para cobrar",
+      "quien": "secretaría",
+      "peticion": "GET /secretaria/citas/dia/",
+      "cuerpo": null,
+      "esperado": 200,
+      "http": 200,
+      "resultado": "pasa",
+      "detalle": "estado=en_curso puede_cobrar=True",
+      "respuesta": {
+        "ok": true,
+        "fecha": "2026-10-23",
+        "es_hoy": true,
+        "resumen": {
+          "total": 2,
+          "pendientes_accion": 1,
+          "en_curso": 1,
+          "completadas": 0,
+          "no_asistio": 0
+        },
+        "citas": [
+          {
+            "id": 60,
+            "cliente_id": 1,
+            "cliente_nombre": "Cliente Prueba",
+            "cliente_telefono": "0000000001",
+            "servicio_nombre": "Corte clásico",
+            "barbero_nombre": "Barbero Uno Prueba",
+            "fecha": "2026-10-23",
+            "hora": "13:00",
+            "duracion_minutos": 45,
+            "estado": "en_curso",
+            "precio_total": 150.0,
+            "anticipo_pagado": 0.0,
+            "anticipo_pendiente": 0.0,
+            "restante": 150.0,
+            "puede_cobrar": true,
+            "puede_marcar_asistencia": true,
+            "cliente_penalizado": false,
+            "penalizacion": {
+              "penalizado": false,
+              "porcentaje_anticipo": 50.0,
+              "total_inasistencias": 0,
+              "citas_cumplidas": 0,
+              "citas_restantes": 0,
+              "citas_total_liberacion": 10
+            }
+          },
+          {
+            "id": 61,
+            "cliente_id": 2,
+            "cliente_nombre": "Cliente Dos Prueba",
+            "cliente_telefono": "0000000005",
+            "servicio_nombre": "Corte clásico",
+            "barbero_nombre": "Barbero Dos Prueba",
+            "fecha": "2026-10-23",
+            "hora": "13:00",
+            "duracion_minutos": 45,
+            "estado": "confirmada",
+            "precio_total": 150.0,
+            "anticipo_pagado": 0.0,
+            "anticipo_pendiente": 0.0,
+            "restante": 150.0,
+            "puede_cobrar": true,
+            "puede_marcar_asistencia": true,
+            "cliente_penalizado": false,
+            "penalizacion": {
+              "penalizado": false,
+              "porcentaje_anticipo": 50.0,
+              "total_inasistencias": 0,
+              "citas_cumplidas": 0,
+              "citas_restantes": 0,
+              "citas_total_liberacion": 10
+            }
+          }
+        ]
+      }
+    },
+    {
+      "caso": "PM06-12 el cliente no puede cancelar una cita en curso",
+      "quien": "cliente A",
+      "peticion": "POST /mis-citas/60/cancelar/",
+      "cuerpo": null,
+      "esperado": 409,
+      "http": 409,
+      "resultado": "pasa",
+      "detalle": "",
+      "respuesta": {
+        "ok": false,
+        "error": "Esta cita ya no se puede cambiar."
+      }
+    }
+  ],
+  "fallas": []
+}

@@ -98,6 +98,17 @@ class _FakeAuthRepository implements AuthRepository {
 }
 
 class _FakeCitasRepository implements CitasRepository {
+  @override
+  Future<Map<String, dynamic>> cancelarCita(int citaId, {String motivo = ''}) =>
+      throw UnimplementedError();
+
+  @override
+  Future<Map<String, dynamic>> reprogramarCita(
+    int citaId, {
+    required String fecha,
+    required String hora,
+  }) => throw UnimplementedError();
+
   bool createCalled = false;
   Object? createError;
 
