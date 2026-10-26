@@ -15,7 +15,7 @@ class AppConfig {
   );
 
   static const String appName = 'Stylo Barber Connect';
-  static const String versionLabel = '0.1.0+1';
+  static const String versionLabel = '0.4.0+2';
 
   static String normalizeBase(String raw) {
     var u = raw.trim();
