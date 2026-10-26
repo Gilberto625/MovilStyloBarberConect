@@ -1,0 +1,472 @@
+{
+  "fecha_prueba": "2026-10-21T16:59:16",
+  "base": "http://127.0.0.1:8000/api",
+  "barbero_id": 3,
+  "servicio": {
+    "id": 1,
+    "nombre": "Corte clásico",
+    "duracion_minutos": 45
+  },
+  "cuentas": {
+    "A": {
+      "id": 1,
+      "rol": "cliente"
+    },
+    "B": {
+      "id": 2,
+      "rol": "cliente"
+    },
+    "SEC": {
+      "id": 3,
+      "rol": "secretaria"
+    }
+  },
+  "citas_creadas": [
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "resultados": [
+    {
+      "prueba": "S3-05",
+      "quien": "cliente A",
+      "peticion": "GET /secretaria/citas/dia/",
+      "http": 403,
+      "ms": 126,
+      "esperado": "403 (rol cliente)",
+      "respuesta": {
+        "ok": false,
+        "error": "No autorizado."
+      }
+    },
+    {
+      "prueba": "S3-05",
+      "quien": "cliente A",
+      "peticion": "GET /secretaria/clientes/",
+      "http": 403,
+      "ms": 200,
+      "esperado": "403 (rol cliente)",
+      "respuesta": {
+        "ok": false,
+        "error": "No autorizado."
+      }
+    },
+    {
+      "prueba": "S3-05",
+      "quien": "cliente A",
+      "peticion": "GET /secretaria/citas/buscar/",
+      "http": 403,
+      "ms": 96,
+      "esperado": "403 (rol cliente)",
+      "respuesta": {
+        "ok": false,
+        "error": "No autorizado."
+      }
+    },
+    {
+      "prueba": "S3-05",
+      "quien": "cliente A",
+      "peticion": "POST /secretaria/citas/1/asistencia/",
+      "http": 403,
+      "ms": 89,
+      "esperado": "403 (rol cliente)",
+      "respuesta": {
+        "ok": false,
+        "error": "No autorizado."
+      }
+    },
+    {
+      "prueba": "S3-05",
+      "quien": "cliente A",
+      "peticion": "POST /secretaria/citas/crear/",
+      "http": 403,
+      "ms": 83,
+      "esperado": "403 (rol cliente)",
+      "respuesta": {
+        "ok": false,
+        "error": "No autorizado."
+      }
+    },
+    {
+      "prueba": "S3-05",
+      "quien": "secretaria",
+      "peticion": "GET /secretaria/citas/dia/",
+      "http": 200,
+      "ms": 147,
+      "esperado": "200 (control)",
+      "respuesta": {
+        "ok": true,
+        "fecha": "2026-10-21",
+        "es_hoy": true,
+        "resumen": {
+          "total": 0,
+          "pendientes_accion": 0,
+          "en_curso": 0,
+          "completadas": 0,
+          "no_asistio": 0
+        },
+        "citas": []
+      }
+    },
+    {
+      "prueba": "PM02-prep",
+      "quien": "secretaria",
+      "peticion": "POST /secretaria/citas/crear/",
+      "http": 201,
+      "ms": 306,
+      "esperado": "201/200: cita de prueba para B",
+      "respuesta": {
+        "ok": true,
+        "id": 2,
+        "fecha": "2026-10-21",
+        "hora": "17:00",
+        "precio_total": 150.0,
+        "anticipo_pagado": 0.0,
+        "estado": "confirmada",
+        "metodo_anticipo": "ninguno",
+        "referencia_pago": "",
+        "requiere_validacion_transferencia": false,
+        "penalizado": false
+      },
+      "cita_id": 2
+    },
+    {
+      "prueba": "PM02-prep",
+      "quien": "secretaria",
+      "peticion": "POST /secretaria/citas/2/asistencia/",
+      "http": 200,
+      "ms": 230,
+      "esperado": "200: B queda con 1 inasistencia",
+      "respuesta": {
+        "ok": true,
+        "estado": "no_asistio",
+        "mensaje": "Inasistencia registrada. El anticipo no es reembolsable según política. Se aplicó la penalización del administrador: las siguientes 10 citas requieren anticipo del 50.0%. Faltan 10 cita(s) asistiendo con anticipo para liberarla.",
+        "penalizacion": {
+          "penalizado": true,
+          "porcentaje_anticipo": 50.0,
+          "total_inasistencias": 1,
+          "citas_restantes": 10,
+          "citas_total_liberacion": 10
+        }
+      }
+    },
+    {
+      "prueba": "PM02",
+      "quien": "cliente B",
+      "peticion": "GET /citas/politica-pago/?cliente_id=2",
+      "http": 200,
+      "ms": 130,
+      "esperado": "200: su propia política (1 inasistencia)",
+      "respuesta": {
+        "ok": true,
+        "requiere_anticipo": true,
+        "porcentaje_anticipo": 50.0,
+        "penalizado": true,
+        "total_inasistencias": 1,
+        "citas_cumplidas_penalizacion": 0,
+        "citas_restantes_penalizacion": 10,
+        "citas_penalizacion_total": 10,
+        "tiempo_espera_maximo": 10,
+        "tiene_banco": false,
+        "banco_nombre": "[omitido]",
+        "banco_cuenta": "[omitido]",
+        "banco_titular": "[omitido]"
+      }
+    },
+    {
+      "prueba": "PM02",
+      "quien": "cliente A",
+      "peticion": "GET /citas/politica-pago/?cliente_id=1",
+      "http": 200,
+      "ms": 99,
+      "esperado": "200: su propia política (0 inasistencias)",
+      "respuesta": {
+        "ok": true,
+        "requiere_anticipo": false,
+        "porcentaje_anticipo": 50.0,
+        "penalizado": false,
+        "total_inasistencias": 0,
+        "citas_cumplidas_penalizacion": 0,
+        "citas_restantes_penalizacion": 0,
+        "citas_penalizacion_total": 10,
+        "tiempo_espera_maximo": 10,
+        "tiene_banco": false,
+        "banco_nombre": "[omitido]",
+        "banco_cuenta": "[omitido]",
+        "banco_titular": "[omitido]"
+      }
+    },
+    {
+      "prueba": "PM02",
+      "quien": "cliente A",
+      "peticion": "GET /citas/politica-pago/?cliente_id=2",
+      "http": 200,
+      "ms": 107,
+      "esperado": "403 o la política de A; NUNCA la de B",
+      "respuesta": {
+        "ok": true,
+        "requiere_anticipo": true,
+        "porcentaje_anticipo": 50.0,
+        "penalizado": true,
+        "total_inasistencias": 1,
+        "citas_cumplidas_penalizacion": 0,
+        "citas_restantes_penalizacion": 10,
+        "citas_penalizacion_total": 10,
+        "tiempo_espera_maximo": 10,
+        "tiene_banco": false,
+        "banco_nombre": "[omitido]",
+        "banco_cuenta": "[omitido]",
+        "banco_titular": "[omitido]"
+      }
+    },
+    {
+      "prueba": "PM02",
+      "quien": "cliente A",
+      "peticion": "GET /mis-citas/",
+      "http": 200,
+      "ms": 144,
+      "esperado": "solo sus citas",
+      "respuesta": {
+        "ok": true,
+        "cita_ids": [
+          1
+        ]
+      },
+      "contiene_cita_de_B": false
+    },
+    {
+      "prueba": "PM02",
+      "quien": "cliente B",
+      "peticion": "GET /mis-citas/",
+      "http": 200,
+      "ms": 173,
+      "esperado": "solo sus citas",
+      "respuesta": {
+        "ok": true,
+        "cita_ids": [
+          2
+        ]
+      },
+      "contiene_cita_de_B": true
+    },
+    {
+      "prueba": "PM02",
+      "quien": "cliente A",
+      "peticion": "POST /citas/ con cliente_id=2",
+      "http": 201,
+      "ms": 152,
+      "esperado": "rechazo, o la cita queda a nombre de A (no de B)",
+      "respuesta": {
+        "ok": true,
+        "id": 3,
+        "fecha": "2026-10-28",
+        "hora": "19:00",
+        "precio_total": 150.0,
+        "anticipo_pagado": 0.0,
+        "comprobante_pago": "",
+        "estado": "confirmada",
+        "metodo_anticipo": "ninguno",
+        "referencia_pago": "",
+        "requiere_validacion_transferencia": false
+      },
+      "cita_id": 3
+    },
+    {
+      "prueba": "PM04-ronda1",
+      "quien": "cliente A",
+      "peticion": "POST /citas/ 2026-10-28 10:00",
+      "http": 201,
+      "ms": 197,
+      "esperado": "solo una aceptada por horario",
+      "respuesta": {
+        "ok": true,
+        "id": 4,
+        "fecha": "2026-10-28",
+        "hora": "10:00",
+        "precio_total": 150.0,
+        "anticipo_pagado": 0.0,
+        "comprobante_pago": "",
+        "estado": "confirmada",
+        "metodo_anticipo": "ninguno",
+        "referencia_pago": "",
+        "requiere_validacion_transferencia": false
+      },
+      "cita_id": 4
+    },
+    {
+      "prueba": "PM04-ronda1",
+      "quien": "cliente B",
+      "peticion": "POST /citas/ 2026-10-28 10:00",
+      "http": 400,
+      "ms": 168,
+      "esperado": "solo una aceptada por horario",
+      "respuesta": {
+        "ok": false,
+        "error": "Por penalización debes pagar anticipo por transferencia o tarjeta para confirmar la cita."
+      },
+      "cita_id": null
+    },
+    {
+      "prueba": "PM04-ronda1",
+      "resumen": true,
+      "hora": "10:00",
+      "peticiones": 2,
+      "aceptadas": 1
+    },
+    {
+      "prueba": "PM04-ronda2",
+      "quien": "cliente A",
+      "peticion": "POST /citas/ 2026-10-28 11:00",
+      "http": 201,
+      "ms": 205,
+      "esperado": "solo una aceptada por horario",
+      "respuesta": {
+        "ok": true,
+        "id": 5,
+        "fecha": "2026-10-28",
+        "hora": "11:00",
+        "precio_total": 150.0,
+        "anticipo_pagado": 0.0,
+        "comprobante_pago": "",
+        "estado": "confirmada",
+        "metodo_anticipo": "ninguno",
+        "referencia_pago": "",
+        "requiere_validacion_transferencia": false
+      },
+      "cita_id": 5
+    },
+    {
+      "prueba": "PM04-ronda2",
+      "quien": "cliente B",
+      "peticion": "POST /citas/ 2026-10-28 11:00",
+      "http": 400,
+      "ms": 142,
+      "esperado": "solo una aceptada por horario",
+      "respuesta": {
+        "ok": false,
+        "error": "Por penalización debes pagar anticipo por transferencia o tarjeta para confirmar la cita."
+      },
+      "cita_id": null
+    },
+    {
+      "prueba": "PM04-ronda2",
+      "resumen": true,
+      "hora": "11:00",
+      "peticiones": 2,
+      "aceptadas": 1
+    },
+    {
+      "prueba": "PM04-ronda3",
+      "quien": "cliente A",
+      "peticion": "POST /citas/ 2026-10-28 12:00",
+      "http": 201,
+      "ms": 151,
+      "esperado": "solo una aceptada por horario",
+      "respuesta": {
+        "ok": true,
+        "id": 6,
+        "fecha": "2026-10-28",
+        "hora": "12:00",
+        "precio_total": 150.0,
+        "anticipo_pagado": 0.0,
+        "comprobante_pago": "",
+        "estado": "confirmada",
+        "metodo_anticipo": "ninguno",
+        "referencia_pago": "",
+        "requiere_validacion_transferencia": false
+      },
+      "cita_id": 6
+    },
+    {
+      "prueba": "PM04-ronda3",
+      "quien": "cliente B",
+      "peticion": "POST /citas/ 2026-10-28 12:00",
+      "http": 400,
+      "ms": 153,
+      "esperado": "solo una aceptada por horario",
+      "respuesta": {
+        "ok": false,
+        "error": "Por penalización debes pagar anticipo por transferencia o tarjeta para confirmar la cita."
+      },
+      "cita_id": null
+    },
+    {
+      "prueba": "PM04-ronda3",
+      "resumen": true,
+      "hora": "12:00",
+      "peticiones": 2,
+      "aceptadas": 1
+    },
+    {
+      "prueba": "PM04-ronda4",
+      "quien": "cliente A",
+      "peticion": "POST /citas/ 2026-10-28 13:00",
+      "http": 201,
+      "ms": 164,
+      "esperado": "solo una aceptada por horario",
+      "respuesta": {
+        "ok": true,
+        "id": 7,
+        "fecha": "2026-10-28",
+        "hora": "13:00",
+        "precio_total": 150.0,
+        "anticipo_pagado": 0.0,
+        "comprobante_pago": "",
+        "estado": "confirmada",
+        "metodo_anticipo": "ninguno",
+        "referencia_pago": "",
+        "requiere_validacion_transferencia": false
+      },
+      "cita_id": 7
+    },
+    {
+      "prueba": "PM04-ronda4",
+      "quien": "cliente A",
+      "peticion": "POST /citas/ 2026-10-28 13:00",
+      "http": 400,
+      "ms": 166,
+      "esperado": "solo una aceptada por horario",
+      "respuesta": {
+        "ok": false,
+        "error": "Ese horario ya está ocupado."
+      },
+      "cita_id": null
+    },
+    {
+      "prueba": "PM04-ronda4",
+      "quien": "cliente B",
+      "peticion": "POST /citas/ 2026-10-28 13:00",
+      "http": 400,
+      "ms": 245,
+      "esperado": "solo una aceptada por horario",
+      "respuesta": {
+        "ok": false,
+        "error": "Ese horario ya está ocupado."
+      },
+      "cita_id": null
+    },
+    {
+      "prueba": "PM04-ronda4",
+      "quien": "cliente B",
+      "peticion": "POST /citas/ 2026-10-28 13:00",
+      "http": 400,
+      "ms": 190,
+      "esperado": "solo una aceptada por horario",
+      "respuesta": {
+        "ok": false,
+        "error": "Ese horario ya está ocupado."
+      },
+      "cita_id": null
+    },
+    {
+      "prueba": "PM04-ronda4",
+      "resumen": true,
+      "hora": "13:00",
+      "peticiones": 4,
+      "aceptadas": 1
+    }
+  ]
+}

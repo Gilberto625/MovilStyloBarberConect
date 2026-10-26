@@ -1,0 +1,890 @@
+{
+  "barbero_id": 3,
+  "servicio_id": 1,
+  "resumen": [
+    {
+      "ronda": 1,
+      "fecha": "2026-10-28",
+      "hora": "10:00",
+      "peticiones": 2,
+      "aceptadas": 2,
+      "aceptada_por": [
+        "A",
+        "B"
+      ],
+      "rechazos": []
+    },
+    {
+      "ronda": 2,
+      "fecha": "2026-10-28",
+      "hora": "11:00",
+      "peticiones": 2,
+      "aceptadas": 2,
+      "aceptada_por": [
+        "A",
+        "B"
+      ],
+      "rechazos": []
+    },
+    {
+      "ronda": 3,
+      "fecha": "2026-10-28",
+      "hora": "12:00",
+      "peticiones": 2,
+      "aceptadas": 2,
+      "aceptada_por": [
+        "A",
+        "B"
+      ],
+      "rechazos": []
+    },
+    {
+      "ronda": 4,
+      "fecha": "2026-10-28",
+      "hora": "13:00",
+      "peticiones": 2,
+      "aceptadas": 2,
+      "aceptada_por": [
+        "A",
+        "B"
+      ],
+      "rechazos": []
+    },
+    {
+      "ronda": 5,
+      "fecha": "2026-10-28",
+      "hora": "14:00",
+      "peticiones": 2,
+      "aceptadas": 2,
+      "aceptada_por": [
+        "A",
+        "B"
+      ],
+      "rechazos": []
+    },
+    {
+      "ronda": 6,
+      "fecha": "2026-10-28",
+      "hora": "15:00",
+      "peticiones": 2,
+      "aceptadas": 1,
+      "aceptada_por": [
+        "B"
+      ],
+      "rechazos": [
+        "Ese horario ya está ocupado."
+      ]
+    },
+    {
+      "ronda": 7,
+      "fecha": "2026-10-28",
+      "hora": "16:00",
+      "peticiones": 2,
+      "aceptadas": 1,
+      "aceptada_por": [
+        "A"
+      ],
+      "rechazos": [
+        "Ese horario ya está ocupado."
+      ]
+    },
+    {
+      "ronda": 8,
+      "fecha": "2026-10-28",
+      "hora": "17:00",
+      "peticiones": 2,
+      "aceptadas": 2,
+      "aceptada_por": [
+        "A",
+        "B"
+      ],
+      "rechazos": []
+    },
+    {
+      "ronda": 9,
+      "fecha": "2026-10-28",
+      "hora": "18:00",
+      "peticiones": 2,
+      "aceptadas": 2,
+      "aceptada_por": [
+        "A",
+        "B"
+      ],
+      "rechazos": []
+    },
+    {
+      "ronda": 10,
+      "fecha": "2026-10-28",
+      "hora": "19:00",
+      "peticiones": 2,
+      "aceptadas": 2,
+      "aceptada_por": [
+        "A",
+        "B"
+      ],
+      "rechazos": []
+    },
+    {
+      "ronda": 11,
+      "fecha": "2026-10-29",
+      "hora": "10:00",
+      "peticiones": 4,
+      "aceptadas": 4,
+      "aceptada_por": [
+        "A",
+        "A",
+        "B",
+        "B"
+      ],
+      "rechazos": []
+    },
+    {
+      "ronda": 12,
+      "fecha": "2026-10-29",
+      "hora": "11:00",
+      "peticiones": 4,
+      "aceptadas": 4,
+      "aceptada_por": [
+        "A",
+        "A",
+        "B",
+        "B"
+      ],
+      "rechazos": []
+    },
+    {
+      "ronda": 13,
+      "fecha": "2026-10-29",
+      "hora": "12:00",
+      "peticiones": 4,
+      "aceptadas": 4,
+      "aceptada_por": [
+        "A",
+        "A",
+        "B",
+        "B"
+      ],
+      "rechazos": []
+    }
+  ],
+  "citas_creadas": [
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37
+  ],
+  "detalle": [
+    {
+      "prueba": "PM04-r1",
+      "quien": "cliente A",
+      "peticion": "POST /citas/ 2026-10-28 10:00",
+      "http": 201,
+      "ms": 152,
+      "esperado": "solo una aceptada por horario",
+      "respuesta": {
+        "ok": true,
+        "id": 8,
+        "fecha": "2026-10-28",
+        "hora": "10:00",
+        "precio_total": 150.0,
+        "anticipo_pagado": 0.0,
+        "comprobante_pago": "",
+        "estado": "confirmada",
+        "metodo_anticipo": "ninguno",
+        "referencia_pago": "",
+        "requiere_validacion_transferencia": false
+      },
+      "cita_id": 8
+    },
+    {
+      "prueba": "PM04-r1",
+      "quien": "cliente B",
+      "peticion": "POST /citas/ 2026-10-28 10:00",
+      "http": 201,
+      "ms": 154,
+      "esperado": "solo una aceptada por horario",
+      "respuesta": {
+        "ok": true,
+        "id": 9,
+        "fecha": "2026-10-28",
+        "hora": "10:00",
+        "precio_total": 150.0,
+        "anticipo_pagado": 0.0,
+        "comprobante_pago": "",
+        "estado": "confirmada",
+        "metodo_anticipo": "ninguno",
+        "referencia_pago": "",
+        "requiere_validacion_transferencia": false
+      },
+      "cita_id": 9
+    },
+    {
+      "prueba": "PM04-r2",
+      "quien": "cliente A",
+      "peticion": "POST /citas/ 2026-10-28 11:00",
+      "http": 201,
+      "ms": 185,
+      "esperado": "solo una aceptada por horario",
+      "respuesta": {
+        "ok": true,
+        "id": 11,
+        "fecha": "2026-10-28",
+        "hora": "11:00",
+        "precio_total": 150.0,
+        "anticipo_pagado": 0.0,
+        "comprobante_pago": "",
+        "estado": "confirmada",
+        "metodo_anticipo": "ninguno",
+        "referencia_pago": "",
+        "requiere_validacion_transferencia": false
+      },
+      "cita_id": 11
+    },
+    {
+      "prueba": "PM04-r2",
+      "quien": "cliente B",
+      "peticion": "POST /citas/ 2026-10-28 11:00",
+      "http": 201,
+      "ms": 186,
+      "esperado": "solo una aceptada por horario",
+      "respuesta": {
+        "ok": true,
+        "id": 10,
+        "fecha": "2026-10-28",
+        "hora": "11:00",
+        "precio_total": 150.0,
+        "anticipo_pagado": 0.0,
+        "comprobante_pago": "",
+        "estado": "confirmada",
+        "metodo_anticipo": "ninguno",
+        "referencia_pago": "",
+        "requiere_validacion_transferencia": false
+      },
+      "cita_id": 10
+    },
+    {
+      "prueba": "PM04-r3",
+      "quien": "cliente A",
+      "peticion": "POST /citas/ 2026-10-28 12:00",
+      "http": 201,
+      "ms": 140,
+      "esperado": "solo una aceptada por horario",
+      "respuesta": {
+        "ok": true,
+        "id": 12,
+        "fecha": "2026-10-28",
+        "hora": "12:00",
+        "precio_total": 150.0,
+        "anticipo_pagado": 0.0,
+        "comprobante_pago": "",
+        "estado": "confirmada",
+        "metodo_anticipo": "ninguno",
+        "referencia_pago": "",
+        "requiere_validacion_transferencia": false
+      },
+      "cita_id": 12
+    },
+    {
+      "prueba": "PM04-r3",
+      "quien": "cliente B",
+      "peticion": "POST /citas/ 2026-10-28 12:00",
+      "http": 201,
+      "ms": 141,
+      "esperado": "solo una aceptada por horario",
+      "respuesta": {
+        "ok": true,
+        "id": 13,
+        "fecha": "2026-10-28",
+        "hora": "12:00",
+        "precio_total": 150.0,
+        "anticipo_pagado": 0.0,
+        "comprobante_pago": "",
+        "estado": "confirmada",
+        "metodo_anticipo": "ninguno",
+        "referencia_pago": "",
+        "requiere_validacion_transferencia": false
+      },
+      "cita_id": 13
+    },
+    {
+      "prueba": "PM04-r4",
+      "quien": "cliente A",
+      "peticion": "POST /citas/ 2026-10-28 13:00",
+      "http": 201,
+      "ms": 136,
+      "esperado": "solo una aceptada por horario",
+      "respuesta": {
+        "ok": true,
+        "id": 14,
+        "fecha": "2026-10-28",
+        "hora": "13:00",
+        "precio_total": 150.0,
+        "anticipo_pagado": 0.0,
+        "comprobante_pago": "",
+        "estado": "confirmada",
+        "metodo_anticipo": "ninguno",
+        "referencia_pago": "",
+        "requiere_validacion_transferencia": false
+      },
+      "cita_id": 14
+    },
+    {
+      "prueba": "PM04-r4",
+      "quien": "cliente B",
+      "peticion": "POST /citas/ 2026-10-28 13:00",
+      "http": 201,
+      "ms": 137,
+      "esperado": "solo una aceptada por horario",
+      "respuesta": {
+        "ok": true,
+        "id": 15,
+        "fecha": "2026-10-28",
+        "hora": "13:00",
+        "precio_total": 150.0,
+        "anticipo_pagado": 0.0,
+        "comprobante_pago": "",
+        "estado": "confirmada",
+        "metodo_anticipo": "ninguno",
+        "referencia_pago": "",
+        "requiere_validacion_transferencia": false
+      },
+      "cita_id": 15
+    },
+    {
+      "prueba": "PM04-r5",
+      "quien": "cliente A",
+      "peticion": "POST /citas/ 2026-10-28 14:00",
+      "http": 201,
+      "ms": 117,
+      "esperado": "solo una aceptada por horario",
+      "respuesta": {
+        "ok": true,
+        "id": 17,
+        "fecha": "2026-10-28",
+        "hora": "14:00",
+        "precio_total": 150.0,
+        "anticipo_pagado": 0.0,
+        "comprobante_pago": "",
+        "estado": "confirmada",
+        "metodo_anticipo": "ninguno",
+        "referencia_pago": "",
+        "requiere_validacion_transferencia": false
+      },
+      "cita_id": 17
+    },
+    {
+      "prueba": "PM04-r5",
+      "quien": "cliente B",
+      "peticion": "POST /citas/ 2026-10-28 14:00",
+      "http": 201,
+      "ms": 115,
+      "esperado": "solo una aceptada por horario",
+      "respuesta": {
+        "ok": true,
+        "id": 16,
+        "fecha": "2026-10-28",
+        "hora": "14:00",
+        "precio_total": 150.0,
+        "anticipo_pagado": 0.0,
+        "comprobante_pago": "",
+        "estado": "confirmada",
+        "metodo_anticipo": "ninguno",
+        "referencia_pago": "",
+        "requiere_validacion_transferencia": false
+      },
+      "cita_id": 16
+    },
+    {
+      "prueba": "PM04-r6",
+      "quien": "cliente A",
+      "peticion": "POST /citas/ 2026-10-28 15:00",
+      "http": 400,
+      "ms": 137,
+      "esperado": "solo una aceptada por horario",
+      "respuesta": {
+        "ok": false,
+        "error": "Ese horario ya está ocupado."
+      },
+      "cita_id": null
+    },
+    {
+      "prueba": "PM04-r6",
+      "quien": "cliente B",
+      "peticion": "POST /citas/ 2026-10-28 15:00",
+      "http": 201,
+      "ms": 135,
+      "esperado": "solo una aceptada por horario",
+      "respuesta": {
+        "ok": true,
+        "id": 18,
+        "fecha": "2026-10-28",
+        "hora": "15:00",
+        "precio_total": 150.0,
+        "anticipo_pagado": 0.0,
+        "comprobante_pago": "",
+        "estado": "confirmada",
+        "metodo_anticipo": "ninguno",
+        "referencia_pago": "",
+        "requiere_validacion_transferencia": false
+      },
+      "cita_id": 18
+    },
+    {
+      "prueba": "PM04-r7",
+      "quien": "cliente A",
+      "peticion": "POST /citas/ 2026-10-28 16:00",
+      "http": 201,
+      "ms": 99,
+      "esperado": "solo una aceptada por horario",
+      "respuesta": {
+        "ok": true,
+        "id": 19,
+        "fecha": "2026-10-28",
+        "hora": "16:00",
+        "precio_total": 150.0,
+        "anticipo_pagado": 0.0,
+        "comprobante_pago": "",
+        "estado": "confirmada",
+        "metodo_anticipo": "ninguno",
+        "referencia_pago": "",
+        "requiere_validacion_transferencia": false
+      },
+      "cita_id": 19
+    },
+    {
+      "prueba": "PM04-r7",
+      "quien": "cliente B",
+      "peticion": "POST /citas/ 2026-10-28 16:00",
+      "http": 400,
+      "ms": 129,
+      "esperado": "solo una aceptada por horario",
+      "respuesta": {
+        "ok": false,
+        "error": "Ese horario ya está ocupado."
+      },
+      "cita_id": null
+    },
+    {
+      "prueba": "PM04-r8",
+      "quien": "cliente A",
+      "peticion": "POST /citas/ 2026-10-28 17:00",
+      "http": 201,
+      "ms": 131,
+      "esperado": "solo una aceptada por horario",
+      "respuesta": {
+        "ok": true,
+        "id": 21,
+        "fecha": "2026-10-28",
+        "hora": "17:00",
+        "precio_total": 150.0,
+        "anticipo_pagado": 0.0,
+        "comprobante_pago": "",
+        "estado": "confirmada",
+        "metodo_anticipo": "ninguno",
+        "referencia_pago": "",
+        "requiere_validacion_transferencia": false
+      },
+      "cita_id": 21
+    },
+    {
+      "prueba": "PM04-r8",
+      "quien": "cliente B",
+      "peticion": "POST /citas/ 2026-10-28 17:00",
+      "http": 201,
+      "ms": 130,
+      "esperado": "solo una aceptada por horario",
+      "respuesta": {
+        "ok": true,
+        "id": 20,
+        "fecha": "2026-10-28",
+        "hora": "17:00",
+        "precio_total": 150.0,
+        "anticipo_pagado": 0.0,
+        "comprobante_pago": "",
+        "estado": "confirmada",
+        "metodo_anticipo": "ninguno",
+        "referencia_pago": "",
+        "requiere_validacion_transferencia": false
+      },
+      "cita_id": 20
+    },
+    {
+      "prueba": "PM04-r9",
+      "quien": "cliente A",
+      "peticion": "POST /citas/ 2026-10-28 18:00",
+      "http": 201,
+      "ms": 134,
+      "esperado": "solo una aceptada por horario",
+      "respuesta": {
+        "ok": true,
+        "id": 22,
+        "fecha": "2026-10-28",
+        "hora": "18:00",
+        "precio_total": 150.0,
+        "anticipo_pagado": 0.0,
+        "comprobante_pago": "",
+        "estado": "confirmada",
+        "metodo_anticipo": "ninguno",
+        "referencia_pago": "",
+        "requiere_validacion_transferencia": false
+      },
+      "cita_id": 22
+    },
+    {
+      "prueba": "PM04-r9",
+      "quien": "cliente B",
+      "peticion": "POST /citas/ 2026-10-28 18:00",
+      "http": 201,
+      "ms": 139,
+      "esperado": "solo una aceptada por horario",
+      "respuesta": {
+        "ok": true,
+        "id": 23,
+        "fecha": "2026-10-28",
+        "hora": "18:00",
+        "precio_total": 150.0,
+        "anticipo_pagado": 0.0,
+        "comprobante_pago": "",
+        "estado": "confirmada",
+        "metodo_anticipo": "ninguno",
+        "referencia_pago": "",
+        "requiere_validacion_transferencia": false
+      },
+      "cita_id": 23
+    },
+    {
+      "prueba": "PM04-r10",
+      "quien": "cliente A",
+      "peticion": "POST /citas/ 2026-10-28 19:00",
+      "http": 201,
+      "ms": 233,
+      "esperado": "solo una aceptada por horario",
+      "respuesta": {
+        "ok": true,
+        "id": 25,
+        "fecha": "2026-10-28",
+        "hora": "19:00",
+        "precio_total": 150.0,
+        "anticipo_pagado": 0.0,
+        "comprobante_pago": "",
+        "estado": "confirmada",
+        "metodo_anticipo": "ninguno",
+        "referencia_pago": "",
+        "requiere_validacion_transferencia": false
+      },
+      "cita_id": 25
+    },
+    {
+      "prueba": "PM04-r10",
+      "quien": "cliente B",
+      "peticion": "POST /citas/ 2026-10-28 19:00",
+      "http": 201,
+      "ms": 232,
+      "esperado": "solo una aceptada por horario",
+      "respuesta": {
+        "ok": true,
+        "id": 24,
+        "fecha": "2026-10-28",
+        "hora": "19:00",
+        "precio_total": 150.0,
+        "anticipo_pagado": 0.0,
+        "comprobante_pago": "",
+        "estado": "confirmada",
+        "metodo_anticipo": "ninguno",
+        "referencia_pago": "",
+        "requiere_validacion_transferencia": false
+      },
+      "cita_id": 24
+    },
+    {
+      "prueba": "PM04-r11",
+      "quien": "cliente A",
+      "peticion": "POST /citas/ 2026-10-29 10:00",
+      "http": 201,
+      "ms": 191,
+      "esperado": "solo una aceptada por horario",
+      "respuesta": {
+        "ok": true,
+        "id": 29,
+        "fecha": "2026-10-29",
+        "hora": "10:00",
+        "precio_total": 150.0,
+        "anticipo_pagado": 0.0,
+        "comprobante_pago": "",
+        "estado": "confirmada",
+        "metodo_anticipo": "ninguno",
+        "referencia_pago": "",
+        "requiere_validacion_transferencia": false
+      },
+      "cita_id": 29
+    },
+    {
+      "prueba": "PM04-r11",
+      "quien": "cliente A",
+      "peticion": "POST /citas/ 2026-10-29 10:00",
+      "http": 201,
+      "ms": 189,
+      "esperado": "solo una aceptada por horario",
+      "respuesta": {
+        "ok": true,
+        "id": 28,
+        "fecha": "2026-10-29",
+        "hora": "10:00",
+        "precio_total": 150.0,
+        "anticipo_pagado": 0.0,
+        "comprobante_pago": "",
+        "estado": "confirmada",
+        "metodo_anticipo": "ninguno",
+        "referencia_pago": "",
+        "requiere_validacion_transferencia": false
+      },
+      "cita_id": 28
+    },
+    {
+      "prueba": "PM04-r11",
+      "quien": "cliente B",
+      "peticion": "POST /citas/ 2026-10-29 10:00",
+      "http": 201,
+      "ms": 189,
+      "esperado": "solo una aceptada por horario",
+      "respuesta": {
+        "ok": true,
+        "id": 27,
+        "fecha": "2026-10-29",
+        "hora": "10:00",
+        "precio_total": 150.0,
+        "anticipo_pagado": 0.0,
+        "comprobante_pago": "",
+        "estado": "confirmada",
+        "metodo_anticipo": "ninguno",
+        "referencia_pago": "",
+        "requiere_validacion_transferencia": false
+      },
+      "cita_id": 27
+    },
+    {
+      "prueba": "PM04-r11",
+      "quien": "cliente B",
+      "peticion": "POST /citas/ 2026-10-29 10:00",
+      "http": 201,
+      "ms": 188,
+      "esperado": "solo una aceptada por horario",
+      "respuesta": {
+        "ok": true,
+        "id": 26,
+        "fecha": "2026-10-29",
+        "hora": "10:00",
+        "precio_total": 150.0,
+        "anticipo_pagado": 0.0,
+        "comprobante_pago": "",
+        "estado": "confirmada",
+        "metodo_anticipo": "ninguno",
+        "referencia_pago": "",
+        "requiere_validacion_transferencia": false
+      },
+      "cita_id": 26
+    },
+    {
+      "prueba": "PM04-r12",
+      "quien": "cliente A",
+      "peticion": "POST /citas/ 2026-10-29 11:00",
+      "http": 201,
+      "ms": 160,
+      "esperado": "solo una aceptada por horario",
+      "respuesta": {
+        "ok": true,
+        "id": 31,
+        "fecha": "2026-10-29",
+        "hora": "11:00",
+        "precio_total": 150.0,
+        "anticipo_pagado": 0.0,
+        "comprobante_pago": "",
+        "estado": "confirmada",
+        "metodo_anticipo": "ninguno",
+        "referencia_pago": "",
+        "requiere_validacion_transferencia": false
+      },
+      "cita_id": 31
+    },
+    {
+      "prueba": "PM04-r12",
+      "quien": "cliente A",
+      "peticion": "POST /citas/ 2026-10-29 11:00",
+      "http": 201,
+      "ms": 159,
+      "esperado": "solo una aceptada por horario",
+      "respuesta": {
+        "ok": true,
+        "id": 30,
+        "fecha": "2026-10-29",
+        "hora": "11:00",
+        "precio_total": 150.0,
+        "anticipo_pagado": 0.0,
+        "comprobante_pago": "",
+        "estado": "confirmada",
+        "metodo_anticipo": "ninguno",
+        "referencia_pago": "",
+        "requiere_validacion_transferencia": false
+      },
+      "cita_id": 30
+    },
+    {
+      "prueba": "PM04-r12",
+      "quien": "cliente B",
+      "peticion": "POST /citas/ 2026-10-29 11:00",
+      "http": 201,
+      "ms": 161,
+      "esperado": "solo una aceptada por horario",
+      "respuesta": {
+        "ok": true,
+        "id": 33,
+        "fecha": "2026-10-29",
+        "hora": "11:00",
+        "precio_total": 150.0,
+        "anticipo_pagado": 0.0,
+        "comprobante_pago": "",
+        "estado": "confirmada",
+        "metodo_anticipo": "ninguno",
+        "referencia_pago": "",
+        "requiere_validacion_transferencia": false
+      },
+      "cita_id": 33
+    },
+    {
+      "prueba": "PM04-r12",
+      "quien": "cliente B",
+      "peticion": "POST /citas/ 2026-10-29 11:00",
+      "http": 201,
+      "ms": 161,
+      "esperado": "solo una aceptada por horario",
+      "respuesta": {
+        "ok": true,
+        "id": 32,
+        "fecha": "2026-10-29",
+        "hora": "11:00",
+        "precio_total": 150.0,
+        "anticipo_pagado": 0.0,
+        "comprobante_pago": "",
+        "estado": "confirmada",
+        "metodo_anticipo": "ninguno",
+        "referencia_pago": "",
+        "requiere_validacion_transferencia": false
+      },
+      "cita_id": 32
+    },
+    {
+      "prueba": "PM04-r13",
+      "quien": "cliente A",
+      "peticion": "POST /citas/ 2026-10-29 12:00",
+      "http": 201,
+      "ms": 158,
+      "esperado": "solo una aceptada por horario",
+      "respuesta": {
+        "ok": true,
+        "id": 35,
+        "fecha": "2026-10-29",
+        "hora": "12:00",
+        "precio_total": 150.0,
+        "anticipo_pagado": 0.0,
+        "comprobante_pago": "",
+        "estado": "confirmada",
+        "metodo_anticipo": "ninguno",
+        "referencia_pago": "",
+        "requiere_validacion_transferencia": false
+      },
+      "cita_id": 35
+    },
+    {
+      "prueba": "PM04-r13",
+      "quien": "cliente A",
+      "peticion": "POST /citas/ 2026-10-29 12:00",
+      "http": 201,
+      "ms": 158,
+      "esperado": "solo una aceptada por horario",
+      "respuesta": {
+        "ok": true,
+        "id": 37,
+        "fecha": "2026-10-29",
+        "hora": "12:00",
+        "precio_total": 150.0,
+        "anticipo_pagado": 0.0,
+        "comprobante_pago": "",
+        "estado": "confirmada",
+        "metodo_anticipo": "ninguno",
+        "referencia_pago": "",
+        "requiere_validacion_transferencia": false
+      },
+      "cita_id": 37
+    },
+    {
+      "prueba": "PM04-r13",
+      "quien": "cliente B",
+      "peticion": "POST /citas/ 2026-10-29 12:00",
+      "http": 201,
+      "ms": 156,
+      "esperado": "solo una aceptada por horario",
+      "respuesta": {
+        "ok": true,
+        "id": 34,
+        "fecha": "2026-10-29",
+        "hora": "12:00",
+        "precio_total": 150.0,
+        "anticipo_pagado": 0.0,
+        "comprobante_pago": "",
+        "estado": "confirmada",
+        "metodo_anticipo": "ninguno",
+        "referencia_pago": "",
+        "requiere_validacion_transferencia": false
+      },
+      "cita_id": 34
+    },
+    {
+      "prueba": "PM04-r13",
+      "quien": "cliente B",
+      "peticion": "POST /citas/ 2026-10-29 12:00",
+      "http": 201,
+      "ms": 158,
+      "esperado": "solo una aceptada por horario",
+      "respuesta": {
+        "ok": true,
+        "id": 36,
+        "fecha": "2026-10-29",
+        "hora": "12:00",
+        "precio_total": 150.0,
+        "anticipo_pagado": 0.0,
+        "comprobante_pago": "",
+        "estado": "confirmada",
+        "metodo_anticipo": "ninguno",
+        "referencia_pago": "",
+        "requiere_validacion_transferencia": false
+      },
+      "cita_id": 36
+    }
+  ]
+}

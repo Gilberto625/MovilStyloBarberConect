@@ -1,0 +1,17 @@
+cliente A penalizado al empezar: False
+cliente B penalizado al empezar: False
+ronda  1 2026-10-28 10:00: 2/2 aceptadas (A,B)
+ronda  2 2026-10-28 11:00: 2/2 aceptadas (A,B)
+ronda  3 2026-10-28 12:00: 2/2 aceptadas (A,B)
+ronda  4 2026-10-28 13:00: 2/2 aceptadas (A,B)
+ronda  5 2026-10-28 14:00: 2/2 aceptadas (A,B)
+ronda  6 2026-10-28 15:00: 1/2 aceptadas (B)
+ronda  7 2026-10-28 16:00: 1/2 aceptadas (A)
+ronda  8 2026-10-28 17:00: 2/2 aceptadas (A,B)
+ronda  9 2026-10-28 18:00: 2/2 aceptadas (A,B)
+ronda 10 2026-10-28 19:00: 2/2 aceptadas (A,B)
+ronda 11 2026-10-29 10:00: 4/4 aceptadas (A,A,B,B)
+ronda 12 2026-10-29 11:00: 4/4 aceptadas (A,A,B,B)
+ronda 13 2026-10-29 12:00: 4/4 aceptadas (A,A,B,B)
+rondas: 13; con más de una aceptada: 11
+citas creadas: [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37]
