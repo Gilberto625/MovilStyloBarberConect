@@ -1,0 +1,199 @@
+"""Pruebas de permisos (S3-05), aislamiento entre clientes (PM02) y reservas
+simultáneas (PM04) contra el Django LOCAL (127.0.0.1:8000).
+
+- Las credenciales salen de ~/.stylo-local/dart_defines.local.json y no se imprimen.
+- Los resultados se guardan sin tokens, correos, teléfonos ni datos bancarios.
+- Uso: python -I pruebas.py <carpeta_de_salida>
+"""
+import datetime as dt
+import json
+import os
+import sys
+import threading
+import time
+import urllib.error
+import urllib.parse
+import urllib.request
+
+BASE = "http://127.0.0.1:8000/api"
+SALIDA = sys.argv[1]
+HOY = dt.date(2026, 10, 21).isoformat()
+FECHA_PM04 = dt.date(2026, 10, 28).isoformat()
+FECHA_PREP = dt.date(2026, 10, 22).isoformat()  # cita de prueba de B para la inasistencia
+SENSIBLES = {"access", "refresh", "token", "tempToken", "email", "correo", "telefono",
+             "banco_cuenta", "banco_titular", "banco_nombre", "password"}
+
+cred = json.load(open(os.path.expanduser("~/.stylo-local/dart_defines.local.json"), encoding="utf-8"))
+registro = []
+creadas = []
+
+
+def limpiar(valor):
+    if isinstance(valor, dict):
+        return {k: ("[omitido]" if k in SENSIBLES else limpiar(v)) for k, v in valor.items()}
+    if isinstance(valor, list):
+        return [limpiar(v) for v in valor]
+    return valor
+
+
+def llamar(metodo, ruta, token=None, cuerpo=None, query=None):
+    url = BASE + ruta + ("?" + urllib.parse.urlencode(query) if query else "")
+    datos = json.dumps(cuerpo).encode("utf-8") if cuerpo is not None else None
+    req = urllib.request.Request(url, data=datos, method=metodo)
+    req.add_header("Content-Type", "application/json")
+    req.add_header("Accept", "application/json")
+    if token:
+        req.add_header("Authorization", "Bearer " + token)
+    t0 = time.perf_counter()
+    try:
+        with urllib.request.urlopen(req, timeout=90) as r:
+            estado, crudo = r.status, r.read()
+    except urllib.error.HTTPError as e:
+        estado, crudo = e.code, e.read()
+    ms = round((time.perf_counter() - t0) * 1000)
+    try:
+        cuerpo_resp = json.loads(crudo.decode("utf-8") or "null")
+    except ValueError:
+        cuerpo_resp = {"_texto": crudo[:200].decode("utf-8", "replace")}
+    return estado, cuerpo_resp, ms
+
+
+def anotar(prueba, quien, metodo, ruta, estado, resp, ms, esperado, extra=None):
+    fila = {"prueba": prueba, "quien": quien, "peticion": f"{metodo} {ruta}", "http": estado,
+            "ms": ms, "esperado": esperado, "respuesta": limpiar(resp)}
+    if extra:
+        fila.update(extra)
+    registro.append(fila)
+    resumen = resp.get("error") if isinstance(resp, dict) else None
+    print(f"[{prueba}] {quien:<10} {metodo} {ruta} -> {estado} ({ms} ms) {resumen or ''}")
+    return fila
+
+
+def login(clave_usuario, clave_pass):
+    estado, resp, _ = llamar("POST", "/login/", cuerpo={"email": cred[clave_usuario], "password": cred[clave_pass]})
+    if estado != 200 or not isinstance(resp, dict) or not resp.get("access"):
+        raise SystemExit(f"Login {clave_usuario} falló: HTTP {estado} {resp.get('error') if isinstance(resp, dict) else ''}")
+    u = resp.get("usuario") or {}
+    return resp["access"], int(u.get("id") or 0), str(u.get("rol") or "")
+
+
+def libres(token, barbero_id, fecha, duracion):
+    _, resp, _ = llamar("GET", "/disponibilidad/", token, query={"barbero_id": barbero_id, "fecha": fecha, "duracion": duracion})
+    return [h["hora"] for h in (resp.get("horarios") or []) if h.get("disponible")]
+
+
+def cuerpo_cita(cliente_id, barbero_id, servicio, fecha, hora):
+    return {"cliente_id": cliente_id, "barbero_id": barbero_id, "servicio_id": servicio["id"],
+            "duracion_minutos": servicio["duracion_minutos"], "fecha": fecha, "hora": hora,
+            "precio_total": servicio["precio"], "anticipo_pagado": 0}
+
+
+def id_cita(resp):
+    if not isinstance(resp, dict):
+        return None
+    for clave in ("cita_id", "id"):
+        if resp.get(clave):
+            return int(resp[clave])
+    cita = resp.get("cita") or {}
+    return int(cita.get("cita_id") or cita.get("id") or 0) or None
+
+
+def main():
+    os.makedirs(SALIDA, exist_ok=True)
+    tok_a, id_a, rol_a = login("TEST_CLIENT_USER", "TEST_CLIENT_PASS")
+    tok_b, id_b, rol_b = login("TEST_CLIENT_B_USER", "TEST_CLIENT_B_PASS")
+    tok_s, id_s, rol_s = login("TEST_SECRETARIA_USER", "TEST_SECRETARIA_PASS")
+    cuentas = {"A": {"id": id_a, "rol": rol_a}, "B": {"id": id_b, "rol": rol_b}, "SEC": {"id": id_s, "rol": rol_s}}
+    print("cuentas:", cuentas)
+
+    _, serv, _ = llamar("GET", "/public/servicios/")
+    if isinstance(serv, dict):
+        serv = serv.get("servicios") or serv.get("results") or []
+    servicio = next(s for s in serv if s.get("activo") and s["id"] == 1)
+    _, barb, _ = llamar("GET", "/barberos/", tok_a, query={"servicio_id": servicio["id"]})
+    barbero_id = int(barb["barberos"][0]["id"])
+
+    # ---- 1. Cliente contra endpoints de secretaría (S3-05) ----
+    for metodo, ruta, cuerpo, query in (
+        ("GET", "/secretaria/citas/dia/", None, {"fecha": HOY}),
+        ("GET", "/secretaria/clientes/", None, {"q": "prueba"}),
+        ("GET", "/secretaria/citas/buscar/", None, {"cliente_id": id_b}),
+        ("POST", "/secretaria/citas/1/asistencia/", {"accion": "llego"}, None),
+        ("POST", "/secretaria/citas/crear/", cuerpo_cita(id_b, barbero_id, servicio, FECHA_PM04, "18:00"), None),
+    ):
+        e, r, ms = llamar(metodo, ruta, tok_a, cuerpo, query)
+        anotar("S3-05", "cliente A", metodo, ruta, e, r, ms, "403 (rol cliente)")
+    e, r, ms = llamar("GET", "/secretaria/citas/dia/", tok_s, query={"fecha": HOY})
+    anotar("S3-05", "secretaria", "GET", "/secretaria/citas/dia/", e, r, ms, "200 (control)")
+
+    # ---- 2. Aislamiento entre clientes (PM02) ----
+    hora_b = libres(tok_s, barbero_id, FECHA_PREP, servicio["duracion_minutos"])[0]
+    e, r, ms = llamar("POST", "/secretaria/citas/crear/", tok_s, cuerpo_cita(id_b, barbero_id, servicio, FECHA_PREP, hora_b))
+    cita_b = id_cita(r)
+    anotar("PM02-prep", "secretaria", "POST", "/secretaria/citas/crear/", e, r, ms, "201/200: cita de prueba para B", {"cita_id": cita_b})
+    if cita_b:
+        creadas.append(cita_b)
+        e, r, ms = llamar("POST", f"/secretaria/citas/{cita_b}/asistencia/", tok_s, {"accion": "no_asistio"})
+        anotar("PM02-prep", "secretaria", "POST", f"/secretaria/citas/{cita_b}/asistencia/", e, r, ms, "200: B queda con 1 inasistencia")
+
+    for quien, tok, objetivo, esperado in (
+        ("cliente B", tok_b, id_b, "200: su propia política (1 inasistencia)"),
+        ("cliente A", tok_a, id_a, "200: su propia política (0 inasistencias)"),
+        ("cliente A", tok_a, id_b, "403 o la política de A; NUNCA la de B"),
+    ):
+        e, r, ms = llamar("GET", "/citas/politica-pago/", tok, query={"cliente_id": objetivo})
+        anotar("PM02", quien, "GET", f"/citas/politica-pago/?cliente_id={objetivo}", e, r, ms, esperado)
+
+    for quien, tok in (("cliente A", tok_a), ("cliente B", tok_b)):
+        e, r, ms = llamar("GET", "/mis-citas/", tok)
+        ids = [int(c.get("cita_id") or c.get("id") or 0) for c in (r.get("citas") or [])] if isinstance(r, dict) else []
+        anotar("PM02", quien, "GET", "/mis-citas/", e, {"ok": r.get("ok") if isinstance(r, dict) else None, "cita_ids": ids},
+               ms, "solo sus citas", {"contiene_cita_de_B": cita_b in ids if cita_b else None})
+
+    hora_x = libres(tok_a, barbero_id, FECHA_PM04, servicio["duracion_minutos"])[-1]
+    e, r, ms = llamar("POST", "/citas/", tok_a, cuerpo_cita(id_b, barbero_id, servicio, FECHA_PM04, hora_x))
+    cita_x = id_cita(r)
+    if cita_x:
+        creadas.append(cita_x)
+    anotar("PM02", "cliente A", "POST", f"/citas/ con cliente_id={id_b}", e, r, ms,
+           "rechazo, o la cita queda a nombre de A (no de B)", {"cita_id": cita_x})
+
+    # ---- 3. Reservas simultáneas (PM04) ----
+    horas = libres(tok_a, barbero_id, FECHA_PM04, servicio["duracion_minutos"])
+    rondas = [(horas[0], [("A", tok_a, id_a), ("B", tok_b, id_b)]),
+              (horas[3], [("A", tok_a, id_a), ("B", tok_b, id_b)]),
+              (horas[6], [("A", tok_a, id_a), ("B", tok_b, id_b)]),
+              (horas[9], [("A", tok_a, id_a), ("A", tok_a, id_a), ("B", tok_b, id_b), ("B", tok_b, id_b)])]
+    for n, (hora, participantes) in enumerate(rondas, start=1):
+        barrera = threading.Barrier(len(participantes))
+        resultados = [None] * len(participantes)
+
+        def reservar(i, quien, tok, cid):
+            barrera.wait()
+            resultados[i] = (quien,) + llamar("POST", "/citas/", tok, cuerpo_cita(cid, barbero_id, servicio, FECHA_PM04, hora))
+
+        hilos = [threading.Thread(target=reservar, args=(i,) + p) for i, p in enumerate(participantes)]
+        for h in hilos:
+            h.start()
+        for h in hilos:
+            h.join()
+        aceptadas = 0
+        for quien, e, r, ms in resultados:
+            cid = id_cita(r) if e in (200, 201) and isinstance(r, dict) and r.get("ok", True) else None
+            if cid:
+                aceptadas += 1
+                creadas.append(cid)
+            anotar(f"PM04-ronda{n}", f"cliente {quien}", "POST", f"/citas/ {FECHA_PM04} {hora}", e, r, ms,
+                   "solo una aceptada por horario", {"cita_id": cid})
+        registro.append({"prueba": f"PM04-ronda{n}", "resumen": True, "hora": hora,
+                         "peticiones": len(participantes), "aceptadas": aceptadas})
+        print(f"[PM04-ronda{n}] {hora}: {aceptadas} de {len(participantes)} aceptadas")
+
+    json.dump({"fecha_prueba": dt.datetime.now().isoformat(timespec="seconds"), "base": BASE,
+               "barbero_id": barbero_id, "servicio": {k: servicio[k] for k in ("id", "nombre", "duracion_minutos")},
+               "cuentas": cuentas, "citas_creadas": sorted(set(creadas)), "resultados": registro},
+              open(os.path.join(SALIDA, "resultados.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=2)
+    print("citas creadas:", sorted(set(creadas)))
+
+
+main()

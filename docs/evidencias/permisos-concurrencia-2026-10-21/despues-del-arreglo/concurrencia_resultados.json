@@ -1,0 +1,725 @@
+{
+  "barbero_id": 3,
+  "servicio_id": 1,
+  "resumen": [
+    {
+      "ronda": 1,
+      "fecha": "2026-10-28",
+      "hora": "10:00",
+      "peticiones": 2,
+      "aceptadas": 1,
+      "aceptada_por": [
+        "A"
+      ],
+      "rechazos": [
+        "Ese horario ya está ocupado."
+      ]
+    },
+    {
+      "ronda": 2,
+      "fecha": "2026-10-28",
+      "hora": "11:00",
+      "peticiones": 2,
+      "aceptadas": 1,
+      "aceptada_por": [
+        "A"
+      ],
+      "rechazos": [
+        "Ese horario ya está ocupado."
+      ]
+    },
+    {
+      "ronda": 3,
+      "fecha": "2026-10-28",
+      "hora": "12:00",
+      "peticiones": 2,
+      "aceptadas": 1,
+      "aceptada_por": [
+        "B"
+      ],
+      "rechazos": [
+        "Ese horario ya está ocupado."
+      ]
+    },
+    {
+      "ronda": 4,
+      "fecha": "2026-10-28",
+      "hora": "13:00",
+      "peticiones": 2,
+      "aceptadas": 1,
+      "aceptada_por": [
+        "A"
+      ],
+      "rechazos": [
+        "Ese horario ya está ocupado."
+      ]
+    },
+    {
+      "ronda": 5,
+      "fecha": "2026-10-28",
+      "hora": "14:00",
+      "peticiones": 2,
+      "aceptadas": 1,
+      "aceptada_por": [
+        "B"
+      ],
+      "rechazos": [
+        "Ese horario ya está ocupado."
+      ]
+    },
+    {
+      "ronda": 6,
+      "fecha": "2026-10-28",
+      "hora": "15:00",
+      "peticiones": 2,
+      "aceptadas": 1,
+      "aceptada_por": [
+        "B"
+      ],
+      "rechazos": [
+        "Ese horario ya está ocupado."
+      ]
+    },
+    {
+      "ronda": 7,
+      "fecha": "2026-10-28",
+      "hora": "16:00",
+      "peticiones": 2,
+      "aceptadas": 1,
+      "aceptada_por": [
+        "B"
+      ],
+      "rechazos": [
+        "Ese horario ya está ocupado."
+      ]
+    },
+    {
+      "ronda": 8,
+      "fecha": "2026-10-28",
+      "hora": "17:00",
+      "peticiones": 2,
+      "aceptadas": 1,
+      "aceptada_por": [
+        "B"
+      ],
+      "rechazos": [
+        "Ese horario ya está ocupado."
+      ]
+    },
+    {
+      "ronda": 9,
+      "fecha": "2026-10-28",
+      "hora": "18:00",
+      "peticiones": 2,
+      "aceptadas": 1,
+      "aceptada_por": [
+        "B"
+      ],
+      "rechazos": [
+        "Ese horario ya está ocupado."
+      ]
+    },
+    {
+      "ronda": 10,
+      "fecha": "2026-10-28",
+      "hora": "19:00",
+      "peticiones": 2,
+      "aceptadas": 1,
+      "aceptada_por": [
+        "B"
+      ],
+      "rechazos": [
+        "Ese horario ya está ocupado."
+      ]
+    },
+    {
+      "ronda": 11,
+      "fecha": "2026-10-29",
+      "hora": "10:00",
+      "peticiones": 4,
+      "aceptadas": 1,
+      "aceptada_por": [
+        "A"
+      ],
+      "rechazos": [
+        "Ese horario ya está ocupado."
+      ]
+    },
+    {
+      "ronda": 12,
+      "fecha": "2026-10-29",
+      "hora": "11:00",
+      "peticiones": 4,
+      "aceptadas": 1,
+      "aceptada_por": [
+        "A"
+      ],
+      "rechazos": [
+        "Ese horario ya está ocupado."
+      ]
+    },
+    {
+      "ronda": 13,
+      "fecha": "2026-10-29",
+      "hora": "12:00",
+      "peticiones": 4,
+      "aceptadas": 1,
+      "aceptada_por": [
+        "B"
+      ],
+      "rechazos": [
+        "Ese horario ya está ocupado."
+      ]
+    }
+  ],
+  "citas_creadas": [
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+    51,
+    52,
+    53,
+    54,
+    55,
+    56
+  ],
+  "detalle": [
+    {
+      "prueba": "PM04-r1",
+      "quien": "cliente A",
+      "peticion": "POST /citas/ 2026-10-28 10:00",
+      "http": 201,
+      "ms": 153,
+      "esperado": "solo una aceptada por horario",
+      "respuesta": {
+        "ok": true,
+        "id": 44,
+        "fecha": "2026-10-28",
+        "hora": "10:00",
+        "precio_total": 150.0,
+        "anticipo_pagado": 0.0,
+        "comprobante_pago": "",
+        "estado": "confirmada",
+        "metodo_anticipo": "ninguno",
+        "referencia_pago": "",
+        "requiere_validacion_transferencia": false
+      },
+      "cita_id": 44
+    },
+    {
+      "prueba": "PM04-r1",
+      "quien": "cliente B",
+      "peticion": "POST /citas/ 2026-10-28 10:00",
+      "http": 400,
+      "ms": 164,
+      "esperado": "solo una aceptada por horario",
+      "respuesta": {
+        "ok": false,
+        "error": "Ese horario ya está ocupado."
+      },
+      "cita_id": null
+    },
+    {
+      "prueba": "PM04-r2",
+      "quien": "cliente A",
+      "peticion": "POST /citas/ 2026-10-28 11:00",
+      "http": 201,
+      "ms": 158,
+      "esperado": "solo una aceptada por horario",
+      "respuesta": {
+        "ok": true,
+        "id": 45,
+        "fecha": "2026-10-28",
+        "hora": "11:00",
+        "precio_total": 150.0,
+        "anticipo_pagado": 0.0,
+        "comprobante_pago": "",
+        "estado": "confirmada",
+        "metodo_anticipo": "ninguno",
+        "referencia_pago": "",
+        "requiere_validacion_transferencia": false
+      },
+      "cita_id": 45
+    },
+    {
+      "prueba": "PM04-r2",
+      "quien": "cliente B",
+      "peticion": "POST /citas/ 2026-10-28 11:00",
+      "http": 400,
+      "ms": 170,
+      "esperado": "solo una aceptada por horario",
+      "respuesta": {
+        "ok": false,
+        "error": "Ese horario ya está ocupado."
+      },
+      "cita_id": null
+    },
+    {
+      "prueba": "PM04-r3",
+      "quien": "cliente A",
+      "peticion": "POST /citas/ 2026-10-28 12:00",
+      "http": 400,
+      "ms": 192,
+      "esperado": "solo una aceptada por horario",
+      "respuesta": {
+        "ok": false,
+        "error": "Ese horario ya está ocupado."
+      },
+      "cita_id": null
+    },
+    {
+      "prueba": "PM04-r3",
+      "quien": "cliente B",
+      "peticion": "POST /citas/ 2026-10-28 12:00",
+      "http": 201,
+      "ms": 181,
+      "esperado": "solo una aceptada por horario",
+      "respuesta": {
+        "ok": true,
+        "id": 46,
+        "fecha": "2026-10-28",
+        "hora": "12:00",
+        "precio_total": 150.0,
+        "anticipo_pagado": 0.0,
+        "comprobante_pago": "",
+        "estado": "confirmada",
+        "metodo_anticipo": "ninguno",
+        "referencia_pago": "",
+        "requiere_validacion_transferencia": false
+      },
+      "cita_id": 46
+    },
+    {
+      "prueba": "PM04-r4",
+      "quien": "cliente A",
+      "peticion": "POST /citas/ 2026-10-28 13:00",
+      "http": 201,
+      "ms": 127,
+      "esperado": "solo una aceptada por horario",
+      "respuesta": {
+        "ok": true,
+        "id": 47,
+        "fecha": "2026-10-28",
+        "hora": "13:00",
+        "precio_total": 150.0,
+        "anticipo_pagado": 0.0,
+        "comprobante_pago": "",
+        "estado": "confirmada",
+        "metodo_anticipo": "ninguno",
+        "referencia_pago": "",
+        "requiere_validacion_transferencia": false
+      },
+      "cita_id": 47
+    },
+    {
+      "prueba": "PM04-r4",
+      "quien": "cliente B",
+      "peticion": "POST /citas/ 2026-10-28 13:00",
+      "http": 400,
+      "ms": 137,
+      "esperado": "solo una aceptada por horario",
+      "respuesta": {
+        "ok": false,
+        "error": "Ese horario ya está ocupado."
+      },
+      "cita_id": null
+    },
+    {
+      "prueba": "PM04-r5",
+      "quien": "cliente A",
+      "peticion": "POST /citas/ 2026-10-28 14:00",
+      "http": 400,
+      "ms": 176,
+      "esperado": "solo una aceptada por horario",
+      "respuesta": {
+        "ok": false,
+        "error": "Ese horario ya está ocupado."
+      },
+      "cita_id": null
+    },
+    {
+      "prueba": "PM04-r5",
+      "quien": "cliente B",
+      "peticion": "POST /citas/ 2026-10-28 14:00",
+      "http": 201,
+      "ms": 166,
+      "esperado": "solo una aceptada por horario",
+      "respuesta": {
+        "ok": true,
+        "id": 48,
+        "fecha": "2026-10-28",
+        "hora": "14:00",
+        "precio_total": 150.0,
+        "anticipo_pagado": 0.0,
+        "comprobante_pago": "",
+        "estado": "confirmada",
+        "metodo_anticipo": "ninguno",
+        "referencia_pago": "",
+        "requiere_validacion_transferencia": false
+      },
+      "cita_id": 48
+    },
+    {
+      "prueba": "PM04-r6",
+      "quien": "cliente A",
+      "peticion": "POST /citas/ 2026-10-28 15:00",
+      "http": 400,
+      "ms": 150,
+      "esperado": "solo una aceptada por horario",
+      "respuesta": {
+        "ok": false,
+        "error": "Ese horario ya está ocupado."
+      },
+      "cita_id": null
+    },
+    {
+      "prueba": "PM04-r6",
+      "quien": "cliente B",
+      "peticion": "POST /citas/ 2026-10-28 15:00",
+      "http": 201,
+      "ms": 140,
+      "esperado": "solo una aceptada por horario",
+      "respuesta": {
+        "ok": true,
+        "id": 49,
+        "fecha": "2026-10-28",
+        "hora": "15:00",
+        "precio_total": 150.0,
+        "anticipo_pagado": 0.0,
+        "comprobante_pago": "",
+        "estado": "confirmada",
+        "metodo_anticipo": "ninguno",
+        "referencia_pago": "",
+        "requiere_validacion_transferencia": false
+      },
+      "cita_id": 49
+    },
+    {
+      "prueba": "PM04-r7",
+      "quien": "cliente A",
+      "peticion": "POST /citas/ 2026-10-28 16:00",
+      "http": 400,
+      "ms": 127,
+      "esperado": "solo una aceptada por horario",
+      "respuesta": {
+        "ok": false,
+        "error": "Ese horario ya está ocupado."
+      },
+      "cita_id": null
+    },
+    {
+      "prueba": "PM04-r7",
+      "quien": "cliente B",
+      "peticion": "POST /citas/ 2026-10-28 16:00",
+      "http": 201,
+      "ms": 120,
+      "esperado": "solo una aceptada por horario",
+      "respuesta": {
+        "ok": true,
+        "id": 50,
+        "fecha": "2026-10-28",
+        "hora": "16:00",
+        "precio_total": 150.0,
+        "anticipo_pagado": 0.0,
+        "comprobante_pago": "",
+        "estado": "confirmada",
+        "metodo_anticipo": "ninguno",
+        "referencia_pago": "",
+        "requiere_validacion_transferencia": false
+      },
+      "cita_id": 50
+    },
+    {
+      "prueba": "PM04-r8",
+      "quien": "cliente A",
+      "peticion": "POST /citas/ 2026-10-28 17:00",
+      "http": 400,
+      "ms": 203,
+      "esperado": "solo una aceptada por horario",
+      "respuesta": {
+        "ok": false,
+        "error": "Ese horario ya está ocupado."
+      },
+      "cita_id": null
+    },
+    {
+      "prueba": "PM04-r8",
+      "quien": "cliente B",
+      "peticion": "POST /citas/ 2026-10-28 17:00",
+      "http": 201,
+      "ms": 109,
+      "esperado": "solo una aceptada por horario",
+      "respuesta": {
+        "ok": true,
+        "id": 51,
+        "fecha": "2026-10-28",
+        "hora": "17:00",
+        "precio_total": 150.0,
+        "anticipo_pagado": 0.0,
+        "comprobante_pago": "",
+        "estado": "confirmada",
+        "metodo_anticipo": "ninguno",
+        "referencia_pago": "",
+        "requiere_validacion_transferencia": false
+      },
+      "cita_id": 51
+    },
+    {
+      "prueba": "PM04-r9",
+      "quien": "cliente A",
+      "peticion": "POST /citas/ 2026-10-28 18:00",
+      "http": 400,
+      "ms": 137,
+      "esperado": "solo una aceptada por horario",
+      "respuesta": {
+        "ok": false,
+        "error": "Ese horario ya está ocupado."
+      },
+      "cita_id": null
+    },
+    {
+      "prueba": "PM04-r9",
+      "quien": "cliente B",
+      "peticion": "POST /citas/ 2026-10-28 18:00",
+      "http": 201,
+      "ms": 129,
+      "esperado": "solo una aceptada por horario",
+      "respuesta": {
+        "ok": true,
+        "id": 52,
+        "fecha": "2026-10-28",
+        "hora": "18:00",
+        "precio_total": 150.0,
+        "anticipo_pagado": 0.0,
+        "comprobante_pago": "",
+        "estado": "confirmada",
+        "metodo_anticipo": "ninguno",
+        "referencia_pago": "",
+        "requiere_validacion_transferencia": false
+      },
+      "cita_id": 52
+    },
+    {
+      "prueba": "PM04-r10",
+      "quien": "cliente A",
+      "peticion": "POST /citas/ 2026-10-28 19:00",
+      "http": 400,
+      "ms": 141,
+      "esperado": "solo una aceptada por horario",
+      "respuesta": {
+        "ok": false,
+        "error": "Ese horario ya está ocupado."
+      },
+      "cita_id": null
+    },
+    {
+      "prueba": "PM04-r10",
+      "quien": "cliente B",
+      "peticion": "POST /citas/ 2026-10-28 19:00",
+      "http": 201,
+      "ms": 133,
+      "esperado": "solo una aceptada por horario",
+      "respuesta": {
+        "ok": true,
+        "id": 53,
+        "fecha": "2026-10-28",
+        "hora": "19:00",
+        "precio_total": 150.0,
+        "anticipo_pagado": 0.0,
+        "comprobante_pago": "",
+        "estado": "confirmada",
+        "metodo_anticipo": "ninguno",
+        "referencia_pago": "",
+        "requiere_validacion_transferencia": false
+      },
+      "cita_id": 53
+    },
+    {
+      "prueba": "PM04-r11",
+      "quien": "cliente A",
+      "peticion": "POST /citas/ 2026-10-29 10:00",
+      "http": 201,
+      "ms": 128,
+      "esperado": "solo una aceptada por horario",
+      "respuesta": {
+        "ok": true,
+        "id": 54,
+        "fecha": "2026-10-29",
+        "hora": "10:00",
+        "precio_total": 150.0,
+        "anticipo_pagado": 0.0,
+        "comprobante_pago": "",
+        "estado": "confirmada",
+        "metodo_anticipo": "ninguno",
+        "referencia_pago": "",
+        "requiere_validacion_transferencia": false
+      },
+      "cita_id": 54
+    },
+    {
+      "prueba": "PM04-r11",
+      "quien": "cliente A",
+      "peticion": "POST /citas/ 2026-10-29 10:00",
+      "http": 400,
+      "ms": 146,
+      "esperado": "solo una aceptada por horario",
+      "respuesta": {
+        "ok": false,
+        "error": "Ese horario ya está ocupado."
+      },
+      "cita_id": null
+    },
+    {
+      "prueba": "PM04-r11",
+      "quien": "cliente B",
+      "peticion": "POST /citas/ 2026-10-29 10:00",
+      "http": 400,
+      "ms": 154,
+      "esperado": "solo una aceptada por horario",
+      "respuesta": {
+        "ok": false,
+        "error": "Ese horario ya está ocupado."
+      },
+      "cita_id": null
+    },
+    {
+      "prueba": "PM04-r11",
+      "quien": "cliente B",
+      "peticion": "POST /citas/ 2026-10-29 10:00",
+      "http": 400,
+      "ms": 138,
+      "esperado": "solo una aceptada por horario",
+      "respuesta": {
+        "ok": false,
+        "error": "Ese horario ya está ocupado."
+      },
+      "cita_id": null
+    },
+    {
+      "prueba": "PM04-r12",
+      "quien": "cliente A",
+      "peticion": "POST /citas/ 2026-10-29 11:00",
+      "http": 400,
+      "ms": 150,
+      "esperado": "solo una aceptada por horario",
+      "respuesta": {
+        "ok": false,
+        "error": "Ese horario ya está ocupado."
+      },
+      "cita_id": null
+    },
+    {
+      "prueba": "PM04-r12",
+      "quien": "cliente A",
+      "peticion": "POST /citas/ 2026-10-29 11:00",
+      "http": 201,
+      "ms": 142,
+      "esperado": "solo una aceptada por horario",
+      "respuesta": {
+        "ok": true,
+        "id": 55,
+        "fecha": "2026-10-29",
+        "hora": "11:00",
+        "precio_total": 150.0,
+        "anticipo_pagado": 0.0,
+        "comprobante_pago": "",
+        "estado": "confirmada",
+        "metodo_anticipo": "ninguno",
+        "referencia_pago": "",
+        "requiere_validacion_transferencia": false
+      },
+      "cita_id": 55
+    },
+    {
+      "prueba": "PM04-r12",
+      "quien": "cliente B",
+      "peticion": "POST /citas/ 2026-10-29 11:00",
+      "http": 400,
+      "ms": 167,
+      "esperado": "solo una aceptada por horario",
+      "respuesta": {
+        "ok": false,
+        "error": "Ese horario ya está ocupado."
+      },
+      "cita_id": null
+    },
+    {
+      "prueba": "PM04-r12",
+      "quien": "cliente B",
+      "peticion": "POST /citas/ 2026-10-29 11:00",
+      "http": 400,
+      "ms": 160,
+      "esperado": "solo una aceptada por horario",
+      "respuesta": {
+        "ok": false,
+        "error": "Ese horario ya está ocupado."
+      },
+      "cita_id": null
+    },
+    {
+      "prueba": "PM04-r13",
+      "quien": "cliente A",
+      "peticion": "POST /citas/ 2026-10-29 12:00",
+      "http": 400,
+      "ms": 144,
+      "esperado": "solo una aceptada por horario",
+      "respuesta": {
+        "ok": false,
+        "error": "Ese horario ya está ocupado."
+      },
+      "cita_id": null
+    },
+    {
+      "prueba": "PM04-r13",
+      "quien": "cliente A",
+      "peticion": "POST /citas/ 2026-10-29 12:00",
+      "http": 400,
+      "ms": 135,
+      "esperado": "solo una aceptada por horario",
+      "respuesta": {
+        "ok": false,
+        "error": "Ese horario ya está ocupado."
+      },
+      "cita_id": null
+    },
+    {
+      "prueba": "PM04-r13",
+      "quien": "cliente B",
+      "peticion": "POST /citas/ 2026-10-29 12:00",
+      "http": 201,
+      "ms": 126,
+      "esperado": "solo una aceptada por horario",
+      "respuesta": {
+        "ok": true,
+        "id": 56,
+        "fecha": "2026-10-29",
+        "hora": "12:00",
+        "precio_total": 150.0,
+        "anticipo_pagado": 0.0,
+        "comprobante_pago": "",
+        "estado": "confirmada",
+        "metodo_anticipo": "ninguno",
+        "referencia_pago": "",
+        "requiere_validacion_transferencia": false
+      },
+      "cita_id": 56
+    },
+    {
+      "prueba": "PM04-r13",
+      "quien": "cliente B",
+      "peticion": "POST /citas/ 2026-10-29 12:00",
+      "http": 400,
+      "ms": 153,
+      "esperado": "solo una aceptada por horario",
+      "respuesta": {
+        "ok": false,
+        "error": "Ese horario ya está ocupado."
+      },
+      "cita_id": null
+    }
+  ]
+}

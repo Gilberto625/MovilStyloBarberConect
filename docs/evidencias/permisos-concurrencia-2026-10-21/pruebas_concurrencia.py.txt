@@ -1,0 +1,73 @@
+"""PM04: reservas simultáneas del mismo horario contra el Django LOCAL.
+
+Reusa las funciones de pruebas.py sin ejecutar su main(). Ningún cliente
+está penalizado al empezar. Uso: python -I pm04.py <carpeta_de_salida>
+"""
+import json
+import os
+import sys
+import threading
+
+sys.argv = [sys.argv[0], sys.argv[1]]
+fuente = open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "pruebas.py"), encoding="utf-8").read()
+exec(fuente.replace("\nmain()\n", "\n"))  # define llamar, login, libres, cuerpo_cita, id_cita, anotar...
+
+
+def correr():
+    os.makedirs(SALIDA, exist_ok=True)
+    tok_a, id_a, _ = login("TEST_CLIENT_USER", "TEST_CLIENT_PASS")
+    tok_b, id_b, _ = login("TEST_CLIENT_B_USER", "TEST_CLIENT_B_PASS")
+    for quien, tok, cid in (("A", tok_a, id_a), ("B", tok_b, id_b)):
+        _, pol, _ = llamar("GET", "/citas/politica-pago/", tok, query={"cliente_id": cid})
+        print(f"cliente {quien} penalizado al empezar: {pol.get('penalizado')}")
+    _, serv, _ = llamar("GET", "/public/servicios/")
+    serv = serv.get("servicios") if isinstance(serv, dict) else serv
+    servicio = next(s for s in serv if s["id"] == 1)
+    _, barb, _ = llamar("GET", "/barberos/", tok_a, query={"servicio_id": servicio["id"]})
+    barbero_id = int(barb["barberos"][0]["id"])
+
+    plan = []
+    for fecha in ("2026-10-28", "2026-10-29"):
+        horas = libres(tok_a, barbero_id, fecha, servicio["duracion_minutos"])
+        plan += [(fecha, h) for h in horas[::3]]  # separadas para que una ronda no tape a la siguiente
+    rondas = [(f, h, [("A", tok_a, id_a), ("B", tok_b, id_b)]) for f, h in plan[:10]]
+    rondas += [(f, h, [("A", tok_a, id_a), ("A", tok_a, id_a), ("B", tok_b, id_b), ("B", tok_b, id_b)]) for f, h in plan[10:13]]
+
+    resumen = []
+    for n, (fecha, hora, participantes) in enumerate(rondas, start=1):
+        barrera = threading.Barrier(len(participantes))
+        res = [None] * len(participantes)
+
+        def reservar(i, quien, tok, cid):
+            barrera.wait()
+            res[i] = (quien,) + llamar("POST", "/citas/", tok, cuerpo_cita(cid, barbero_id, servicio, fecha, hora))
+
+        hilos = [threading.Thread(target=reservar, args=(i,) + p) for i, p in enumerate(participantes)]
+        for h in hilos:
+            h.start()
+        for h in hilos:
+            h.join()
+        aceptadas, errores = [], []
+        for quien, e, r, ms in res:
+            cid = id_cita(r) if e in (200, 201) and isinstance(r, dict) and r.get("ok", True) else None
+            if cid:
+                aceptadas.append(quien)
+                creadas.append(cid)
+            else:
+                errores.append(r.get("error") if isinstance(r, dict) else str(r))
+            anotar(f"PM04-r{n}", f"cliente {quien}", "POST", f"/citas/ {fecha} {hora}", e, r, ms,
+                   "solo una aceptada por horario", {"cita_id": cid})
+        fila = {"ronda": n, "fecha": fecha, "hora": hora, "peticiones": len(participantes),
+                "aceptadas": len(aceptadas), "aceptada_por": aceptadas, "rechazos": sorted(set(errores))}
+        resumen.append(fila)
+        print(f"ronda {n:>2} {fecha} {hora}: {len(aceptadas)}/{len(participantes)} aceptadas ({','.join(aceptadas)})")
+
+    json.dump({"barbero_id": barbero_id, "servicio_id": servicio["id"], "resumen": resumen,
+               "citas_creadas": sorted(set(creadas)), "detalle": registro},
+              open(os.path.join(SALIDA, "resultados_pm04.json"), "w", encoding="utf-8"), ensure_ascii=False, indent=2)
+    dobles = [f for f in resumen if f["aceptadas"] > 1]
+    print(f"rondas: {len(resumen)}; con más de una aceptada: {len(dobles)}")
+    print("citas creadas:", sorted(set(creadas)))
+
+
+correr()
