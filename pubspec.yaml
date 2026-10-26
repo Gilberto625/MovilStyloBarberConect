@@ -1,7 +1,7 @@
 name: stylo_barber_connect
 description: Stylo Barber Connect — aplicación móvil Android (cliente y secretaría).
 publish_to: "none"
-version: 0.1.0+1
+version: 0.4.0+2
 
 environment:
   sdk: ^3.13.5
