@@ -17,6 +17,12 @@ class SecretariaHoyViewModel extends ChangeNotifier {
   SecretariaDiaDto? dia;
   String? fechaSeleccionada;
   String filtroEstado = 'todas';
+
+  /// Hora de la última lectura buena de la agenda (indicador de conexión).
+  DateTime? actualizadoEn;
+
+  /// La última actualización falló y se muestra la agenda anterior.
+  bool sinConexion = false;
   String consulta = '';
 
   List<SecretariaCitaDto> get citasFiltradas {
@@ -45,6 +51,8 @@ class SecretariaHoyViewModel extends ChangeNotifier {
     notifyListeners();
     try {
       dia = await _repository.getCitasDia(fecha: fechaSeleccionada);
+      actualizadoEn = DateTime.now();
+      sinConexion = false;
       state = (dia?.citas.isEmpty ?? true) ? LoadState.empty : LoadState.ready;
     } catch (e) {
       errorMessage = e.toString();
@@ -52,6 +60,7 @@ class SecretariaHoyViewModel extends ChangeNotifier {
         state = LoadState.error;
       } else {
         dia = previous;
+        sinConexion = true;
       }
     }
     reloading = false;

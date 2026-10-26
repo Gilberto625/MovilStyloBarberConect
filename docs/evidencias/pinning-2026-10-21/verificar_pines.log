@@ -1,0 +1,5 @@
+# dart run tool/verificar_pines.dart — 2026-10-21T15:13:46Z
+Raíces fijadas: (GTS Root R4, GTS Root R1, GTS Root R3, ISRG Root X1, ISRG Root X2)
+OK backend: HTTP 200; certificado "/CN=onrender.com" emitido por "/C=US/O=Google Trust Services/CN=WE1", vence 2026-12-20
+OK control: www.digicert.com rechazado en el handshake (CERTIFICATE_VERIFY_FAILED: self signed certificate in certificate chain(../../third_party/boringssl/src/ssl/handshake.cc:320))
+código de salida: 0

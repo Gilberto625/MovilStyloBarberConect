@@ -1,0 +1,127 @@
+Flutter 3.47.7 • channel stable • https://github.com/flutter/flutter.git
+
+00:00 +0: loading <repo>/test/auth_and_flows_test.dart
+00:00 +0: <repo>/test/auth_and_flows_test.dart: ApiException parses ok/error envelope
+00:00 +1: <repo>/test/auth_and_flows_test.dart: ApiException parses detail envelope
+00:00 +2: <repo>/test/auth_and_flows_test.dart: ApiException marks unauthorized
+00:00 +3: <repo>/test/auth_and_flows_test.dart: AuthViewModel login success navigates to authenticated cliente
+00:00 +4: <repo>/test/auth_and_flows_test.dart: AuthViewModel login requires 2FA without inventing tokens
+00:00 +5: <repo>/test/auth_and_flows_test.dart: AuthViewModel login error keeps guest and surfaces message
+00:00 +6: <repo>/test/auth_and_flows_test.dart: AuthViewModel verify2fa success and failure
+00:00 +7: <repo>/test/auth_and_flows_test.dart: AuthViewModel logout clears session locally
+00:00 +8: <repo>/test/auth_and_flows_test.dart: ClientCitasViewModel empty mis citas yields empty state
+00:00 +9: <repo>/test/auth_and_flows_test.dart: ClientCitasViewModel crear cita failure does not claim success
+00:00 +10: <repo>/test/auth_and_flows_test.dart: ClientCitasViewModel politica de anticipo se carga del backend
+00:00 +11: <repo>/test/auth_and_flows_test.dart: SecretariaHoyViewModel loads day citas and filters
+00:00 +12: <repo>/test/auth_and_flows_test.dart: SecretariaHoyViewModel server error is not treated as success
+00:00 +13: <repo>/test/auth_and_flows_test.dart: SecretariaHoyViewModel keeps the selected date on reload
+00:00 +14: <repo>/test/auth_and_flows_test.dart: SecretariaHoyViewModel search matches client, service or barber
+00:00 +15: <repo>/test/auth_and_flows_test.dart: SecretariaHoyViewModel asistencia failure surfaces error
+00:00 +16: <repo>/test/client_secretary_premium_test.dart: client home empty, next appointment and error retry
+00:00 +17: <repo>/test/client_secretary_premium_test.dart: client home empty, next appointment and error retry
+00:00 +18: <repo>/test/client_secretary_premium_test.dart: client home empty, next appointment and error retry
+00:00 +19: <repo>/test/client_secretary_premium_test.dart: client home empty, next appointment and error retry
+00:00 +20: <repo>/test/client_secretary_premium_test.dart: client home empty, next appointment and error retry
+00:00 +21: <repo>/test/client_secretary_premium_test.dart: client home empty, next appointment and error retry
+00:00 +22: <repo>/test/client_secretary_premium_test.dart: client home empty, next appointment and error retry
+00:00 +23: <repo>/test/client_secretary_premium_test.dart: client home empty, next appointment and error retry
+00:02 +24: <repo>/test/guest_home_premium_test.dart: Guest premium Home responsive 360x800, textScale 1.0, long names and safe areas
+00:02 +25: <repo>/test/guest_premium_widgets_test.dart: GuestPremiumImage empty URL uses its fallback without requesting a resource
+00:02 +26: <repo>/test/guest_premium_widgets_test.dart: GuestPremiumImage empty URL uses its fallback without requesting a resource
+00:02 +27: <repo>/test/guest_premium_widgets_test.dart: GuestPremiumImage empty URL uses its fallback without requesting a resource
+00:02 +28: <repo>/test/guest_premium_widgets_test.dart: GuestPremiumImage empty URL uses its fallback without requesting a resource
+00:02 +29: <repo>/test/login_premium_test.dart: login fits phone, large phone, tablet and landscape
+00:03 +30: <repo>/test/login_premium_test.dart: login fits phone, large phone, tablet and landscape
+00:03 +31: <repo>/test/login_premium_test.dart: login fits phone, large phone, tablet and landscape
+00:03 +32: <repo>/test/login_premium_test.dart: login fits phone, large phone, tablet and landscape
+00:03 +33: <repo>/test/login_premium_test.dart: login fits phone, large phone, tablet and landscape
+00:03 +34: <repo>/test/login_premium_test.dart: login fits phone, large phone, tablet and landscape
+00:03 +35: <repo>/test/login_premium_test.dart: login fits phone, large phone, tablet and landscape
+00:03 +36: <repo>/test/login_premium_test.dart: login fits phone, large phone, tablet and landscape
+00:03 +37: <repo>/test/login_premium_test.dart: login fits phone, large phone, tablet and landscape
+00:03 +38: <repo>/test/login_premium_test.dart: login fits phone, large phone, tablet and landscape
+00:03 +39: <repo>/test/login_premium_test.dart: login fits phone, large phone, tablet and landscape
+00:03 +40: <repo>/test/login_premium_test.dart: login fits phone, large phone, tablet and landscape
+00:03 +41: <repo>/test/login_premium_test.dart: login fits phone, large phone, tablet and landscape
+00:03 +42: <repo>/test/login_premium_test.dart: login fits phone, large phone, tablet and landscape
+00:03 +43: <repo>/test/login_premium_test.dart: login fits phone, large phone, tablet and landscape
+00:03 +44: <repo>/test/guest_home_premium_test.dart: Guest premium Home responsive 800x360, textScale 1.0, long names and safe areas
+00:03 +45: <repo>/test/guest_home_premium_test.dart: Guest premium Home responsive 800x360, textScale 1.0, long names and safe areas
+00:03 +46: <repo>/test/guest_home_premium_test.dart: Guest premium Home responsive 800x360, textScale 1.0, long names and safe areas
+00:03 +47: <repo>/test/client_secretary_premium_test.dart: profile keeps a long email on a narrow screen
+00:03 +48: <repo>/test/client_secretary_premium_test.dart: profile keeps a long email on a narrow screen
+00:03 +49: <repo>/test/login_premium_test.dart: login stays readable with enlarged text
+00:04 +50: <repo>/test/guest_home_premium_test.dart: Guest premium Home responsive 800x360, textScale 1.3, long names and safe areas
+00:04 +51: <repo>/test/client_secretary_premium_test.dart: client and secretary layouts avoid overflow
+00:04 +52: <repo>/test/client_secretary_premium_test.dart: client and secretary layouts avoid overflow
+00:04 +53: <repo>/test/client_secretary_premium_test.dart: client and secretary layouts avoid overflow
+00:04 +54: <repo>/test/client_secretary_premium_test.dart: client and secretary layouts avoid overflow
+00:04 +55: <repo>/test/client_secretary_premium_test.dart: client and secretary layouts avoid overflow
+00:04 +56: <repo>/test/client_secretary_premium_test.dart: client and secretary layouts avoid overflow
+00:04 +57: <repo>/test/client_secretary_premium_test.dart: client and secretary layouts avoid overflow
+00:04 +58: <repo>/test/client_secretary_premium_test.dart: client and secretary layouts avoid overflow
+00:04 +59: <repo>/test/guest_home_premium_test.dart: Guest premium Home states retry recovers the catalog through the same repository
+00:04 +60: <repo>/test/login_premium_test.dart: login error is announced in a live region
+00:05 +61: <repo>/test/client_secretary_premium_test.dart: secretary hides actions the backend did not authorize
+00:05 +62: <repo>/test/guest_home_premium_test.dart: Guest premium Home states pull to refresh requests the catalog again
+00:05 +63: <repo>/test/login_premium_test.dart: 2FA accepts six digits, masks destination and resends
+00:05 +64: <repo>/test/client_secretary_premium_test.dart: secretary search filters the loaded day
+00:05 +65: <repo>/test/client_secretary_premium_test.dart: secretary search filters the loaded day
+00:05 +66: <repo>/test/client_secretary_premium_test.dart: secretary search filters the loaded day
+00:05 +67: <repo>/test/login_premium_test.dart: login rejects a malformed email and can return home
+00:05 +68: <repo>/test/guest_home_premium_test.dart: Guest premium Home navigation Reservar cita opens login without an authenticated operation
+00:05 +69: <repo>/test/guest_home_premium_test.dart: Guest premium Home navigation Reservar cita opens login without an authenticated operation
+00:05 +70: <repo>/test/guest_home_premium_test.dart: Guest premium Home navigation Entrar opens login without an authenticated operation
+00:06 +71: <repo>/test/secretaria_gestion_test.dart: a short client query does not call the server
+00:06 +72: <repo>/test/guest_home_premium_test.dart: Guest premium Home navigation guest-services-all opens the corresponding full catalog
+00:06 +73: <repo>/test/guest_home_premium_test.dart: Guest premium Home navigation guest-services-all opens the corresponding full catalog
+00:06 +74: <repo>/test/guest_home_premium_test.dart: Guest premium Home navigation guest-services-all opens the corresponding full catalog
+00:06 +75: <repo>/test/guest_home_premium_test.dart: Guest premium Home navigation guest-services-all opens the corresponding full catalog
+00:06 +76: <repo>/test/guest_home_premium_test.dart: Guest premium Home navigation guest-services-all opens the corresponding full catalog
+00:06 +77: <repo>/test/guest_home_premium_test.dart: Guest premium Home navigation guest-services-all opens the corresponding full catalog
+00:06 +78: <repo>/test/guest_home_premium_test.dart: Guest premium Home navigation guest-services-all opens the corresponding full catalog
+00:06 +79: <repo>/test/secretaria_gestion_test.dart: confirm does not create a cita without a client
+00:06 +80: <repo>/test/secretaria_gestion_test.dart: confirm does not create a cita without a client
+00:06 +81: <repo>/test/secretaria_gestion_test.dart: confirm does not create a cita without a client
+00:07 +82: <repo>/test/secretaria_gestion_test.dart: confirm does not create a cita without a client
+00:07 +83: <repo>/test/secretaria_gestion_test.dart: confirm does not create a cita without a client
+00:07 +84: <repo>/test/secretaria_gestion_test.dart: confirm does not create a cita without a client
+00:08 +85: <repo>/test/secretaria_gestion_test.dart: confirm does not create a cita without a client
+00:08 +86: <repo>/test/splash_routes_test.dart: splash waits for session and routes guest
+00:08 +87: <repo>/test/splash_view_test.dart: splash fits phone, tablet and landscape
+00:08 +88: <repo>/test/splash_view_test.dart: splash fits phone, tablet and landscape
+00:08 +89: <repo>/test/splash_view_test.dart: splash fits phone, tablet and landscape
+00:08 +90: <repo>/test/splash_routes_test.dart: splash waits for session and routes admin
+00:09 +91: loading <repo>/test/unit/models_json_test.dart
+00:10 +91: <repo>/test/unit/models_json_test.dart: U-JSON fromJson con fixtures del contrato Django CitaDto acepta números como texto y campos ausentes
+00:10 +92: <repo>/test/unit/models_json_test.dart: U-JSON fromJson con fixtures del contrato Django BarberoDto ignora ids no numéricos y da un nombre por defecto
+00:10 +93: <repo>/test/unit/models_json_test.dart: U-JSON fromJson con fixtures del contrato Django PoliticaPagoDto lee anticipo y penalización
+00:10 +94: <repo>/test/unit/models_json_test.dart: U-JSON fromJson con fixtures del contrato Django SecretariaCitaDto lee permisos y penalización anidada
+00:10 +95: <repo>/test/unit/models_json_test.dart: U-JSON fromJson con fixtures del contrato Django SecretariaCitaDto sin penalización ni permisos los deja en falso
+00:10 +96: <repo>/test/unit/models_json_test.dart: U-JSON fromJson con fixtures del contrato Django AuthUser normaliza el rol y sobrevive a encode/tryDecode
+00:10 +97: <repo>/test/unit/validators_test.dart: PM-U01 validador de correo o usuario acepta correos válidos
+00:10 +98: <repo>/test/unit/validators_test.dart: PM-U01 validador de correo o usuario acepta correos válidos
+00:10 +99: <repo>/test/unit/validators_test.dart: PM-U01 validador de correo o usuario acepta correos válidos
+00:10 +100: <repo>/test/unit/validators_test.dart: PM-U01 validador de correo o usuario acepta un nombre de usuario sin @
+00:10 +101: <repo>/test/unit/validators_test.dart: PM-U01 validador de correo o usuario rechaza vacío o solo espacios
+00:10 +102: <repo>/test/unit/validators_test.dart: PM-U01 validador de correo o usuario rechaza correos sin @ válido, sin dominio o sin extensión
+00:11 +103: <repo>/test/unit/viewmodels_mockito_test.dart: U-MOCK ClientCitasViewModel mis citas: lista con datos queda ready y consulta una vez
+00:11 +104: <repo>/test/unit/viewmodels_mockito_test.dart: U-MOCK ClientCitasViewModel mis citas: lista vacía queda empty
+00:11 +105: <repo>/test/unit/viewmodels_mockito_test.dart: U-MOCK ClientCitasViewModel mis citas: un 500 del servidor queda en error con su mensaje
+00:11 +106: <repo>/test/unit/viewmodels_mockito_test.dart: U-MOCK ClientCitasViewModel mis citas: un timeout queda en error, no en carga infinita
+00:11 +107: <repo>/test/unit/viewmodels_mockito_test.dart: U-MOCK ClientCitasViewModel reservar envía los datos elegidos una sola vez
+00:11 +108: <repo>/test/unit/viewmodels_mockito_test.dart: U-MOCK ClientCitasViewModel reservar con 409 (horario ocupado) no da la cita por creada
+00:11 +109: <repo>/test/unit/viewmodels_mockito_test.dart: U-MOCK AuthViewModel (setUpAll)
+00:11 +109: <repo>/test/unit/viewmodels_mockito_test.dart: U-MOCK AuthViewModel login exitoso guarda la sesión una vez y entra autenticado
+00:11 +110: <repo>/test/unit/viewmodels_mockito_test.dart: U-MOCK AuthViewModel login con 2FA no guarda tokens todavía
+00:11 +111: <repo>/test/unit/viewmodels_mockito_test.dart: U-MOCK AuthViewModel credenciales incorrectas (401) dejan el mensaje del servidor
+00:11 +112: <repo>/test/unit/viewmodels_mockito_test.dart: U-MOCK AuthViewModel logout borra la sesión local una vez y vuelve a invitado
+00:11 +113: <repo>/test/viewmodel_repository_test.dart: ServicioDto.fromJson maps backend fields
+00:11 +114: <repo>/test/viewmodel_repository_test.dart: ServicioDto.fromJson maps backend fields
+00:11 +115: <repo>/test/viewmodel_repository_test.dart: ServicioDto.fromJson maps backend fields
+00:11 +116: <repo>/test/viewmodel_repository_test.dart: parseUserRole maps administrador to admin
+00:11 +117: <repo>/test/viewmodel_repository_test.dart: HomeGuestViewModel loads repository data
+00:11 +118: <repo>/test/viewmodel_repository_test.dart: CatalogRepository contract returns empty lists without inventing data
+00:11 +119: loading <repo>/test/widget_test.dart
+00:12 +119: <repo>/test/widget_test.dart: Guest home shows brand and empty catalog message
+00:13 +120: All tests passed!

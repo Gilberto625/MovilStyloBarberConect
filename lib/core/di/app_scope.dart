@@ -1,12 +1,20 @@
+import '../config/app_config.dart';
 import '../network/api_client.dart';
+import '../network/cliente_http.dart';
 import '../storage/secure_token_storage.dart';
 import '../../repositories/auth_repository.dart';
+import '../../repositories/barbero_repository.dart';
 import '../../repositories/catalog_repository.dart';
 import '../../repositories/citas_repository.dart';
+import '../../repositories/pedidos_repository.dart';
+import '../../repositories/privacidad_repository.dart';
 import '../../repositories/secretaria_repository.dart';
 import '../../services/auth_api_service.dart';
+import '../../services/barbero_api_service.dart';
 import '../../services/catalog_api_service.dart';
 import '../../services/citas_api_service.dart';
+import '../../services/pedidos_api_service.dart';
+import '../../services/privacidad_api_service.dart';
 import '../../services/secretaria_api_service.dart';
 import '../../viewmodels/auth_viewmodel.dart';
 import '../../viewmodels/catalog_list_viewmodel.dart';
@@ -24,6 +32,9 @@ class AppScope {
     required this.authRepository,
     required this.citasRepository,
     required this.secretariaRepository,
+    required this.barberoRepository,
+    required this.privacidadRepository,
+    required this.pedidosRepository,
     required this.authViewModel,
     required this.homeGuestViewModel,
     required this.catalogListViewModel,
@@ -39,6 +50,8 @@ class AppScope {
 
     final api = ApiClient(
       tokenStorage: storage,
+      // Certificate pinning en HTTPS (GH#38).
+      httpClient: crearClienteHttp(Uri.parse(AppConfig.apiBaseUrl)),
       onSessionExpired: () async {
         await authRepository.logoutLocal();
         await authViewModel.logout();
@@ -49,6 +62,7 @@ class AppScope {
     final authApi = AuthApiService(api);
     final citasApi = CitasApiService(api);
     final secretariaApi = SecretariaApiService(api);
+    final barberoRepository = BarberoRepository(BarberoApiService(api));
 
     final CatalogRepository catalogRepository = CatalogRepositoryImpl(
       catalogApi,
@@ -56,6 +70,13 @@ class AppScope {
     authRepository = AuthRepository(api: authApi, storage: storage);
     final citasRepository = CitasRepository(citasApi);
     final secretariaRepository = SecretariaRepository(secretariaApi);
+    final privacidadRepository = PrivacidadRepository(
+      auth: authApi,
+      citas: citasApi,
+      publico: catalogApi,
+      preferencias: PrivacidadApiService(api),
+    );
+    final pedidosRepository = PedidosRepository(PedidosApiService(api));
     authViewModel = AuthViewModel(authRepository);
 
     return AppScope._(
@@ -65,6 +86,9 @@ class AppScope {
       authRepository: authRepository,
       citasRepository: citasRepository,
       secretariaRepository: secretariaRepository,
+      barberoRepository: barberoRepository,
+      privacidadRepository: privacidadRepository,
+      pedidosRepository: pedidosRepository,
       authViewModel: authViewModel,
       homeGuestViewModel: HomeGuestViewModel(catalogRepository),
       catalogListViewModel: CatalogListViewModel(catalogRepository),
@@ -84,6 +108,17 @@ class AppScope {
   final AuthRepository authRepository;
   final CitasRepository citasRepository;
   final SecretariaRepository secretariaRepository;
+
+  /// El panel del barbero crea su ViewModel por ruta (PM09).
+  final BarberoRepository barberoRepository;
+
+  /// Las pantallas de privacidad crean su ViewModel por ruta, así no queda
+  /// estado de un usuario al cambiar de cuenta (PM09).
+  final PrivacidadRepository privacidadRepository;
+
+  /// La tienda crea su ViewModel dentro del panel del cliente, así el carrito
+  /// y los pedidos no pasan de una cuenta a otra (PM09).
+  final PedidosRepository pedidosRepository;
   final AuthViewModel authViewModel;
   final HomeGuestViewModel homeGuestViewModel;
   final CatalogListViewModel catalogListViewModel;

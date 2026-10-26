@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
+import 'package:stylo_barber_connect/views/client/client_widgets.dart';
 import 'package:stylo_barber_connect/core/errors/app_exception.dart';
 import 'package:stylo_barber_connect/core/theme/app_theme.dart';
 import 'package:stylo_barber_connect/models/auth_models.dart';
@@ -19,6 +20,10 @@ import 'package:stylo_barber_connect/views/client/client_home_view.dart';
 import 'package:stylo_barber_connect/views/secretary/secretary_home_view.dart';
 
 void main() {
+  // Las citas de estas pruebas tienen fechas fijas de octubre de 2026.
+  setUp(() => relojCliente = () => DateTime(2026, 10, 1));
+  tearDown(() => relojCliente = DateTime.now);
+
   testWidgets('client home empty, next appointment and error retry', (
     tester,
   ) async {
@@ -40,7 +45,15 @@ void main() {
     await tester.tap(find.byTooltip('Actualizar citas'));
     await tester.pumpAndSettle();
     expect(find.text('Corte clásico'), findsOneWidget);
-    expect(find.text('2026-10-14'), findsWidgets);
+    // La fecha se muestra legible ("14 oct"), no como 2026-10-14.
+    expect(
+      find.descendant(
+        of: find.byKey(const ValueKey('cita-3')),
+        matching: find.text('oct'),
+      ),
+      findsOneWidget,
+    );
+    expect(find.text('2026-10-14'), findsNothing);
 
     citas.misCitas = const [];
     citas.citasError = ApiException('Sin conexión.');
@@ -81,6 +94,11 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.text('11:30'));
     await tester.pumpAndSettle();
+    expect(find.text('Confirmar reserva'), findsNothing);
+    // Paso 4: el resumen se revisa antes de confirmar.
+    await tester.tap(find.byKey(const Key('agendar_continuar')));
+    await tester.pumpAndSettle();
+    expect(find.text('Luis Mora'), findsOneWidget);
     expect(find.text('Confirmar reserva'), findsOneWidget);
     await tester.tap(find.text('Confirmar reserva'));
     await tester.pumpAndSettle();
@@ -110,9 +128,13 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.text('11:30'));
     await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const Key('agendar_continuar')));
+    await tester.pumpAndSettle();
     await tester.tap(find.text('Confirmar reserva'));
     await tester.pumpAndSettle();
     expect(citas.created, 0);
+    // El usuario sigue en el resumen para elegir otro horario.
+    expect(find.text('Paso 4 de 4: Resumen'), findsOneWidget);
     expect(find.textContaining('ya no está disponible'), findsWidgets);
     expect(tester.takeException(), isNull);
     auth.dispose();
@@ -191,7 +213,7 @@ void main() {
         secretariaRepo: day,
         home: const SecretaryHomeView(),
       );
-      expect(find.text('Operación'), findsOneWidget);
+      expect(find.text('Hoy'), findsWidgets);
       await tester.scrollUntilVisible(
         find.text('Ana López'),
         80,
@@ -224,9 +246,11 @@ void main() {
     await tester.tap(find.text('Ana López'));
     await tester.pumpAndSettle();
     expect(find.text('Cliente llegó'), findsNothing);
-    expect(find.text('Cobrar restante'), findsNothing);
+    expect(find.byKey(const Key('detalle_cobrar')), findsNothing);
+    expect(find.byKey(const Key('detalle_no_asistio')), findsNothing);
     expect(find.text('Cita #15'), findsOneWidget);
     expect(find.text('45 min'), findsOneWidget);
+    await tester.scrollUntilVisible(find.text('Volver a la agenda'), 200);
     expect(find.text('Volver a la agenda'), findsOneWidget);
     expect(tester.takeException(), isNull);
     auth.dispose();
@@ -378,6 +402,19 @@ class _FakeAuth implements AuthRepository {
   Future<void> resend2fa(String tempToken) async {}
 
   @override
+  Future<RegistroPendiente> registrar(RegistroRequest datos) async =>
+      throw UnimplementedError('registro no se usa en esta prueba');
+
+  @override
+  Future<AuthUser> verificarRegistro({
+    required String tempToken,
+    required String codigo,
+  }) async => throw UnimplementedError('registro no se usa en esta prueba');
+
+  @override
+  Future<String> reenviarCodigoRegistro(String correo) async => '';
+
+  @override
   Future<AuthUser?> restoreSession() async => user;
 
   @override
@@ -399,6 +436,17 @@ class _FakeAuth implements AuthRepository {
 }
 
 class _FakeCitas implements CitasRepository {
+  @override
+  Future<Map<String, dynamic>> cancelarCita(int citaId, {String motivo = ''}) =>
+      throw UnimplementedError();
+
+  @override
+  Future<Map<String, dynamic>> reprogramarCita(
+    int citaId, {
+    required String fecha,
+    required String hora,
+  }) => throw UnimplementedError();
+
   List<CitaDto> misCitas = const [];
   Object? citasError;
   Object? createError;

@@ -1,0 +1,7 @@
+{
+  "ok": true,
+  "barberos": [
+    {"id": 7, "nombre": "Ana", "apellido": "Prueba", "especialidades": "Fade, barba", "avatar_url": "", "servicios_ids": [3, "5", "x"]},
+    {"id": 8, "nombre": "", "apellido": "", "servicios_ids": null}
+  ]
+}

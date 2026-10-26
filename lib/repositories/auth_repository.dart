@@ -41,6 +41,24 @@ class AuthRepository {
   Future<void> resend2fa(String tempToken) =>
       _api.solicitarCodigo2fa(tempToken: tempToken);
 
+  Future<RegistroPendiente> registrar(RegistroRequest datos) =>
+      _api.registrar(datos);
+
+  /// Confirma el alta y abre la sesión igual que un login.
+  Future<AuthUser> verificarRegistro({
+    required String tempToken,
+    required String codigo,
+  }) async {
+    final success = await _api.verificarRegistro(
+      tempToken: tempToken,
+      codigo: codigo,
+    );
+    return completeLogin(success);
+  }
+
+  Future<String> reenviarCodigoRegistro(String correo) =>
+      _api.reenviarCodigoRegistro(correo);
+
   Future<AuthUser?> restoreSession() async {
     final access = await _storage.readAccess();
     if (access == null || access.isEmpty) {

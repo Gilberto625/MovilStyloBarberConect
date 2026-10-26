@@ -7,7 +7,9 @@ import 'package:provider/provider.dart';
 import 'package:stylo_barber_connect/core/theme/app_theme.dart';
 import 'package:stylo_barber_connect/models/catalog_models.dart';
 import 'package:stylo_barber_connect/repositories/catalog_repository.dart';
+import 'package:stylo_barber_connect/routes/app_routes.dart';
 import 'package:stylo_barber_connect/viewmodels/home_guest_viewmodel.dart';
+import 'package:stylo_barber_connect/views/guest/guest_contacto_view.dart';
 import 'package:stylo_barber_connect/views/guest/guest_home_view.dart';
 import 'package:stylo_barber_connect/views/guest/guest_premium_widgets.dart';
 import 'package:stylo_barber_connect/widgets/common_widgets.dart';
@@ -46,6 +48,8 @@ const _product = ProductoDto(
 ContactoDto _contact({
   List<Map<String, Object?>>? horarios,
   String horario = '',
+  String whatsapp = '',
+  String maps = '',
 }) {
   return ContactoDto.fromJson({
     'telefono': '5550001234',
@@ -59,8 +63,8 @@ ContactoDto _contact({
     'logo_texto_parte1': 'Tony Stylo',
     'logo_texto_parte2': 'Barbería',
     'logo_url': '',
-    'whatsapp_url': '',
-    'google_maps_url': '',
+    'whatsapp_url': whatsapp,
+    'google_maps_url': maps,
     'horarios_por_dia': horarios ?? _wholeWeek,
   });
 }
@@ -131,6 +135,8 @@ Future<void> _pumpHome(
   Size size = const Size(390, 844),
   double textScale = 1,
   bool settle = true,
+  bool disableAnimations = false,
+  DateTime Function()? clock,
 }) async {
   tester.view.devicePixelRatio = 1;
   tester.view.physicalSize = size;
@@ -157,17 +163,20 @@ Future<void> _pumpHome(
         builder: (context, child) => MediaQuery(
           data: MediaQuery.of(context).copyWith(
             textScaler: TextScaler.linear(textScale),
+            disableAnimations: disableAnimations,
             padding: const EdgeInsets.only(top: 24, bottom: 16),
             viewPadding: const EdgeInsets.only(top: 24, bottom: 16),
           ),
           child: child!,
         ),
-        home: const GuestHomeView(),
+        home: GuestHomeView(clock: clock),
         routes: {
           '/login': (_) => const Scaffold(body: Text('mock-login')),
           '/servicios': (_) => const Scaffold(body: Text('mock-servicios')),
           '/productos': (_) => const Scaffold(body: Text('mock-productos')),
         },
+        // Detalle de servicio y producto: las rutas reales de la app.
+        onGenerateRoute: AppRoutes.onGenerateRoute,
       ),
     ),
   );
@@ -191,6 +200,13 @@ Future<void> _reveal(WidgetTester tester, Finder target) async {
 }
 
 Finder _scheduleRow(int day) => find.byKey(ValueKey('guest-schedule-row-$day'));
+
+/// Cambia de pestaña con la barra inferior del invitado.
+Future<void> _openTab(WidgetTester tester, String tab) async {
+  await tester.tap(find.byKey(ValueKey('guest-nav-$tab')));
+  await tester.pumpAndSettle();
+  expect(tester.takeException(), isNull);
+}
 
 void _expectUntruncatedText(WidgetTester tester, String value) {
   final text = tester.widget<Text>(find.text(value));
@@ -229,7 +245,16 @@ void main() {
           await _reveal(tester, find.text(_product.nombre));
           _expectUntruncatedText(tester, _product.nombre);
           _expectUntruncatedText(tester, _product.marca);
+
+          await _openTab(tester, 'servicios');
+          await _reveal(tester, find.text(_service.nombre));
+          _expectUntruncatedText(tester, _service.nombre);
+          await _openTab(tester, 'productos');
+          await _reveal(tester, find.text(_product.nombre));
+          _expectUntruncatedText(tester, _product.nombre);
+          await _openTab(tester, 'contacto');
           await _reveal(tester, _scheduleRow(6));
+          expect(repository.homeRequests, 1);
         });
       }
     }
@@ -332,7 +357,9 @@ void main() {
   });
 
   group('Guest premium Home navigation', () {
-    testWidgets('Tab focuses Entrar and Enter opens login', (tester) async {
+    testWidgets('Tab reaches the first action and Enter opens login', (
+      tester,
+    ) async {
       await _pumpHome(tester, _FixtureCatalogRepository());
       await tester.sendKeyEvent(LogicalKeyboardKey.tab);
       await tester.pump();
@@ -359,10 +386,10 @@ void main() {
     }
 
     for (final route in [
-      (key: 'guest-services-all', page: 'mock-servicios'),
-      (key: 'guest-products-all', page: 'mock-productos'),
+      (key: 'guest-services-all', tab: 'guest-servicios-tab'),
+      (key: 'guest-products-all', tab: 'guest-productos-tab'),
     ]) {
-      testWidgets('${route.key} opens the corresponding full catalog', (
+      testWidgets('${route.key} switches to its tab without another request', (
         tester,
       ) async {
         final repository = _FixtureCatalogRepository();
@@ -372,11 +399,25 @@ void main() {
         await tester.tap(action);
         await tester.pumpAndSettle();
 
-        expect(find.text(route.page), findsOneWidget);
+        expect(find.byKey(ValueKey(route.tab)), findsOneWidget);
         expect(repository.homeRequests, 1);
         expect(tester.takeException(), isNull);
       });
     }
+
+    testWidgets('Android back on another tab returns to Inicio first', (
+      tester,
+    ) async {
+      await _pumpHome(tester, _FixtureCatalogRepository());
+      await _openTab(tester, 'contacto');
+      expect(_scheduleRow(0), findsOneWidget);
+
+      await tester.binding.handlePopRoute();
+      await tester.pumpAndSettle();
+
+      expect(_scheduleRow(0), findsNothing);
+      expect(find.byKey(const ValueKey('guest-reservar')), findsOneWidget);
+    });
   });
 
   group('Guest premium Home real catalog values', () {
@@ -406,6 +447,7 @@ void main() {
       'supplied week is ordered and Sunday remains explicitly closed',
       (tester) async {
         await _pumpHome(tester, _FixtureCatalogRepository());
+        await _openTab(tester, 'contacto');
         await _reveal(tester, _scheduleRow(0));
         const weekdays = [
           'Lunes',
@@ -467,6 +509,7 @@ void main() {
           tester,
           _FixtureCatalogRepository(data: _readyData(contacto: contacto)),
         );
+        await _openTab(tester, 'contacto');
         await _reveal(tester, _scheduleRow(0));
         await _reveal(tester, _scheduleRow(2));
         await _reveal(tester, _scheduleRow(5));
@@ -497,6 +540,7 @@ void main() {
           tester,
           _FixtureCatalogRepository(data: _readyData(contacto: contacto)),
         );
+        await _openTab(tester, 'contacto');
         await _reveal(tester, find.text(legacySchedule));
 
         for (var day = 0; day < 7; day += 1) {
@@ -506,5 +550,270 @@ void main() {
         expect(tester.takeException(), isNull);
       },
     );
+  });
+
+  group('Invitado: detalle de catálogo', () {
+    testWidgets('PA-01 la tarjeta de servicio abre su detalle y Reservar '
+        'lleva a iniciar sesión', (tester) async {
+      final repository = _FixtureCatalogRepository();
+      await _pumpHome(tester, repository);
+      await _reveal(tester, find.byType(GuestServiceCard));
+      await tester.tap(find.byType(GuestServiceCard));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Qué incluye'), findsOneWidget);
+      expect(find.text(_service.descripcion), findsOneWidget);
+      expect(find.text(moneyFormat.format(_service.precio)), findsOneWidget);
+      expect(find.text('45 min'), findsOneWidget);
+      expect(tester.takeException(), isNull);
+
+      await tester.tap(find.byKey(const ValueKey('servicio-detalle-reservar')));
+      await tester.pumpAndSettle();
+      expect(find.text('mock-login'), findsOneWidget);
+      expect(repository.homeRequests, 1);
+    });
+
+    testWidgets('Volver regresa del detalle al inicio', (tester) async {
+      await _pumpHome(tester, _FixtureCatalogRepository());
+      await _reveal(tester, find.byType(GuestServiceCard));
+      await tester.tap(find.byType(GuestServiceCard));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byKey(const ValueKey('detalle-volver')));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Qué incluye'), findsNothing);
+      expect(find.byType(GuestServiceCard), findsOneWidget);
+    });
+
+    testWidgets('el producto se abre desde la cuadrícula con marca, precio y '
+        'existencias', (tester) async {
+      await _pumpHome(tester, _FixtureCatalogRepository());
+      await _openTab(tester, 'productos');
+      await tester.tap(find.byKey(ValueKey('producto-celda-${_product.id}')));
+      await tester.pumpAndSettle();
+
+      expect(find.text(_product.marca), findsOneWidget);
+      expect(find.text(moneyFormat.format(_product.precio)), findsOneWidget);
+      expect(find.text('Disponible, 4 piezas'), findsOneWidget);
+      await tester.tap(find.byKey(const ValueKey('producto-detalle-entrar')));
+      await tester.pumpAndSettle();
+      expect(find.text('mock-login'), findsOneWidget);
+    });
+
+    testWidgets('un producto agotado lo dice y no ofrece pedirlo', (
+      tester,
+    ) async {
+      const agotado = ProductoDto(
+        id: 24,
+        nombre: 'Cera mate',
+        marca: '',
+        descripcion: '',
+        precio: 150,
+        categoria: 'cabello',
+        stock: 0,
+        imagenUrl: '',
+        destacado: false,
+      );
+      await _pumpHome(
+        tester,
+        _FixtureCatalogRepository(
+          data: (
+            contacto: _contact(),
+            servicios: const [_service],
+            productos: const [agotado],
+          ),
+        ),
+      );
+      await _openTab(tester, 'productos');
+      await tester.tap(find.byKey(const ValueKey('producto-celda-24')));
+      await tester.pumpAndSettle();
+
+      expect(find.text('Agotado'), findsOneWidget);
+      expect(
+        find.text('Este producto está agotado por ahora.'),
+        findsOneWidget,
+      );
+      final boton = tester.widget<ElevatedButton>(
+        find.byKey(const ValueKey('producto-detalle-entrar')),
+      );
+      expect(boton.onPressed, isNull);
+    });
+  });
+
+  group('Invitado: contacto y estado de hoy', () {
+    testWidgets('el inicio dice si la barbería está abierta ahora', (
+      tester,
+    ) async {
+      await _pumpHome(
+        tester,
+        _FixtureCatalogRepository(),
+        clock: () => DateTime(2026, 10, 19, 10), // lunes
+      );
+      expect(
+        find.text('Abierto ahora, cierra a las 18:45'),
+        findsAtLeastNWidgets(1),
+      );
+
+      await _openTab(tester, 'contacto');
+      expect(
+        find.descendant(of: _scheduleRow(0), matching: find.text('Hoy')),
+        findsOneWidget,
+      );
+      expect(
+        find.descendant(of: _scheduleRow(1), matching: find.text('Hoy')),
+        findsNothing,
+      );
+    });
+
+    testWidgets('el domingo cerrado se anuncia sin inventar horario', (
+      tester,
+    ) async {
+      await _pumpHome(
+        tester,
+        _FixtureCatalogRepository(),
+        clock: () => DateTime(2026, 10, 25, 12), // domingo
+      );
+      expect(find.text('Hoy no abrimos'), findsAtLeastNWidgets(1));
+      expect(find.textContaining('Abierto ahora'), findsNothing);
+    });
+
+    testWidgets('solo ofrece enlaces web seguros y, si no puede abrir, copia '
+        'el dato', (tester) async {
+      String? copiado;
+      final messenger = tester.binding.defaultBinaryMessenger;
+      messenger.setMockMethodCallHandler(SystemChannels.platform, (call) async {
+        if (call.method == 'Clipboard.setData') {
+          copiado = (call.arguments as Map)['text'] as String?;
+        }
+        return null;
+      });
+      addTearDown(
+        () => messenger.setMockMethodCallHandler(SystemChannels.platform, null),
+      );
+      final abiertos = <Uri>[];
+      final original = abrirUrlExterna;
+      // El marcador no está disponible; el mapa sí abre.
+      abrirUrlExterna = (uri) async {
+        abiertos.add(uri);
+        return uri.scheme != 'tel';
+      };
+      addTearDown(() => abrirUrlExterna = original);
+
+      final contacto = _contact(
+        whatsapp: 'javascript:alert(1)',
+        maps: 'https://maps.google.com/?q=Tony+Stylo',
+      );
+      await _pumpHome(
+        tester,
+        _FixtureCatalogRepository(data: _readyData(contacto: contacto)),
+      );
+      await _openTab(tester, 'contacto');
+
+      expect(find.byKey(const ValueKey('contacto-whatsapp')), findsNothing);
+      expect(find.byKey(const ValueKey('contacto-mapa')), findsOneWidget);
+      await tester.tap(find.byKey(const ValueKey('contacto-llamar')));
+      await tester.pumpAndSettle();
+
+      expect(abiertos.single.toString(), 'tel:5550001234');
+      expect(copiado, '5550001234');
+      expect(
+        find.textContaining('No se pudo abrir el marcador'),
+        findsOneWidget,
+      );
+
+      copiado = null;
+      await tester.tap(find.byKey(const ValueKey('contacto-mapa')));
+      await tester.pumpAndSettle();
+      expect(abiertos.last.host, 'maps.google.com');
+      expect(copiado, isNull, reason: 'Si el mapa abre, no se copia nada.');
+      expect(tester.takeException(), isNull);
+    });
+
+    test('ContactoDto.horarioHoy interpreta la hora real del día', () {
+      final c = _contact();
+      final lunes10 = c.horarioHoy(DateTime(2026, 10, 19, 10))!;
+      expect(lunes10.estado, EstadoHoy.abierto);
+      expect(lunes10.apertura, '09:15');
+      expect(lunes10.cierre, '18:45');
+      expect(
+        c.horarioHoy(DateTime(2026, 10, 19, 9, 14))!.estado,
+        EstadoHoy.abrePronto,
+      );
+      expect(
+        c.horarioHoy(DateTime(2026, 10, 19, 18, 45))!.estado,
+        EstadoHoy.yaCerro,
+      );
+      expect(
+        c.horarioHoy(DateTime(2026, 10, 25, 12))!.estado,
+        EstadoHoy.cerrado,
+      );
+    });
+
+    test('sin día publicado no inventa; sin horario por día no hay estado', () {
+      final parcial = _contact(
+        horarios: [
+          {'dia_semana': 5, 'abierto': true, 'apertura': '10:30'},
+        ],
+      );
+      expect(
+        parcial.horarioHoy(DateTime(2026, 10, 19, 10))!.estado,
+        EstadoHoy.sinDato,
+      );
+      expect(
+        parcial.horarioHoy(DateTime(2026, 10, 24, 12))!.estado,
+        EstadoHoy.sinDato,
+      );
+      expect(_contact(horarios: []).horarioHoy(DateTime(2026, 10, 19)), isNull);
+    });
+
+    test('normaliza horas y rechaza valores inválidos', () {
+      expect(HorarioHoy.hhmm('9:05'), '09:05');
+      expect(HorarioHoy.hhmm('11:00:00'), '11:00');
+      expect(HorarioHoy.hhmm('25:00'), isNull);
+      expect(HorarioHoy.hhmm('abc'), isNull);
+      expect(HorarioHoy.hhmm(null), isNull);
+    });
+
+    test('solo enlaces http(s) y teléfonos con dígitos', () {
+      expect(enlaceWebSeguro('https://wa.me/525550001234'), isNotNull);
+      expect(enlaceWebSeguro('javascript:alert(1)'), isNull);
+      expect(enlaceWebSeguro('intent://scan/#Intent;scheme=zxing;end'), isNull);
+      expect(enlaceWebSeguro(''), isNull);
+      expect(enlaceTelefono('(555) 000-1234').toString(), 'tel:5550001234');
+      expect(enlaceTelefono('12'), isNull);
+    });
+  });
+
+  group('Invitado: motion', () {
+    Iterable<double> opacidades(WidgetTester tester) => tester
+        .widgetList<FadeTransition>(
+          find.ancestor(
+            of: find.byType(BrandTitle),
+            matching: find.byType(FadeTransition),
+          ),
+        )
+        .map((f) => f.opacity.value);
+
+    testWidgets('la entrada anima una vez y termina visible', (tester) async {
+      await _pumpHome(tester, _FixtureCatalogRepository(), settle: false);
+      await tester.pump();
+      expect(opacidades(tester).any((o) => o < 1), isTrue);
+      await tester.pumpAndSettle();
+      expect(opacidades(tester).every((o) => o == 1), isTrue);
+    });
+
+    testWidgets('con reducir movimiento todo aparece de inmediato', (
+      tester,
+    ) async {
+      await _pumpHome(
+        tester,
+        _FixtureCatalogRepository(),
+        settle: false,
+        disableAnimations: true,
+      );
+      await tester.pump();
+      expect(find.byType(BrandTitle), findsOneWidget);
+      expect(opacidades(tester).every((o) => o == 1), isTrue);
+    });
   });
 }

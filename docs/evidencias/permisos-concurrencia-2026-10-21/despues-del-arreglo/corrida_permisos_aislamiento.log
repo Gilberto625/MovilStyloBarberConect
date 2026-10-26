@@ -1,0 +1,30 @@
+cuentas: {'A': {'id': 1, 'rol': 'cliente'}, 'B': {'id': 2, 'rol': 'cliente'}, 'SEC': {'id': 3, 'rol': 'secretaria'}}
+[S3-05] cliente A  GET /secretaria/citas/dia/ -> 403 (79 ms) No autorizado.
+[S3-05] cliente A  GET /secretaria/clientes/ -> 403 (91 ms) No autorizado.
+[S3-05] cliente A  GET /secretaria/citas/buscar/ -> 403 (62 ms) No autorizado.
+[S3-05] cliente A  POST /secretaria/citas/1/asistencia/ -> 403 (84 ms) No autorizado.
+[S3-05] cliente A  POST /secretaria/citas/crear/ -> 403 (195 ms) No autorizado.
+[S3-05] secretaria GET /secretaria/citas/dia/ -> 200 (254 ms) 
+[PM02-prep] secretaria POST /secretaria/citas/crear/ -> 201 (310 ms) 
+[PM02-prep] secretaria POST /secretaria/citas/38/asistencia/ -> 200 (133 ms) 
+[PM02] cliente B  GET /citas/politica-pago/?cliente_id=2 -> 200 (84 ms) 
+[PM02] cliente A  GET /citas/politica-pago/?cliente_id=1 -> 200 (87 ms) 
+[PM02] cliente A  GET /citas/politica-pago/?cliente_id=2 -> 200 (86 ms) 
+[PM02] cliente A  GET /mis-citas/ -> 200 (117 ms) 
+[PM02] cliente B  GET /mis-citas/ -> 200 (209 ms) 
+[PM02] cliente A  POST /citas/ con cliente_id=2 -> 201 (222 ms) 
+[PM04-ronda1] cliente A  POST /citas/ 2026-10-28 10:00 -> 201 (177 ms) 
+[PM04-ronda1] cliente B  POST /citas/ 2026-10-28 10:00 -> 400 (151 ms) Por penalización debes pagar anticipo por transferencia o tarjeta para confirmar la cita.
+[PM04-ronda1] 10:00: 1 de 2 aceptadas
+[PM04-ronda2] cliente A  POST /citas/ 2026-10-28 11:00 -> 201 (160 ms) 
+[PM04-ronda2] cliente B  POST /citas/ 2026-10-28 11:00 -> 400 (137 ms) Por penalización debes pagar anticipo por transferencia o tarjeta para confirmar la cita.
+[PM04-ronda2] 11:00: 1 de 2 aceptadas
+[PM04-ronda3] cliente A  POST /citas/ 2026-10-28 12:00 -> 201 (128 ms) 
+[PM04-ronda3] cliente B  POST /citas/ 2026-10-28 12:00 -> 400 (137 ms) Ese horario ya está ocupado.
+[PM04-ronda3] 12:00: 1 de 2 aceptadas
+[PM04-ronda4] cliente A  POST /citas/ 2026-10-28 13:00 -> 201 (139 ms) 
+[PM04-ronda4] cliente A  POST /citas/ 2026-10-28 13:00 -> 400 (174 ms) Ese horario ya está ocupado.
+[PM04-ronda4] cliente B  POST /citas/ 2026-10-28 13:00 -> 400 (163 ms) Ese horario ya está ocupado.
+[PM04-ronda4] cliente B  POST /citas/ 2026-10-28 13:00 -> 400 (152 ms) Ese horario ya está ocupado.
+[PM04-ronda4] 13:00: 1 de 4 aceptadas
+citas creadas: [38, 39, 40, 41, 42, 43]

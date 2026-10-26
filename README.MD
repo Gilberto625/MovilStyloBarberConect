@@ -83,13 +83,42 @@ flutter build apk --release --obfuscate --split-debug-info=build/symbols
 Guarda `build/symbols` fuera del repo público (por versión/build).
 La firma release actual usa claves debug temporalmente; no publicar en Play Store sin keystore autorizado.
 
+### Release ofuscado
+
+El release combina dos capas:
+- **R8** (`android/app/build.gradle.kts`: `isMinifyEnabled`, `isShrinkResources`, `proguard-rules.pro`) ofusca y recorta el código Java/Kotlin y genera `mapping.txt`.
+- **`--obfuscate`** renombra el código Dart dentro de `libapp.so` y deja los símbolos aparte.
+
+```bash
+# Usa la versión de pubspec.yaml en la carpeta de símbolos
+flutter build apk       --release --obfuscate --split-debug-info=build/symbols/0.1.0+1
+flutter build appbundle --release --obfuscate --split-debug-info=build/symbols/0.1.0+1   # Play
+```
+
+Después de cada build de release, guarda **fuera del repo** y por versión:
+- `build/symbols/<versión>/` (símbolos Dart);
+- `build/app/outputs/mapping/release/mapping.txt` (R8).
+
+Un lugar privado del equipo (unidad compartida o un secreto cifrado) sirve; el repo y los artefactos de Actions no, porque el repo es público. Con eso se desofusca un crash:
+
+```bash
+flutter symbolize -i stacktrace.txt -d build/symbols/0.1.0+1/app.android-arm64.symbols
+```
+
+- La firma lee `android/key.properties` si existe; si no, usa la clave debug. El keystore lo crea el equipo.
+- El release no permite HTTP sin cifrar: para probar contra el backend local usa un build debug.
+- Evidencia de la verificación (strings, hashes, manifest, JADX/MobSF): `docs/evidencias/seguridad/2026-10-19/`.
+
 ## Endpoints conectados
 
 | Área | Endpoints |
 |------|-----------|
-| Público | `GET /public/servicios/`, `/public/productos/`, `/public/contacto/` |
+| Público | `GET /public/servicios/`, `/public/productos/`, `/public/contacto/`, `/public/legal/?tipo=privacidad` (aviso de privacidad) |
 | Auth | `POST /login/`, `/login/2fa/verificar/`, `/login/2fa/solicitar-codigo/`, `POST /auth/token/refresh/`, `GET /auth/me/`, `GET /perfil/` |
 | Cliente | `GET /barberos/`, `/disponibilidad/`, `/citas/politica-pago/`, `/mis-citas/`, `POST /citas/` |
+| Cliente: cambiar su cita (S6-02, PM05) | `POST /mis-citas/{id}/cancelar/` con `{motivo?}` y `POST /mis-citas/{id}/reprogramar/` con `{fecha, hora}`. Solo citas propias en pendiente o confirmada, con 1 día de anticipación (2 si la cita cae de viernes a domingo). Reprogramar conserva servicio, barbero, precio y anticipo. `GET /mis-citas/` agrega `barbero_id`, `puede_modificar`, `motivo_no_modificable` y `limite_modificacion`: la app muestra los botones solo si `puede_modificar` es `true`. Cita ajena: 404; fuera de plazo u horario ocupado: 409 con el mensaje del servidor |
+| Barbero (S7-01..03, PM06) | `GET /barbero/agenda/?fecha=` (solo sus citas activas; por defecto hoy) y `POST /barbero/citas/{id}/atencion/` con `{accion: iniciar \| terminar}`. Iniciar pasa la cita a `en_curso`; terminar la deja en curso con la marca de atención terminada para que secretaría cobre. Solo citas propias y de hoy; otro rol: 403 |
+| Privacidad (ARCO) | `GET /perfil/` + `GET /mis-citas/` (Mis datos, GH#42), `PUT /perfil/` (rectificación, GH#43). `PUT` reemplaza el perfil completo: la app reenvía `avatar_url` y `direccion` actuales. `GET`/`PUT /privacidad/preferencias/` (opt-in de finalidades secundarias guardado en la cuenta, GH#41/GH#45; backend `feature/movil-arco-preferencias`). `POST /privacidad/cancelacion/` (Eliminar mi cuenta, GH#44; backend PR #5): con sesión pide `{contrasena, motivo?}`, bloquea la cuenta al momento y responde 201 `{folio, estado, fecha_supresion}`; los datos personales se suprimen a los 30 días con `manage.py suprimir_cuentas_vencidas`. Sin sesión acepta `{cuenta, contrasena}` para la página web de borrado. El personal recibe 403 |
 | Secretaría | `GET /secretaria/citas/dia/`, `POST .../asistencia/`, `POST .../cobrar/` |
 
 ## Seguridad
@@ -98,17 +127,32 @@ La firma release actual usa claves debug temporalmente; no publicar en Play Stor
 - Sin logs de `Authorization`, tokens u OTP.
 - Logout solo local (el backend no expone logout).
 - 401 → refresh; si falla, limpia sesión.
-- Roles: secretaría solo si el backend reporta `secretaria` o `admin`.
+- Roles: secretaría solo si el backend reporta `secretaria` o `admin`; el barbero entra a **Mi agenda**; los demás, al panel del cliente.
+- Guarda central de rutas (GH#70, `lib/routes/route_guard.dart`): cada panel revisa sesión y rol antes de dibujarse y, si no le toca, manda al acceso o al inicio de su rol.
 - El ocultar botones en UI no sustituye permisos del servidor.
 
 ## Pruebas
 
 ```bash
 flutter analyze
-flutter test
+flutter test --coverage
 ```
 
 Incluye ViewModels (auth, citas, secretaría), repositorios fake, widgets de home y manejo de errores/estados vacíos.
+
+Pruebas unitarias (Actividad 3):
+
+| Carpeta | Qué contiene |
+|---|---|
+| `test/unit/` | `PM-U01` (validador de correo), `fromJson` con fixtures y ViewModels con Mockito (`verify`, errores HTTP, timeout, doble toque) |
+| `test/fixtures/` | JSON con la forma real de las respuestas de Django, con datos ficticios |
+| `test/mocks/` | `mocks.dart` declara los mocks; `mocks.mocks.dart` es generado y se versiona para que CI no necesite `build_runner` |
+
+Si cambia la firma de un repository, regenera los mocks y súbelos en el mismo PR:
+
+```bash
+dart run build_runner build --delete-conflicting-outputs
+```
 
 ## Notas
 

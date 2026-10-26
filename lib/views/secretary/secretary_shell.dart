@@ -19,7 +19,7 @@ class _SecretaryShellState extends State<SecretaryShell> {
   int _index = 0;
 
   static const _items = [
-    (Icons.calendar_today_outlined, 'Agenda'),
+    (Icons.today_outlined, 'Hoy'),
     (Icons.add_circle_outline, 'Nueva'),
     (Icons.person_search_outlined, 'Clientes'),
     (Icons.grid_view_outlined, 'Más'),
@@ -42,42 +42,37 @@ class _SecretaryShellState extends State<SecretaryShell> {
       _SecretaryMasView(),
     ];
 
-    return Theme(
-      data: AppTheme.guest(),
-      child: SecretaryNav(
-        go: _go,
-        child: Scaffold(
-          backgroundColor: AppColors.guestBg,
-          body: Row(
-            children: [
-              if (wide) _Rail(index: _index, onSelect: _go),
-              Expanded(
-                child: IndexedStack(index: _index, children: pages),
-              ),
-            ],
-          ),
-          bottomNavigationBar: wide
-              ? null
-              : MediaQuery(
-                  data: MediaQuery.of(context)
-                      .copyWith(textScaler: TextScaler.noScaling),
-                  child: NavigationBar(
-                    selectedIndex: _index,
-                    backgroundColor: const Color(0xFF0E1612),
-                    indicatorColor: AppColors.gold.withValues(alpha: 0.16),
-                    labelBehavior:
-                        NavigationDestinationLabelBehavior.alwaysShow,
-                    onDestinationSelected: _go,
-                    destinations: [
-                      for (final item in _items)
-                        NavigationDestination(
-                          icon: Icon(item.$1),
-                          label: item.$2,
-                        ),
-                    ],
-                  ),
-                ),
+    return SecretaryNav(
+      go: _go,
+      child: Scaffold(
+        backgroundColor: AppColors.panelBg,
+        body: Row(
+          children: [
+            if (wide) _Rail(index: _index, onSelect: _go),
+            Expanded(
+              child: IndexedStack(index: _index, children: pages),
+            ),
+          ],
         ),
+        bottomNavigationBar: wide
+            ? null
+            : DecoratedBox(
+                decoration: const BoxDecoration(
+                  border: Border(top: BorderSide(color: AppColors.border)),
+                ),
+                child: NavigationBar(
+                  selectedIndex: _index,
+                  onDestinationSelected: _go,
+                  destinations: [
+                    for (var i = 0; i < _items.length; i++)
+                      NavigationDestination(
+                        key: ValueKey('secretaria-nav-$i'),
+                        icon: Icon(_items[i].$1),
+                        label: _items[i].$2,
+                      ),
+                  ],
+                ),
+              ),
       ),
     );
   }
@@ -93,7 +88,7 @@ class _Rail extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: 232,
-      color: const Color(0xFF0E1612),
+      color: AppColors.guestCard,
       child: SafeArea(
         child: Padding(
           padding: const EdgeInsets.fromLTRB(16, 20, 16, 16),
@@ -107,7 +102,7 @@ class _Rail extends StatelessWidget {
               ),
               const Text(
                 'Secretaría',
-                style: TextStyle(color: Color(0xFFA6BAB0)),
+                style: TextStyle(color: AppColors.muted),
               ),
               const SizedBox(height: 28),
               for (var i = 0; i < _SecretaryShellState._items.length; i++)
@@ -129,7 +124,7 @@ class _Rail extends StatelessWidget {
 
   String _label(int i) {
     return switch (i) {
-      0 => 'Agenda',
+      0 => 'Hoy',
       1 => 'Nueva cita',
       2 => 'Clientes',
       _ => 'Más',
@@ -208,7 +203,7 @@ class _SecretaryMasView extends StatelessWidget {
     ];
 
     return Scaffold(
-      backgroundColor: AppColors.guestBg,
+      backgroundColor: AppColors.panelBg,
       appBar: AppBar(title: const Text('Más')),
       body: ListView(
         padding: const EdgeInsets.all(16),
@@ -261,10 +256,7 @@ class _SecretaryMasView extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 4),
-                  Text(
-                    item.$2,
-                    style: const TextStyle(color: Color(0xFFA6BAB0)),
-                  ),
+                  Text(item.$2, style: const TextStyle(color: AppColors.muted)),
                 ],
               ),
             ),
@@ -290,8 +282,8 @@ class _LinkTile extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: Material(
-        color: const Color(0xFF14211B),
-        borderRadius: BorderRadius.circular(14),
+        color: AppColors.surface,
+        borderRadius: AppRadii.controlBorder,
         child: InkWell(
           onTap: onTap,
           borderRadius: BorderRadius.circular(14),
@@ -306,18 +298,18 @@ class _LinkTile extends StatelessWidget {
                       Text(
                         title,
                         style: const TextStyle(
-                          color: AppColors.gold,
+                          color: AppColors.ivory,
                           fontWeight: FontWeight.w700,
                         ),
                       ),
                       Text(
                         subtitle,
-                        style: const TextStyle(color: Color(0xFFA6BAB0)),
+                        style: const TextStyle(color: AppColors.muted),
                       ),
                     ],
                   ),
                 ),
-                const Icon(Icons.chevron_right, color: AppColors.gold),
+                const Icon(Icons.chevron_right, color: AppColors.muted),
               ],
             ),
           ),

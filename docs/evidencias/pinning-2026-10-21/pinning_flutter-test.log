@@ -1,0 +1,41 @@
+Resolving dependencies...
+Downloading packages...
+  build 4.0.11 (5.0.0 available)
+  build_config 1.3.3 (1.4.0 available)
+  build_runner 2.16.2 (2.17.1 available)
+  code_assets 1.2.1 (2.1.0 available)
+  cupertino_icons 1.0.9 (2.0.0 available)
+  flutter_secure_storage 9.2.4 (11.2.0 available)
+  flutter_secure_storage_linux 1.2.3 (3.0.3 available)
+  flutter_secure_storage_macos 3.1.3 (4.0.0 available)
+  flutter_secure_storage_platform_interface 1.1.2 (2.1.1 available)
+  flutter_secure_storage_web 1.2.1 (2.1.1 available)
+  flutter_secure_storage_windows 3.1.2 (4.2.2 available)
+  google_fonts 6.3.3 (9.0.0 available)
+  hooks 2.0.2 (2.2.0 available)
+  js 0.6.7 (0.7.2 available)
+  material_color_utilities 0.13.0 (0.13.1 available)
+  meta 1.18.3 (1.19.0 available)
+  objective_c 9.5.0 (9.6.2 available)
+  record_use 0.6.0 (1.1.1 available)
+  test_api 0.7.12 (0.7.15 available)
+  vector_math 2.4.0 (2.4.3 available)
+  vm_service 15.3.0 (15.4.0 available)
+  win32 5.15.0 (6.4.0 available)
+Got dependencies!
+22 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+00:00 +0: loading test/pinning_test.dart
+00:00 +0: GH#39 raíces fijadas y su rotación cada PEM coincide con la huella SHA-256 documentada
+00:00 +1: GH#39 raíces fijadas y su rotación raíz actual del backend más respaldos de otra autoridad
+00:00 +2: GH#39 raíces fijadas y su rotación ninguna raíz vence antes de 2030
+00:00 +3: GH#39 raíces fijadas y su rotación el contexto TLS acepta todas las raíces
+00:00 +4: GH#38 cuándo aplica el pinning en release siempre, aunque se intente desactivar
+00:00 +5: GH#38 cuándo aplica el pinning en debug sí, salvo que se desactive a propósito
+00:00 +6: GH#38 cuándo aplica el pinning el backend local por HTTP no usa TLS
+00:00 +7: GH#38 cuándo aplica el pinning el cliente de la API con HTTPS es el cliente fijado
+00:00 +8: GH#38 servidor TLS con un certificado no permitido (setUpAll)
+00:00 +8: GH#38 servidor TLS con un certificado no permitido control: confiando en su autoridad, el servidor responde
+00:00 +9: GH#38 servidor TLS con un certificado no permitido con pinning se rechaza en el handshake
+00:00 +10: GH#38 servidor TLS con un certificado no permitido (tearDownAll)
+00:00 +10: All tests passed!
