@@ -128,7 +128,14 @@ jobs:
 
       - name: Install NDK
         shell: bash
-        run: yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --install "ndk;28.2.13676358" > /dev/null
+        # Con pipefail, `yes` termina por SIGPIPE cuando sdkmanager acaba y el paso
+        # fallaba aunque el NDK sí quedara instalado. Se comprueba la carpeta al final.
+        run: |
+          NDK="ndk;28.2.13676358"
+          if [ ! -d "$ANDROID_HOME/ndk/28.2.13676358" ]; then
+            yes 2>/dev/null | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --install "$NDK" > /dev/null || true
+          fi
+          test -d "$ANDROID_HOME/ndk/28.2.13676358" || { echo "::error::No se instaló el NDK 28.2.13676358"; exit 1; }
 
       - name: Build obfuscated release APK
         run: flutter build apk --release --obfuscate --split-debug-info=build/symbols/ci

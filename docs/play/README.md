@@ -7,6 +7,7 @@ Todo lo que pide Play Console para publicar **Stylo Barber Connect** (`com.tonys
 | [`FICHA.md`](FICHA.md) | Ficha de Play Store: nombre, descripciones, categoría, contacto, gráficos y capturas |
 | [`SEGURIDAD_DE_LOS_DATOS.md`](SEGURIDAD_DE_LOS_DATOS.md) | Contenido de la app › Seguridad de los datos, Eliminación de cuenta y Política de privacidad |
 | [`CLASIFICACION_Y_ACCESO.md`](CLASIFICACION_Y_ACCESO.md) | Contenido de la app › Clasificación de contenido, Público objetivo, Anuncios y Acceso a la app (cuenta para revisores) |
+| [`PRIMERA_SUBIDA.md`](PRIMERA_SUBIDA.md) | **Paso a paso de la primera subida**: bajar el AAB firmado, crear la app, prueba interna, desofuscación, prueba cerrada y producción |
 | [`FIRMA_Y_PUBLICACION.md`](FIRMA_Y_PUBLICACION.md) | Keystore de subida, secretos de GitHub, AAB firmado, pruebas interna y cerrada, y producción |
 | `graficos/` | Ícono de 512×512 y gráfico destacado de 1024×500 (PR #102) |
 | `capturas/` | Capturas para teléfono, ya en proporción 2:1 |
@@ -21,8 +22,8 @@ Estados: ✅ listo · 🟡 listo al fusionar su PR · 👥 lo hace el equipo (da
 | 2 | Paquete único `com.tonystylo.stylo_barber_connect` | ✅ | `android/app/build.gradle.kts` |
 | 3 | **SDK objetivo ≥ 36** (apps nuevas desde el 31-ago-2026) | ✅ `targetSdk=36` | `docs/evidencias/estatico-2026-10-21/` |
 | 4 | Páginas de memoria de 16 KB | ✅ | mismo informe |
-| 5 | AAB firmado con la clave de subida | 👥 crear keystore y 5 secretos → ✅ `release.yml` lo construye | `FIRMA_Y_PUBLICACION.md` |
-| 6 | Versión `0.4.0+2` | ✅ en `main`, tag `v0.4.0` | `pubspec.yaml` |
+| 5 | AAB firmado con la clave de subida | ✅ keystore y 5 secretos cargados (29-oct); `release.yml` lo construye | `FIRMA_Y_PUBLICACION.md` |
+| 6 | Versión para la prueba cerrada: `0.8.0-beta.1+4` (HITO 03) | 🟡 PR de versión hacia `release` | `pubspec.yaml` |
 | 7 | Ícono 512×512 y gráfico destacado 1024×500 | ✅ | `graficos/` |
 | 8 | 2 a 8 capturas de teléfono, lado mayor ≤ 2× el menor | ✅ 5 capturas 1080×2160 | `capturas/` |
 | 9 | Nombre, descripción breve y completa | ✅ actualizada con reprogramar, cancelar y agenda del barbero | `FICHA.md` |
