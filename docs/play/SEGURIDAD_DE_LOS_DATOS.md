@@ -5,7 +5,7 @@ Play Console › Supervisar y mejorar › Política y programas › **Contenido 
 ## Política de privacidad
 - URL: `https://tonystylo.vercel.app/nosotros?tipo=privacidad`.
 - Es pública, no pide sesión y es la misma que muestra la app en "Aviso de privacidad".
-- **Antes de enviar a revisión (lo hace el equipo):** el texto publicado (versión 1.0, revisado el 2026-10-21) todavía tiene tres marcadores sin llenar: `[NOMBRE O RAZÓN SOCIAL DE LA PERSONA RESPONSABLE]`, `[RFC]` y `[CORREO PARA PRIVACIDAD Y DERECHOS ARCO]`.
+- **Antes de enviar a revisión (lo hace el equipo):** el texto publicado todavía tiene dos marcadores sin llenar (revisado en producción el 2026-10-29): `[NOMBRE O RAZÓN SOCIAL DE LA PERSONA RESPONSABLE]` y `[CORREO PARA PRIVACIDAD Y DERECHOS ARCO]`.
   - Play pide que la política identifique al responsable y dé un contacto. Con marcadores, la revisión la puede rechazar.
   - Se llenan desde el contenido legal del backend (panel de administración de la web), no en la app.
   - El correo debe ser el mismo de la ficha.
@@ -15,8 +15,8 @@ Play pide las dos vías porque la app permite crear cuenta:
 
 | Vía | Cómo | Estado |
 |---|---|---|
-| **Desde la app** | Perfil › Privacidad y mis datos › **Eliminar mi cuenta**. Se reautentica con la contraseña y la palabra ELIMINAR. | PR #101 (app) + PR #5 (backend) |
-| **Desde la web**, sin instalar la app | `https://tonystylo.vercel.app/eliminar-cuenta`: correo o usuario más contraseña, y responde con un folio | Página del front pendiente; usa el mismo `POST /api/privacidad/cancelacion/` sin sesión |
+| **Desde la app** | Perfil › Privacidad y mis datos › **Eliminar mi cuenta**. Se reautentica con la contraseña y la palabra ELIMINAR. | ✅ en producción (app PR #101, backend PR #5) |
+| **Desde la web**, sin instalar la app | `https://tonystylo.vercel.app/eliminar-cuenta`: correo o usuario más contraseña, y responde con un folio | ✅ publicada (front PR #3); usa el mismo `POST /api/privacidad/cancelacion/` sin sesión |
 
 Respuestas del formulario "Eliminación de datos":
 - **¿La app permite crear cuentas?** Sí.
@@ -25,7 +25,7 @@ Respuestas del formulario "Eliminación de datos":
 - **Qué se borra y cuándo** (texto para la página web y para la revisión):
   > Al pedirlo, la cuenta se bloquea de inmediato. En 30 días se eliminan el nombre, el correo, el teléfono, la fecha de nacimiento, el usuario, la contraseña y las direcciones. Las citas, cobros y ventas se conservan sin datos que te identifiquen, porque la barbería debe guardar sus registros contables.
 
-**Requisito del backend:** programar en Render un **Cron Job diario** con `python manage.py suprimir_cuentas_vencidas`. Sin él, la supresión a los 30 días no ocurre. Se puede probar antes con `--dry-run`.
+**Requisito del backend:** programar en Render un **Cron Job diario** con `python manage.py suprimir_cuentas_vencidas` (se puede probar antes con `--dry-run`). Como respaldo, el backend PR #8 lo corre en cada arranque del servicio; pero con el ping cada 10 minutos el servicio casi no reinicia, así que el Cron diario sigue siendo necesario.
 
 ## Formulario "Seguridad de los datos"
 
