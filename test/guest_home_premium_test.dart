@@ -274,6 +274,20 @@ void main() {
     });
   });
 
+  group('Invitado: guías de accesibilidad (GH#19)', () {
+    testWidgets('inicio cumple objetivos táctiles, etiquetas y contraste', (
+      tester,
+    ) async {
+      final semantics = tester.ensureSemantics();
+      await _pumpHome(tester, _FixtureCatalogRepository());
+
+      await expectLater(tester, meetsGuideline(androidTapTargetGuideline));
+      await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
+      await expectLater(tester, meetsGuideline(textContrastGuideline));
+      semantics.dispose();
+    });
+  });
+
   group('Guest premium Home states', () {
     testWidgets('loading ends when the repository supplies the catalog', (
       tester,

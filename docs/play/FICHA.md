@@ -15,7 +15,7 @@ Coincide con el nombre que muestra el launcher (`android:label`).
 Reserva tu corte en Tony Stylo Barbería, revisa tus citas y aparta productos.
 ```
 
-**Descripción completa** (máx. 4000) — 1 240 caracteres:
+**Descripción completa** (máx. 4000) — 1 403 caracteres:
 ```
 Stylo Barber Connect es la app oficial de Tony Stylo Barbería. Reserva tu lugar en la silla sin llamar ni esperar respuesta.
 
@@ -23,6 +23,7 @@ RESERVA EN POCOS PASOS
 • Elige el servicio, el barbero y un horario que de verdad está libre: la disponibilidad sale directo de la agenda de la barbería.
 • Revisa el resumen antes de confirmar: servicio, barbero, fecha, hora y precio.
 • Consulta tus próximas citas y tu historial cuando quieras.
+• ¿Cambió tu plan? Reprograma o cancela tu cita desde la app, con la anticipación que pide la barbería.
 
 TIENDA DE LA BARBERÍA
 • Mira los productos con su precio y disponibilidad.
@@ -41,7 +42,8 @@ TUS DATOS, BAJO TU CONTROL
 • Tu sesión se guarda cifrada en el teléfono y tu contraseña nunca se guarda en él.
 
 PARA EL EQUIPO DE LA BARBERÍA
-El personal de recepción tiene su propio panel para la operación del día: citas de hoy, llegada del cliente y cobro.
+• Recepción tiene su panel para la operación del día: citas de hoy, llegada del cliente y cobro.
+• Cada barbero ve solo su agenda y marca cuándo empieza y termina la atención.
 
 Sin anuncios.
 ```
