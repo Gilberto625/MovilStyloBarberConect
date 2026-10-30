@@ -49,36 +49,36 @@ class _FakeAuthUser_0 extends _i1.SmartFake implements _i2.AuthUser {
     : super(parent, parentInvocation);
 }
 
-class _FakeRegistroPendiente_1 extends _i1.SmartFake
-    implements _i2.RegistroPendiente {
-  _FakeRegistroPendiente_1(Object parent, Invocation parentInvocation)
+class _FakePerfilDto_1 extends _i1.SmartFake implements _i2.PerfilDto {
+  _FakePerfilDto_1(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakePerfilDto_2 extends _i1.SmartFake implements _i2.PerfilDto {
-  _FakePerfilDto_2(Object parent, Invocation parentInvocation)
-    : super(parent, parentInvocation);
-}
-
-class _FakeBarberoAgendaDto_3 extends _i1.SmartFake
+class _FakeBarberoAgendaDto_2 extends _i1.SmartFake
     implements _i3.BarberoAgendaDto {
-  _FakeBarberoAgendaDto_3(Object parent, Invocation parentInvocation)
+  _FakeBarberoAgendaDto_2(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakeContactoDto_4 extends _i1.SmartFake implements _i4.ContactoDto {
-  _FakeContactoDto_4(Object parent, Invocation parentInvocation)
+class _FakeContactoDto_3 extends _i1.SmartFake implements _i4.ContactoDto {
+  _FakeContactoDto_3(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakePoliticaPagoDto_5 extends _i1.SmartFake
+class _FakePoliticaPagoDto_4 extends _i1.SmartFake
     implements _i5.PoliticaPagoDto {
-  _FakePoliticaPagoDto_5(Object parent, Invocation parentInvocation)
+  _FakePoliticaPagoDto_4(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakePedidoCreado_6 extends _i1.SmartFake implements _i6.PedidoCreado {
-  _FakePedidoCreado_6(Object parent, Invocation parentInvocation)
+class _FakePedidoCreado_5 extends _i1.SmartFake implements _i6.PedidoCreado {
+  _FakePedidoCreado_5(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
+}
+
+class _FakePreferencia2fa_6 extends _i1.SmartFake
+    implements _i2.Preferencia2fa {
+  _FakePreferencia2fa_6(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
@@ -182,17 +182,22 @@ class MockAuthRepository extends _i1.Mock implements _i8.AuthRepository {
   ) as _i9.Future<void>);
 
   @override
-  _i9.Future<_i2.RegistroPendiente> registrar(
-    _i2.RegistroRequest? datos,
-  ) => (super.noSuchMethod(
-    Invocation.method(#registrar, [datos]),
-    returnValue: _i9.Future<_i2.RegistroPendiente>.value(
-      _FakeRegistroPendiente_1(this, Invocation.method(#registrar, [datos])),
-    ),
-    returnValueForMissingStub: _i9.Future<_i2.RegistroPendiente>.value(
-      _FakeRegistroPendiente_1(this, Invocation.method(#registrar, [datos])),
-    ),
-  ) as _i9.Future<_i2.RegistroPendiente>);
+  _i9.Future<_i2.RegistroResultado> registrar(_i2.RegistroRequest? datos) =>
+      (super.noSuchMethod(
+        Invocation.method(#registrar, [datos]),
+        returnValue: _i9.Future<_i2.RegistroResultado>.value(
+          _i10.dummyValue<_i2.RegistroResultado>(
+            this,
+            Invocation.method(#registrar, [datos]),
+          ),
+        ),
+        returnValueForMissingStub: _i9.Future<_i2.RegistroResultado>.value(
+          _i10.dummyValue<_i2.RegistroResultado>(
+            this,
+            Invocation.method(#registrar, [datos]),
+          ),
+        ),
+      ) as _i9.Future<_i2.RegistroResultado>);
 
   @override
   _i9.Future<_i2.AuthUser> verificarRegistro({
@@ -252,10 +257,10 @@ class MockAuthRepository extends _i1.Mock implements _i8.AuthRepository {
   _i9.Future<_i2.PerfilDto> getPerfil() => (super.noSuchMethod(
     Invocation.method(#getPerfil, []),
     returnValue: _i9.Future<_i2.PerfilDto>.value(
-      _FakePerfilDto_2(this, Invocation.method(#getPerfil, [])),
+      _FakePerfilDto_1(this, Invocation.method(#getPerfil, [])),
     ),
     returnValueForMissingStub: _i9.Future<_i2.PerfilDto>.value(
-      _FakePerfilDto_2(this, Invocation.method(#getPerfil, [])),
+      _FakePerfilDto_1(this, Invocation.method(#getPerfil, [])),
     ),
   ) as _i9.Future<_i2.PerfilDto>);
 
@@ -276,13 +281,13 @@ class MockBarberoRepository extends _i1.Mock implements _i11.BarberoRepository {
       (super.noSuchMethod(
         Invocation.method(#getAgenda, [], {#fecha: fecha}),
         returnValue: _i9.Future<_i3.BarberoAgendaDto>.value(
-          _FakeBarberoAgendaDto_3(
+          _FakeBarberoAgendaDto_2(
             this,
             Invocation.method(#getAgenda, [], {#fecha: fecha}),
           ),
         ),
         returnValueForMissingStub: _i9.Future<_i3.BarberoAgendaDto>.value(
-          _FakeBarberoAgendaDto_3(
+          _FakeBarberoAgendaDto_2(
             this,
             Invocation.method(#getAgenda, [], {#fecha: fecha}),
           ),
@@ -340,10 +345,10 @@ class MockCatalogRepository extends _i1.Mock implements _i12.CatalogRepository {
   _i9.Future<_i4.ContactoDto> getContacto() => (super.noSuchMethod(
     Invocation.method(#getContacto, []),
     returnValue: _i9.Future<_i4.ContactoDto>.value(
-      _FakeContactoDto_4(this, Invocation.method(#getContacto, [])),
+      _FakeContactoDto_3(this, Invocation.method(#getContacto, [])),
     ),
     returnValueForMissingStub: _i9.Future<_i4.ContactoDto>.value(
-      _FakeContactoDto_4(this, Invocation.method(#getContacto, [])),
+      _FakeContactoDto_3(this, Invocation.method(#getContacto, [])),
     ),
   ) as _i9.Future<_i4.ContactoDto>);
 
@@ -366,7 +371,7 @@ class MockCatalogRepository extends _i1.Mock implements _i12.CatalogRepository {
                 List<_i4.ServicioDto> servicios,
               })
             >.value((
-              contacto: _FakeContactoDto_4(
+              contacto: _FakeContactoDto_3(
                 this,
                 Invocation.method(#loadHomeGuest, []),
               ),
@@ -381,7 +386,7 @@ class MockCatalogRepository extends _i1.Mock implements _i12.CatalogRepository {
                 List<_i4.ServicioDto> servicios,
               })
             >.value((
-              contacto: _FakeContactoDto_4(
+              contacto: _FakeContactoDto_3(
                 this,
                 Invocation.method(#loadHomeGuest, []),
               ),
@@ -444,13 +449,13 @@ class MockCitasRepository extends _i1.Mock implements _i13.CitasRepository {
       (super.noSuchMethod(
         Invocation.method(#getPoliticaPago, [clienteId]),
         returnValue: _i9.Future<_i5.PoliticaPagoDto>.value(
-          _FakePoliticaPagoDto_5(
+          _FakePoliticaPagoDto_4(
             this,
             Invocation.method(#getPoliticaPago, [clienteId]),
           ),
         ),
         returnValueForMissingStub: _i9.Future<_i5.PoliticaPagoDto>.value(
-          _FakePoliticaPagoDto_5(
+          _FakePoliticaPagoDto_4(
             this,
             Invocation.method(#getPoliticaPago, [clienteId]),
           ),
@@ -536,13 +541,13 @@ class MockPedidosRepository extends _i1.Mock implements _i14.PedidosRepository {
   }) => (super.noSuchMethod(
     Invocation.method(#crearPedido, [], {#lineas: lineas, #notas: notas}),
     returnValue: _i9.Future<_i6.PedidoCreado>.value(
-      _FakePedidoCreado_6(
+      _FakePedidoCreado_5(
         this,
         Invocation.method(#crearPedido, [], {#lineas: lineas, #notas: notas}),
       ),
     ),
     returnValueForMissingStub: _i9.Future<_i6.PedidoCreado>.value(
-      _FakePedidoCreado_6(
+      _FakePedidoCreado_5(
         this,
         Invocation.method(#crearPedido, [], {#lineas: lineas, #notas: notas}),
       ),
@@ -559,10 +564,10 @@ class MockPrivacidadRepository extends _i1.Mock
   _i9.Future<_i2.PerfilDto> getPerfil() => (super.noSuchMethod(
     Invocation.method(#getPerfil, []),
     returnValue: _i9.Future<_i2.PerfilDto>.value(
-      _FakePerfilDto_2(this, Invocation.method(#getPerfil, [])),
+      _FakePerfilDto_1(this, Invocation.method(#getPerfil, [])),
     ),
     returnValueForMissingStub: _i9.Future<_i2.PerfilDto>.value(
-      _FakePerfilDto_2(this, Invocation.method(#getPerfil, [])),
+      _FakePerfilDto_1(this, Invocation.method(#getPerfil, [])),
     ),
   ) as _i9.Future<_i2.PerfilDto>);
 
@@ -581,10 +586,10 @@ class MockPrivacidadRepository extends _i1.Mock
   ) => (super.noSuchMethod(
     Invocation.method(#actualizarPerfil, [cambios]),
     returnValue: _i9.Future<_i2.PerfilDto>.value(
-      _FakePerfilDto_2(this, Invocation.method(#actualizarPerfil, [cambios])),
+      _FakePerfilDto_1(this, Invocation.method(#actualizarPerfil, [cambios])),
     ),
     returnValueForMissingStub: _i9.Future<_i2.PerfilDto>.value(
-      _FakePerfilDto_2(this, Invocation.method(#actualizarPerfil, [cambios])),
+      _FakePerfilDto_1(this, Invocation.method(#actualizarPerfil, [cambios])),
     ),
   ) as _i9.Future<_i2.PerfilDto>);
 
@@ -595,6 +600,42 @@ class MockPrivacidadRepository extends _i1.Mock
         returnValue: _i9.Future<_i7.ContenidoLegalDto?>.value(),
         returnValueForMissingStub: _i9.Future<_i7.ContenidoLegalDto?>.value(),
       ) as _i9.Future<_i7.ContenidoLegalDto?>);
+
+  @override
+  _i9.Future<_i7.ContenidoLegalDto?> getTerminos() => (super.noSuchMethod(
+    Invocation.method(#getTerminos, []),
+    returnValue: _i9.Future<_i7.ContenidoLegalDto?>.value(),
+    returnValueForMissingStub: _i9.Future<_i7.ContenidoLegalDto?>.value(),
+  ) as _i9.Future<_i7.ContenidoLegalDto?>);
+
+  @override
+  _i9.Future<_i2.Preferencia2fa> getPreferencia2fa() => (super.noSuchMethod(
+    Invocation.method(#getPreferencia2fa, []),
+    returnValue: _i9.Future<_i2.Preferencia2fa>.value(
+      _FakePreferencia2fa_6(this, Invocation.method(#getPreferencia2fa, [])),
+    ),
+    returnValueForMissingStub: _i9.Future<_i2.Preferencia2fa>.value(
+      _FakePreferencia2fa_6(this, Invocation.method(#getPreferencia2fa, [])),
+    ),
+  ) as _i9.Future<_i2.Preferencia2fa>);
+
+  @override
+  _i9.Future<_i2.Preferencia2fa> guardarPreferencia2fa(bool? activo) =>
+      (super.noSuchMethod(
+        Invocation.method(#guardarPreferencia2fa, [activo]),
+        returnValue: _i9.Future<_i2.Preferencia2fa>.value(
+          _FakePreferencia2fa_6(
+            this,
+            Invocation.method(#guardarPreferencia2fa, [activo]),
+          ),
+        ),
+        returnValueForMissingStub: _i9.Future<_i2.Preferencia2fa>.value(
+          _FakePreferencia2fa_6(
+            this,
+            Invocation.method(#guardarPreferencia2fa, [activo]),
+          ),
+        ),
+      ) as _i9.Future<_i2.Preferencia2fa>);
 
   @override
   _i9.Future<_i7.ConsentimientoPrivacidad> getConsentimiento() =>

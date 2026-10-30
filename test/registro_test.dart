@@ -93,6 +93,31 @@ class _Backend {
       jsonDecode(peticiones[i].body) as Map<String, dynamic>;
 }
 
+/// Servidor con `sinVerificacion`: cuenta verificada y sesión al momento.
+http.Response _altaSinCodigo(http.Request _) => _json({
+  'ok': true,
+  'requiereVerificacion': false,
+  'mensaje': 'Cuenta creada correctamente.',
+  'access': 'acc-alta',
+  'refresh': 'ref-alta',
+  'usuario': {
+    'id': 32,
+    'username': 'ana.lopez',
+    'email': 'ana@correo.mx',
+    'rol': 'cliente',
+  },
+}, 201);
+
+/// Servidor anterior que no pudo mandar el correo del código.
+http.Response _altaSinCorreo(http.Request _) => _json({
+  'ok': true,
+  'requiereVerificacion': true,
+  'tempToken': 'tmp-2',
+  'destino': 'a****1@outlook.com',
+  'email_enviado': false,
+  'mensaje': 'No se pudo enviar el correo en este momento.',
+}, 201);
+
 Future<void> _pump(
   WidgetTester tester,
   AuthViewModel auth, {
@@ -122,6 +147,7 @@ Future<void> _pump(
           AppRoutes.clientHome: (_) =>
               const Scaffold(body: Text('panel-cliente')),
           AppRoutes.avisoPrivacidad: (_) => const Scaffold(body: Text('aviso')),
+          AppRoutes.terminos: (_) => const Scaffold(body: Text('terminos')),
         },
       ),
     ),
@@ -172,10 +198,13 @@ void main() {
   group('Contrato de registro (POST /register/)', () {
     test('envía los campos de Django normalizados y sin Bearer', () async {
       final b = _Backend();
-      final pendiente = await b.repo.registrar(_datos);
+      final resultado = await b.repo.registrar(_datos);
 
+      // Servidor anterior: ignora sinVerificacion y pide el código.
+      final pendiente = resultado as RegistroPendiente;
       expect(pendiente.tempToken, 'tmp-1');
       expect(pendiente.destino, 'a***a@correo.mx');
+      expect(pendiente.emailEnviado, isTrue);
       final r = b.peticiones.single;
       expect(r.method, 'POST');
       expect(r.headers.containsKey('Authorization'), isFalse);
@@ -190,6 +219,7 @@ void main() {
         'preguntasecreta': '¿En qué ciudad naciste?',
         'respuestasecreta': 'Huejutla',
         'aceptaTerminos': true,
+        'sinVerificacion': true,
       });
     });
 
@@ -272,6 +302,65 @@ void main() {
     });
   });
 
+  group('Registro sin código (sinVerificacion)', () {
+    test('con tokens devuelve la sesión y no pide código', () async {
+      final b = _Backend(registro: _altaSinCodigo);
+      final resultado = await b.repo.registrar(_datos);
+
+      expect(resultado, isA<RegistroCompletado>());
+      final sesion = (resultado as RegistroCompletado).sesion;
+      expect(sesion.access, 'acc-alta');
+      expect(sesion.refresh, 'ref-alta');
+      expect(sesion.user.rol, UserRole.cliente);
+      expect(b.cuerpo(0)['sinVerificacion'], isTrue);
+    });
+
+    test('sin usuario en la respuesta no se da por creada', () async {
+      final b = _Backend(
+        registro: (_) => _json({
+          'ok': true,
+          'requiereVerificacion': false,
+          'access': 'acc-alta',
+          'refresh': 'ref-alta',
+        }, 201),
+      );
+      await expectLater(b.repo.registrar(_datos), throwsA(isA<ApiException>()));
+      expect(b.storage.access, isNull);
+    });
+
+    test('email_enviado:false llega al pendiente', () async {
+      final b = _Backend(registro: _altaSinCorreo);
+      final pendiente = await b.repo.registrar(_datos) as RegistroPendiente;
+      expect(pendiente.tempToken, 'tmp-2');
+      expect(pendiente.emailEnviado, isFalse);
+    });
+
+    test('el ViewModel guarda la sesión igual que tras el código', () async {
+      final b = _Backend(registro: _altaSinCodigo);
+      final vm = AuthViewModel(b.repo);
+
+      expect(await vm.registrar(_datos), isTrue);
+      expect(vm.phase, AuthPhase.authenticated);
+      expect(vm.role, UserRole.cliente);
+      expect(vm.user?.username, 'ana.lopez');
+      expect(vm.hayRegistroPendiente, isFalse);
+      expect(b.storage.access, 'acc-alta');
+      expect(b.storage.refresh, 'ref-alta');
+      expect(b.peticiones.map((r) => r.url.path), ['/api/register/']);
+    });
+
+    test('servidor anterior: queda pendiente del código', () async {
+      final b = _Backend();
+      final vm = AuthViewModel(b.repo);
+
+      expect(await vm.registrar(_datos), isTrue);
+      expect(vm.phase, isNot(AuthPhase.authenticated));
+      expect(vm.hayRegistroPendiente, isTrue);
+      expect(vm.registroEmailEnviado, isTrue);
+      expect(b.storage.access, isNull);
+    });
+  });
+
   group('Validadores del alta (reglas de RegisterView)', () {
     test('contraseña: los cinco requisitos', () {
       expect(
@@ -324,6 +413,59 @@ void main() {
         '/api/register/',
         '/api/register/2fa/verificar/',
       ]);
+    });
+
+    testWidgets('PA-08b alta sin código: del formulario directo al panel', (
+      tester,
+    ) async {
+      final b = _Backend(registro: _altaSinCodigo);
+      final auth = AuthViewModel(b.repo);
+      addTearDown(auth.dispose);
+      await _pump(tester, auth);
+
+      await _llenar(tester);
+      await _crear(tester);
+
+      expect(find.text('panel-cliente'), findsOneWidget);
+      expect(find.text('Confirma tu correo'), findsNothing);
+      expect(b.storage.access, 'acc-alta');
+      expect(b.peticiones.map((r) => r.url.path), ['/api/register/']);
+    });
+
+    testWidgets('si el correo no salió, no dice "Enviado a"', (tester) async {
+      final b = _Backend(registro: _altaSinCorreo);
+      final auth = AuthViewModel(b.repo);
+      addTearDown(auth.dispose);
+      await _pump(tester, auth);
+
+      await _llenar(tester);
+      await _crear(tester);
+
+      expect(find.text('Confirma tu correo'), findsOneWidget);
+      expect(
+        find.text('No se pudo enviar el correo en este momento.'),
+        findsOneWidget,
+      );
+      expect(find.textContaining('Enviado a'), findsNothing);
+      expect(find.textContaining('a****1@outlook.com'), findsNothing);
+    });
+
+    testWidgets('C el enlace a los términos de uso se ve y abre su pantalla', (
+      tester,
+    ) async {
+      final auth = AuthViewModel(_Backend().repo);
+      addTearDown(auth.dispose);
+      await _pump(tester, auth);
+
+      final enlace = find.byKey(const Key('registro_leer_terminos'));
+      await tester.ensureVisible(enlace);
+      await tester.pumpAndSettle();
+      expect(find.text('Leer los términos de uso'), findsOneWidget);
+      expect(find.byKey(const Key('registro_leer_aviso')), findsOneWidget);
+
+      await tester.tap(enlace);
+      await tester.pumpAndSettle();
+      expect(find.text('terminos'), findsOneWidget);
     });
 
     testWidgets('vacío: marca cada campo y no llama al servidor', (
