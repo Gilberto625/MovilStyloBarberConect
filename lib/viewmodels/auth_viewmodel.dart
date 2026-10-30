@@ -103,25 +103,40 @@ class AuthViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  // Alta de cliente: el registro queda pendiente hasta confirmar el código.
+  // Alta de cliente. Con un servidor que acepta `sinVerificacion` la sesión
+  // se abre al momento; si no, queda pendiente hasta confirmar el código.
   String? registroTempToken;
   String? registroDestino;
   String? registroCorreo;
   String? registroMensaje;
 
+  /// El servidor sí mandó el código del alta (`email_enviado`).
+  bool registroEmailEnviado = true;
+
   bool get hayRegistroPendiente =>
       registroTempToken != null && registroTempToken!.isNotEmpty;
 
+  /// Devuelve `true` si la cuenta se creó. Con [phase] en
+  /// [AuthPhase.authenticated] ya hay sesión; si no, falta el código.
   Future<bool> registrar(RegistroRequest datos) async {
     busy = true;
     errorMessage = null;
     notifyListeners();
     try {
-      final pendiente = await _repository.registrar(datos);
-      registroTempToken = pendiente.tempToken;
-      registroDestino = pendiente.destino;
-      registroCorreo = datos.correo.trim().toLowerCase();
-      registroMensaje = pendiente.mensaje;
+      final resultado = await _repository.registrar(datos);
+      switch (resultado) {
+        case RegistroCompletado(:final sesion):
+          // Igual que tras confirmar el código: tokens y usuario guardados.
+          user = await _repository.completeLogin(sesion);
+          cancelarRegistro(notify: false);
+          phase = AuthPhase.authenticated;
+        case RegistroPendiente():
+          registroTempToken = resultado.tempToken;
+          registroDestino = resultado.destino;
+          registroEmailEnviado = resultado.emailEnviado;
+          registroCorreo = datos.correo.trim().toLowerCase();
+          registroMensaje = resultado.mensaje;
+      }
       busy = false;
       notifyListeners();
       return true;
@@ -186,6 +201,7 @@ class AuthViewModel extends ChangeNotifier {
     registroDestino = null;
     registroCorreo = null;
     registroMensaje = null;
+    registroEmailEnviado = true;
     if (notify) notifyListeners();
   }
 

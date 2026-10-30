@@ -22,6 +22,7 @@ import '../views/privacy/eliminar_cuenta_view.dart';
 import '../views/privacy/editar_perfil_view.dart';
 import '../views/privacy/mis_datos_view.dart';
 import '../views/privacy/privacidad_view.dart';
+import '../views/privacy/terminos_view.dart';
 import '../views/secretary/secretary_gestion_views.dart';
 import '../views/secretary/secretary_home_view.dart';
 import '../views/secretary/secretary_shell.dart';
@@ -49,6 +50,7 @@ class AppRoutes {
   static const misDatos = '/privacidad/mis-datos';
   static const editarPerfil = '/privacidad/editar-perfil';
   static const avisoPrivacidad = '/aviso-privacidad';
+  static const terminos = '/terminos';
   static const eliminarCuenta = '/privacidad/eliminar-cuenta';
   static const barberHome = '/barbero';
 
@@ -194,7 +196,18 @@ class AppRoutes {
         }
         return SecretaryReprogramarView(citaId: citaId);
       case privacidad:
-        return const PrivacidadView();
+        return ChangeNotifierProvider(
+          create: (context) => Verificacion2faViewModel(
+            context.read<AppScope>().privacidadRepository,
+          ),
+          child: const PrivacidadView(),
+        );
+      case terminos:
+        return ChangeNotifierProvider(
+          create: (context) =>
+              TerminosViewModel(context.read<AppScope>().privacidadRepository),
+          child: const TerminosView(),
+        );
       // Las pantallas de privacidad crean su ViewModel por ruta: no comparten
       // estado entre usuarios (PM09) y se liberan al salir.
       case misDatos:

@@ -3,8 +3,11 @@ import 'package:flutter/material.dart';
 import '../../core/theme/app_theme.dart';
 import '../../routes/app_routes.dart';
 import 'privacidad_widgets.dart';
+import 'verificacion_2fa_seccion.dart';
 
-/// Perfil → Privacidad: entrada a los derechos ARCO que la app ya cubre.
+/// Perfil → Privacidad: entrada a los derechos ARCO que la app ya cubre y
+/// la seguridad de la cuenta (código por correo al iniciar sesión).
+/// Necesita un `Verificacion2faViewModel` arriba (lo crea la ruta).
 class PrivacidadView extends StatelessWidget {
   const PrivacidadView({super.key});
 
@@ -52,6 +55,7 @@ class PrivacidadView extends StatelessWidget {
             onTap: () => Navigator.pushNamed(context, AppRoutes.eliminarCuenta),
           ),
           const SizedBox(height: 8),
+          const Verificacion2faSeccion(),
           const PanelSeccion(
             titulo: 'Oponerte a un uso de tus datos',
             child: Text(

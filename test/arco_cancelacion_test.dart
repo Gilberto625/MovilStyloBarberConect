@@ -55,6 +55,9 @@ Future<(MockPrivacidadRepository, MockAuthRepository)> _pump(
       rol: UserRole.cliente,
     ),
   );
+  // Privacidad y mis datos lee el interruptor del código por correo.
+  when(repo.getPreferencia2fa())
+      .thenAnswer((_) async => const Preferencia2fa(email2fa: false));
   final auth = AuthViewModel(authRepo);
   await auth.bootstrap();
   addTearDown(auth.dispose);
@@ -64,6 +67,9 @@ Future<(MockPrivacidadRepository, MockAuthRepository)> _pump(
         ChangeNotifierProvider<AuthViewModel>.value(value: auth),
         ChangeNotifierProvider<EliminarCuentaViewModel>(
           create: (_) => EliminarCuentaViewModel(repo),
+        ),
+        ChangeNotifierProvider<Verificacion2faViewModel>(
+          create: (_) => Verificacion2faViewModel(repo),
         ),
       ],
       child: MaterialApp(
