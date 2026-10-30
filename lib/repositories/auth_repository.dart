@@ -41,7 +41,9 @@ class AuthRepository {
   Future<void> resend2fa(String tempToken) =>
       _api.solicitarCodigo2fa(tempToken: tempToken);
 
-  Future<RegistroPendiente> registrar(RegistroRequest datos) =>
+  /// Si Django ya devuelve la sesión ([RegistroCompletado]), quien llama la
+  /// guarda con [completeLogin], igual que tras confirmar el código.
+  Future<RegistroResultado> registrar(RegistroRequest datos) =>
       _api.registrar(datos);
 
   /// Confirma el alta y abre la sesión igual que un login.

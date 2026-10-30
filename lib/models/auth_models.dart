@@ -165,6 +165,7 @@ class RegistroRequest {
     required this.preguntaSecreta,
     required this.respuestaSecreta,
     required this.aceptaTerminos,
+    this.sinVerificacion = true,
   });
 
   /// Las mismas opciones que ofrece la web (register.component.html).
@@ -188,6 +189,11 @@ class RegistroRequest {
   final String respuestaSecreta;
   final bool aceptaTerminos;
 
+  /// Pide a Django crear la cuenta ya verificada y devolver la sesión, sin
+  /// mandar código al correo. Un servidor que no lo conoce lo ignora y
+  /// responde con el flujo de código de siempre.
+  final bool sinVerificacion;
+
   Map<String, dynamic> toJson() => {
     'nombre': nombre.trim(),
     'apellidopaterno': apellidoPaterno.trim(),
@@ -199,15 +205,32 @@ class RegistroRequest {
     'preguntasecreta': preguntaSecreta,
     'respuestasecreta': respuestaSecreta.trim(),
     'aceptaTerminos': aceptaTerminos,
+    if (sinVerificacion) 'sinVerificacion': true,
   };
 }
 
+/// Respuesta de `POST /register/`: la cuenta queda lista con su sesión
+/// ([RegistroCompletado]) o pendiente del código del correo
+/// ([RegistroPendiente], servidores sin `sinVerificacion`).
+sealed class RegistroResultado {
+  const RegistroResultado();
+}
+
+/// Cuenta creada y verificada: Django devolvió los tokens del cliente.
+class RegistroCompletado extends RegistroResultado {
+  const RegistroCompletado({required this.sesion, required this.mensaje});
+
+  final LoginSuccess sesion;
+  final String mensaje;
+}
+
 /// Registro creado, pendiente de confirmar con el código del correo.
-class RegistroPendiente {
+class RegistroPendiente extends RegistroResultado {
   const RegistroPendiente({
     required this.tempToken,
     required this.destino,
     required this.mensaje,
+    this.emailEnviado = true,
   });
 
   final String tempToken;
@@ -215,4 +238,33 @@ class RegistroPendiente {
   /// Correo enmascarado por el servidor (`j***e@correo.com`).
   final String destino;
   final String mensaje;
+
+  /// `email_enviado` de Django. Si es falso, el código no salió y no hay que
+  /// decir "Enviado a …". Servidores que no lo mandan cuentan como enviado.
+  final bool emailEnviado;
+}
+
+/// `GET/PUT /perfil/2fa/`: pedir código por correo al iniciar sesión.
+class Preferencia2fa {
+  const Preferencia2fa({
+    required this.email2fa,
+    this.puedeGestionar = true,
+    this.motivoBloqueo = '',
+    this.proveedorAuth = '',
+  });
+
+  final bool email2fa;
+  final bool puedeGestionar;
+  final String motivoBloqueo;
+  final String proveedorAuth;
+
+  factory Preferencia2fa.fromJson(Map<String, dynamic> json) {
+    return Preferencia2fa(
+      email2fa: json['email_2fa'] == true,
+      // El PUT no lo devuelve: si falta, se puede gestionar.
+      puedeGestionar: json['puede_gestionar'] != false,
+      motivoBloqueo: (json['motivo_bloqueo'] ?? '').toString(),
+      proveedorAuth: (json['proveedor_auth'] ?? '').toString(),
+    );
+  }
 }

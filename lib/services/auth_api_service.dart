@@ -89,9 +89,11 @@ class AuthApiService {
     }
   }
 
-  /// Paso 1 del alta: Django valida, crea la cuenta sin verificar y manda un
-  /// código al correo. Los 400/409 llegan como [ApiException] con su mensaje.
-  Future<RegistroPendiente> registrar(RegistroRequest datos) async {
+  /// Alta de cliente. Con `sinVerificacion`, Django crea la cuenta verificada
+  /// y responde con la sesión ([RegistroCompletado]). Si responde con
+  /// `tempToken` (servidor anterior), la cuenta espera el código del correo
+  /// ([RegistroPendiente]). Los 400/409 llegan como [ApiException].
+  Future<RegistroResultado> registrar(RegistroRequest datos) async {
     final raw = await _api.post(
       '/register/',
       auth: false,
@@ -107,6 +109,24 @@ class AuthApiService {
       );
     }
     final tempToken = (map['tempToken'] ?? '').toString();
+    final access = (map['access'] ?? '').toString();
+    if (map['requiereVerificacion'] != true &&
+        tempToken.isEmpty &&
+        access.isNotEmpty) {
+      final refresh = (map['refresh'] ?? '').toString();
+      final userRaw = map['usuario'];
+      if (refresh.isEmpty || userRaw is! Map) {
+        throw ApiException('Registro incompleto: faltan tokens o usuario.');
+      }
+      return RegistroCompletado(
+        sesion: LoginSuccess(
+          access: access,
+          refresh: refresh,
+          user: AuthUser.fromJson(Map<String, dynamic>.from(userRaw)),
+        ),
+        mensaje: (map['mensaje'] ?? 'Cuenta creada correctamente.').toString(),
+      );
+    }
     if (tempToken.isEmpty) {
       throw ApiException('Registro incompleto: falta el token temporal.');
     }
@@ -115,6 +135,7 @@ class AuthApiService {
       destino: (map['destino'] ?? '').toString(),
       mensaje: (map['mensaje'] ?? 'Te enviamos un código a tu correo.')
           .toString(),
+      emailEnviado: map['email_enviado'] != false,
     );
   }
 
@@ -182,6 +203,30 @@ class AuthApiService {
   Future<PerfilDto> actualizarPerfil(PerfilUpdate cambios) async {
     final raw = await _api.put('/perfil/', body: cambios.toJson());
     return _perfilDesde(raw);
+  }
+
+  /// `GET /perfil/2fa/`: si al iniciar sesión se pide código por correo.
+  Future<Preferencia2fa> preferencia2fa() async {
+    return _preferencia2faDesde(await _api.get('/perfil/2fa/'));
+  }
+
+  /// `PUT /perfil/2fa/` con `{email_2fa}`. Devuelve lo que quedó guardado.
+  Future<Preferencia2fa> guardarPreferencia2fa({required bool email2fa}) async {
+    return _preferencia2faDesde(
+      await _api.put('/perfil/2fa/', body: {'email_2fa': email2fa}),
+    );
+  }
+
+  Preferencia2fa _preferencia2faDesde(Object? raw) {
+    if (raw is! Map) throw ApiException('Respuesta de seguridad inválida.');
+    final map = Map<String, dynamic>.from(raw);
+    if (map['ok'] == false || map['email_2fa'] is! bool) {
+      throw ApiException(
+        (map['error'] ?? 'No se pudo leer la verificación por correo.')
+            .toString(),
+      );
+    }
+    return Preferencia2fa.fromJson(map);
   }
 
   PerfilDto _perfilDesde(Object? raw) {
