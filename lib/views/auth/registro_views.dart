@@ -75,6 +75,11 @@ class _RegistroViewState extends State<RegistroView> {
       ),
     );
     if (!mounted || !ok) return;
+    // Servidor con `sinVerificacion`: la sesión ya está abierta.
+    if (auth.phase == AuthPhase.authenticated) {
+      goHomeByRole(context, auth.role);
+      return;
+    }
     Navigator.pushNamed(context, AppRoutes.registroVerificar);
   }
 
@@ -101,9 +106,14 @@ class _RegistroViewState extends State<RegistroView> {
               if (auth.hayRegistroPendiente) ...[
                 const SizedBox(height: AppSpacing.lg),
                 StatusBanner(
-                  tone: BannerTone.info,
-                  message:
-                      'Ya enviamos un código a ${auth.registroDestino ?? 'tu correo'}.',
+                  tone: auth.registroEmailEnviado
+                      ? BannerTone.info
+                      : BannerTone.aviso,
+                  message: auth.registroEmailEnviado
+                      ? 'Ya enviamos un código a '
+                            '${auth.registroDestino ?? 'tu correo'}.'
+                      : 'Tu cuenta está creada, pero no pudimos enviar el '
+                            'código. Pide otro desde la siguiente pantalla.',
                 ),
                 Align(
                   alignment: Alignment.centerLeft,
@@ -181,7 +191,7 @@ class _RegistroViewState extends State<RegistroView> {
                 autofillHints: const [AutofillHints.email],
                 decoration: const InputDecoration(
                   labelText: 'Correo',
-                  helperText: 'Te enviaremos un código para confirmarlo',
+                  helperText: 'Con él también puedes iniciar sesión',
                 ),
                 validator: validarCorreo,
               ),
@@ -274,13 +284,25 @@ class _RegistroViewState extends State<RegistroView> {
                     ),
                     Padding(
                       padding: const EdgeInsets.only(left: AppSpacing.xxl),
-                      child: TextButton(
-                        key: const Key('registro_leer_aviso'),
-                        onPressed: () => Navigator.pushNamed(
-                          context,
-                          AppRoutes.avisoPrivacidad,
-                        ),
-                        child: const Text('Leer el aviso de privacidad'),
+                      child: Wrap(
+                        children: [
+                          TextButton(
+                            key: const Key('registro_leer_aviso'),
+                            onPressed: () => Navigator.pushNamed(
+                              context,
+                              AppRoutes.avisoPrivacidad,
+                            ),
+                            child: const Text('Leer el aviso de privacidad'),
+                          ),
+                          TextButton(
+                            key: const Key('registro_leer_terminos'),
+                            onPressed: () => Navigator.pushNamed(
+                              context,
+                              AppRoutes.terminos,
+                            ),
+                            child: const Text('Leer los términos de uso'),
+                          ),
+                        ],
                       ),
                     ),
                     if (field.hasError)
@@ -439,7 +461,8 @@ class _VerificarRegistroViewState extends State<VerificarRegistroView> {
   @override
   Widget build(BuildContext context) {
     final auth = context.watch<AuthViewModel>();
-    final destino = auth.registroDestino;
+    // Solo se dice a dónde se envió si el correo salió de verdad.
+    final destino = auth.registroEmailEnviado ? auth.registroDestino : null;
     return AuthScaffold(
       leading: IconButton(
         tooltip: 'Volver al registro',

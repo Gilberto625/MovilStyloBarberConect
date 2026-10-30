@@ -272,3 +272,99 @@ class EliminarCuentaViewModel extends ChangeNotifier {
     }
   }
 }
+
+/// Términos de uso desde `/public/legal/?tipo=terminos`. Son públicos: se
+/// leen sin sesión, por ejemplo antes de crear la cuenta.
+class TerminosViewModel extends ChangeNotifier {
+  TerminosViewModel(this._repository);
+
+  final PrivacidadRepository _repository;
+
+  LoadState state = LoadState.idle;
+  String? errorMessage;
+  ContenidoLegalDto? terminos;
+
+  Future<void> load() async {
+    state = LoadState.loading;
+    errorMessage = null;
+    notifyListeners();
+    try {
+      terminos = await _repository.getTerminos();
+      state = terminos == null ? LoadState.empty : LoadState.ready;
+    } catch (e) {
+      errorMessage = e.toString();
+      state = LoadState.error;
+    }
+    notifyListeners();
+  }
+}
+
+/// Perfil › Privacidad › "Pedir código por correo al iniciar sesión"
+/// (`/perfil/2fa/`). Apagado por defecto; el valor manda el servidor.
+class Verificacion2faViewModel extends ChangeNotifier {
+  Verificacion2faViewModel(this._repository);
+
+  final PrivacidadRepository _repository;
+
+  LoadState state = LoadState.idle;
+  String? errorMessage;
+  Preferencia2fa? preferencia;
+  bool guardando = false;
+
+  /// Error al guardar. Se conserva el valor anterior del servidor.
+  String? errorGuardar;
+  String? mensaje;
+
+  bool get activo => preferencia?.email2fa ?? false;
+
+  bool get puedeCambiar =>
+      state == LoadState.ready &&
+      !guardando &&
+      (preferencia?.puedeGestionar ?? false);
+
+  Future<void> load() async {
+    state = LoadState.loading;
+    errorMessage = null;
+    errorGuardar = null;
+    mensaje = null;
+    notifyListeners();
+    try {
+      preferencia = await _repository.getPreferencia2fa();
+      state = LoadState.ready;
+    } catch (e) {
+      errorMessage = e.toString();
+      state = LoadState.error;
+    }
+    notifyListeners();
+  }
+
+  /// Guarda en el servidor y muestra lo que quedó guardado.
+  Future<bool> cambiar(bool valor) async {
+    if (!puedeCambiar || valor == activo) return false;
+    guardando = true;
+    errorGuardar = null;
+    mensaje = null;
+    notifyListeners();
+    try {
+      final guardada = await _repository.guardarPreferencia2fa(valor);
+      // El PUT no trae `puede_gestionar`: se conserva el de la lectura.
+      preferencia = Preferencia2fa(
+        email2fa: guardada.email2fa,
+        puedeGestionar: preferencia?.puedeGestionar ?? true,
+        motivoBloqueo: preferencia?.motivoBloqueo ?? '',
+        proveedorAuth: guardada.proveedorAuth,
+      );
+      mensaje = guardada.email2fa
+          ? 'Listo. Te pediremos un código al iniciar sesión.'
+          : 'Listo. Entrarás solo con tu contraseña.';
+      guardando = false;
+      notifyListeners();
+      return true;
+    } catch (e) {
+      errorGuardar = e.toString();
+      guardando = false;
+      notifyListeners();
+      return false;
+    }
+  }
+}

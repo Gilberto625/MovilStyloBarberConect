@@ -33,13 +33,25 @@ class PrivacidadRepository {
       _auth.actualizarPerfil(cambios);
 
   /// El bloque `privacidad` de `/public/legal/`, o `null` si no está publicado.
-  Future<ContenidoLegalDto?> getAvisoPrivacidad() async {
-    final contenidos = await _publico.fetchContenidoLegal(tipo: 'privacidad');
+  Future<ContenidoLegalDto?> getAvisoPrivacidad() => _legal('privacidad');
+
+  /// El bloque `terminos` de `/public/legal/` (el mismo que la web muestra en
+  /// `/nosotros?tipo=terminos`), o `null` si no está publicado.
+  Future<ContenidoLegalDto?> getTerminos() => _legal('terminos');
+
+  Future<ContenidoLegalDto?> _legal(String tipo) async {
+    final contenidos = await _publico.fetchContenidoLegal(tipo: tipo);
     for (final c in contenidos) {
-      if (c.tipo == 'privacidad' && c.contenido.trim().isNotEmpty) return c;
+      if (c.tipo == tipo && c.contenido.trim().isNotEmpty) return c;
     }
     return null;
   }
+
+  /// Verificación por correo al iniciar sesión (`/perfil/2fa/`).
+  Future<Preferencia2fa> getPreferencia2fa() => _auth.preferencia2fa();
+
+  Future<Preferencia2fa> guardarPreferencia2fa(bool activo) =>
+      _auth.guardarPreferencia2fa(email2fa: activo);
 
   /// Preferencias del usuario autenticado, desde el servidor.
   Future<ConsentimientoPrivacidad> getConsentimiento() =>
