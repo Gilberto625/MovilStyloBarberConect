@@ -368,9 +368,14 @@ void main() {
     testWidgets('el centro de privacidad lleva a sus tres pantallas', (
       tester,
     ) async {
+      when(repo.getPreferencia2fa())
+          .thenAnswer((_) async => const Preferencia2fa(email2fa: false));
       await _pump(
         tester,
-        const PrivacidadView(),
+        ChangeNotifierProvider(
+          create: (_) => Verificacion2faViewModel(repo),
+          child: const PrivacidadView(),
+        ),
         routes: {
           '/privacidad/mis-datos': (_) => const Text('ruta-mis-datos'),
           '/privacidad/editar-perfil': (_) => const Text('ruta-editar'),
