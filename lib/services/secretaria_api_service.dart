@@ -76,7 +76,7 @@ class SecretariaApiService {
 
   Future<List<SecretariaClienteDto>> buscarClientes(String q) async {
     final map = await _ok(
-      await _api.get('/secretaria/clientes/', query: {'q': q}),
+      _api.get('/secretaria/clientes/', query: {'q': q}),
       'Respuesta de clientes inválida.',
       'No se pudieron buscar clientes.',
     );
@@ -94,7 +94,7 @@ class SecretariaApiService {
     required String telefono,
   }) async {
     final map = await _ok(
-      await _api.post(
+      _api.post(
         '/secretaria/clientes/',
         body: {
           'modo': 'anonimo',
@@ -121,7 +121,7 @@ class SecretariaApiService {
 
   Future<List<SecretariaCitaResumenDto>> citasDeCliente(int clienteId) async {
     final map = await _ok(
-      await _api.get(
+      _api.get(
         '/secretaria/citas/buscar/',
         query: {'cliente_id': '$clienteId'},
       ),
@@ -141,7 +141,7 @@ class SecretariaApiService {
 
   Future<SecretariaCitaEditableDto> citaEditable(int citaId) async {
     final map = await _ok(
-      await _api.get('/secretaria/citas/$citaId/editar/'),
+      _api.get('/secretaria/citas/$citaId/editar/'),
       'Respuesta de cita inválida.',
       'No se pudo cargar la cita.',
     );
