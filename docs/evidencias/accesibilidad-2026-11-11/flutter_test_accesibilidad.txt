@@ -1,0 +1,178 @@
+00:00 +0: loading test/accesibilidad/guias_android_test.dart
+00:00 +0: test/accesibilidad/guias_android_test.dart: QA-006 guías Android · login · 412x915
+00:01 +1: test/accesibilidad/pantalla_pequena_test.dart: S8-03 reserva completa en 360x640
+00:01 +2: test/accesibilidad/pantalla_pequena_test.dart: S8-03 reserva completa en 360x640
+00:02 +3: test/accesibilidad/pantalla_pequena_test.dart: S8-03 reserva completa en 360x640
+00:02 +4: test/accesibilidad/pantalla_pequena_test.dart: S8-03 reserva completa en 360x640
+00:02 +5: test/accesibilidad/texto_ampliado_test.dart: PM10 reserva completa con texto ×1.3
+00:02 +6: test/accesibilidad/guias_android_test.dart: QA-006 guías Android · agendar_1 · 412x915
+00:02 +7: test/accesibilidad/guias_android_test.dart: QA-006 guías Android · agendar_1 · 412x915
+00:02 +8: test/accesibilidad/texto_ampliado_test.dart: QA-006 login con texto ×1.3 sin overflow
+00:03 +9: test/accesibilidad/pantalla_pequena_test.dart: S8-03 registro en 360x640: sin overflow y alcanzable
+00:03 +10: test/accesibilidad/pantalla_pequena_test.dart: S8-03 registro en 360x640: sin overflow y alcanzable
+00:03 +11: test/accesibilidad/texto_ampliado_test.dart: QA-006 registro con texto ×1.3 sin overflow
+00:03 +12: test/accesibilidad/guias_android_test.dart: QA-006 guías Android · agendar_3 · 412x915
+00:03 +13: test/accesibilidad/guias_android_test.dart: QA-006 guías Android · agendar_3 · 412x915
+00:03 +14: test/accesibilidad/guias_android_test.dart: QA-006 guías Android · agendar_3 · 412x915
+00:03 +15: test/accesibilidad/guias_android_test.dart: QA-006 guías Android · agendar_3 · 412x915
+00:03 +16: test/accesibilidad/pantalla_pequena_test.dart: S8-03 agendar_1 en 360x640: sin overflow y alcanzable
+00:03 +17: test/accesibilidad/pantalla_pequena_test.dart: S8-03 agendar_1 en 360x640: sin overflow y alcanzable
+00:03 +18: test/accesibilidad/guias_android_test.dart: QA-006 guías Android · agendar_4 · 412x915
+00:04 +19: test/accesibilidad/guias_android_test.dart: QA-006 guías Android · agendar_4 · 412x915
+00:04 +20: test/accesibilidad/guias_android_test.dart: QA-006 guías Android · agendar_4 · 412x915
+00:04 +21: test/accesibilidad/guias_android_test.dart: QA-006 guías Android · agendar_4 · 412x915
+00:04 +22: test/accesibilidad/pantalla_pequena_test.dart: S8-03 agendar_3 en 360x640: sin overflow y alcanzable
+00:04 +23: test/accesibilidad/texto_ampliado_test.dart: QA-006 agendar_3 con texto ×1.3 sin overflow
+00:04 +24: test/accesibilidad/texto_ampliado_test.dart: QA-006 agendar_3 con texto ×1.3 sin overflow
+00:04 +25: test/accesibilidad/pantalla_pequena_test.dart: S8-03 agendar_4 en 360x640: sin overflow y alcanzable
+00:05 +26: test/accesibilidad/pantalla_pequena_test.dart: S8-03 agendar_4 en 360x640: sin overflow y alcanzable
+00:05 +27: test/accesibilidad/texto_ampliado_test.dart: QA-006 agendar_4 con texto ×1.3 sin overflow
+00:05 +28: test/accesibilidad/texto_ampliado_test.dart: QA-006 agendar_4 con texto ×1.3 sin overflow
+00:05 +29: test/accesibilidad/guias_android_test.dart: QA-006 guías Android · cancelar_cita · 412x915
+00:05 +30: test/accesibilidad/pantalla_pequena_test.dart: S8-03 detalle_cita en 360x640: sin overflow y alcanzable
+00:05 +31: test/accesibilidad/pantalla_pequena_test.dart: S8-03 detalle_cita en 360x640: sin overflow y alcanzable
+00:05 +32: test/accesibilidad/guias_android_test.dart: QA-006 guías Android · cliente_perfil · 412x915
+00:05 +33: test/accesibilidad/texto_ampliado_test.dart: QA-006 detalle_cita con texto ×1.3 sin overflow
+00:06 +34: test/accesibilidad/pantalla_pequena_test.dart: S8-03 cancelar_cita en 360x640: sin overflow y alcanzable
+00:06 +35: test/accesibilidad/pantalla_pequena_test.dart: S8-03 cancelar_cita en 360x640: sin overflow y alcanzable
+00:06 +36: test/accesibilidad/texto_ampliado_test.dart: QA-006 cancelar_cita con texto ×1.3 sin overflow
+00:06 +37: test/accesibilidad/guias_android_test.dart: QA-006 guías Android · secretaria_detalle · 412x915
+00:06 +38: test/accesibilidad/guias_android_test.dart: QA-006 guías Android · secretaria_detalle · 412x915
+00:06 +39: test/accesibilidad/texto_ampliado_test.dart: QA-006 cliente_perfil con texto ×1.3 sin overflow
+00:06 +40: test/accesibilidad/pantalla_pequena_test.dart: S8-03 secretaria_hoy en 360x640: sin overflow y alcanzable
+00:07 +41: test/accesibilidad/guias_android_test.dart: QA-006 guías Android · secretaria_cobro · 412x915
+00:07 +42: test/accesibilidad/guias_android_test.dart: QA-006 guías Android · secretaria_cobro · 412x915
+00:07 +43: test/accesibilidad/pantalla_pequena_test.dart: S8-03 secretaria_detalle en 360x640: sin overflow y alcanzable
+00:07 +44: test/accesibilidad/texto_ampliado_test.dart: QA-006 secretaria_detalle con texto ×1.3 sin overflow
+00:07 +45: test/accesibilidad/guias_android_test.dart: QA-006 guías Android · secretaria_no_asistio · 412x915
+00:08 +46: test/accesibilidad/pantalla_pequena_test.dart: S8-03 secretaria_cobro en 360x640: sin overflow y alcanzable
+00:08 +47: test/accesibilidad/texto_ampliado_test.dart: QA-006 secretaria_cobro con texto ×1.3 sin overflow
+00:08 +48: test/accesibilidad/texto_ampliado_test.dart: QA-006 secretaria_cobro con texto ×1.3 sin overflow
+00:08 +49: test/accesibilidad/texto_ampliado_test.dart: QA-006 secretaria_cobro con texto ×1.3 sin overflow
+00:08 +50: test/accesibilidad/pantalla_pequena_test.dart: S8-03 secretaria_no_asistio en 360x640: sin overflow y alcanzable
+00:08 +51: test/accesibilidad/pantalla_pequena_test.dart: S8-03 secretaria_no_asistio en 360x640: sin overflow y alcanzable
+00:08 +52: test/accesibilidad/pantalla_pequena_test.dart: S8-03 secretaria_no_asistio en 360x640: sin overflow y alcanzable
+00:08 +53: test/accesibilidad/texto_ampliado_test.dart: QA-006 secretaria_no_asistio con texto ×1.3 sin overflow
+00:08 +54: test/accesibilidad/texto_ampliado_test.dart: QA-006 secretaria_no_asistio con texto ×1.3 sin overflow
+00:08 +55: test/accesibilidad/texto_ampliado_test.dart: QA-006 secretaria_no_asistio con texto ×1.3 sin overflow
+00:08 +56: test/accesibilidad/guias_android_test.dart: QA-006 guías Android · agendar_1 · 360x640
+00:08 +57: test/accesibilidad/pantalla_pequena_test.dart: S8-03 reserva completa en 360x640 texto ×1.3
+00:08 +58: test/accesibilidad/pantalla_pequena_test.dart: S8-03 reserva completa en 360x640 texto ×1.3
+00:09 +59: test/accesibilidad/pantalla_pequena_test.dart: S8-03 reserva completa en 360x640 texto ×1.3
+00:09 +60: test/accesibilidad/texto_ampliado_test.dart: PM10 reserva completa con texto ×2.0
+00:09 +61: test/accesibilidad/texto_ampliado_test.dart: PM10 reserva completa con texto ×2.0
+00:09 +62: test/accesibilidad/guias_android_test.dart: QA-006 guías Android · agendar_3 · 360x640
+00:09 +63: test/accesibilidad/pantalla_pequena_test.dart: S8-03 registro en 360x640 texto ×1.3: sin overflow y alcanzable
+00:09 +64: test/accesibilidad/pantalla_pequena_test.dart: S8-03 registro en 360x640 texto ×1.3: sin overflow y alcanzable
+00:09 +65: test/accesibilidad/guias_android_test.dart: QA-006 guías Android · agendar_4 · 360x640
+00:09 +66: test/accesibilidad/guias_android_test.dart: QA-006 guías Android · agendar_4 · 360x640
+00:09 +67: test/accesibilidad/guias_android_test.dart: QA-006 guías Android · agendar_4 · 360x640
+00:10 +68: test/accesibilidad/guias_android_test.dart: QA-006 guías Android · agendar_4 · 360x640
+00:10 +69: test/accesibilidad/guias_android_test.dart: QA-006 guías Android · agendar_4 · 360x640
+00:10 +70: test/accesibilidad/pantalla_pequena_test.dart: S8-03 agendar_1 en 360x640 texto ×1.3: sin overflow y alcanzable
+00:10 +71: test/accesibilidad/pantalla_pequena_test.dart: S8-03 agendar_1 en 360x640 texto ×1.3: sin overflow y alcanzable
+00:10 +72: test/accesibilidad/guias_android_test.dart: QA-006 guías Android · mis_citas · 360x640
+00:10 +73: test/accesibilidad/texto_ampliado_test.dart: QA-006 agendar_1 con texto ×2.0 sin overflow
+00:10 +74: test/accesibilidad/texto_ampliado_test.dart: QA-006 agendar_1 con texto ×2.0 sin overflow
+00:10 +75: test/accesibilidad/guias_android_test.dart: QA-006 guías Android · detalle_cita · 360x640
+00:10 +76: test/accesibilidad/pantalla_pequena_test.dart: S8-03 agendar_3 en 360x640 texto ×1.3: sin overflow y alcanzable
+00:10 +77: test/accesibilidad/pantalla_pequena_test.dart: S8-03 agendar_3 en 360x640 texto ×1.3: sin overflow y alcanzable
+00:11 +78: test/accesibilidad/guias_android_test.dart: QA-006 guías Android · cancelar_cita · 360x640
+00:11 +79: test/accesibilidad/texto_ampliado_test.dart: QA-006 agendar_3 con texto ×2.0 sin overflow
+00:11 +80: test/accesibilidad/pantalla_pequena_test.dart: S8-03 agendar_4 en 360x640 texto ×1.3: sin overflow y alcanzable
+00:11 +81: test/accesibilidad/pantalla_pequena_test.dart: S8-03 agendar_4 en 360x640 texto ×1.3: sin overflow y alcanzable
+00:11 +82: test/accesibilidad/texto_ampliado_test.dart: QA-006 agendar_4 con texto ×2.0 sin overflow
+00:11 +83: test/accesibilidad/texto_ampliado_test.dart: QA-006 agendar_4 con texto ×2.0 sin overflow
+00:11 +84: test/accesibilidad/texto_ampliado_test.dart: QA-006 agendar_4 con texto ×2.0 sin overflow
+00:11 +85: test/accesibilidad/guias_android_test.dart: QA-006 guías Android · secretaria_detalle · 360x640
+00:11 +86: test/accesibilidad/pantalla_pequena_test.dart: S8-03 detalle_cita en 360x640 texto ×1.3: sin overflow y alcanzable
+00:11 +87: test/accesibilidad/pantalla_pequena_test.dart: S8-03 detalle_cita en 360x640 texto ×1.3: sin overflow y alcanzable
+00:11 +88: test/accesibilidad/guias_android_test.dart: QA-006 guías Android · secretaria_cobro · 360x640
+00:12 +89: test/accesibilidad/guias_android_test.dart: QA-006 guías Android · secretaria_cobro · 360x640
+00:12 +90: test/accesibilidad/guias_android_test.dart: QA-006 guías Android · secretaria_cobro · 360x640
+00:12 +91: test/accesibilidad/texto_ampliado_test.dart: QA-006 cancelar_cita con texto ×2.0 sin overflow
+00:12 +92: test/accesibilidad/texto_ampliado_test.dart: QA-006 cancelar_cita con texto ×2.0 sin overflow
+00:12 +93: test/accesibilidad/guias_android_test.dart: QA-006 guías Android · secretaria_no_asistio · 360x640
+00:12 +94: test/accesibilidad/guias_android_test.dart: QA-006 guías Android · secretaria_no_asistio · 360x640
+00:12 +95: test/accesibilidad/guias_android_test.dart: QA-006 guías Android · secretaria_no_asistio · 360x640
+00:12 +96: test/accesibilidad/pantalla_pequena_test.dart: S8-03 secretaria_detalle en 360x640 texto ×1.3: sin overflow y alcanzable
+00:12 +97: test/accesibilidad/pantalla_pequena_test.dart: S8-03 secretaria_detalle en 360x640 texto ×1.3: sin overflow y alcanzable
+00:12 +98: test/accesibilidad/pantalla_pequena_test.dart: S8-03 secretaria_detalle en 360x640 texto ×1.3: sin overflow y alcanzable
+00:12 +99: test/accesibilidad/pantalla_pequena_test.dart: S8-03 secretaria_detalle en 360x640 texto ×1.3: sin overflow y alcanzable
+00:12 +100: test/accesibilidad/texto_ampliado_test.dart: QA-006 secretaria_detalle con texto ×2.0 sin overflow
+00:13 +101: test/accesibilidad/texto_ampliado_test.dart: QA-006 secretaria_detalle con texto ×2.0 sin overflow
+00:13 +102: test/accesibilidad/texto_ampliado_test.dart: QA-006 secretaria_detalle con texto ×2.0 sin overflow
+00:13 +103: test/accesibilidad/pantalla_pequena_test.dart: S8-03 secretaria_cobro en 360x640 texto ×1.3: sin overflow y alcanzable
+00:13 +104: test/accesibilidad/pantalla_pequena_test.dart: S8-03 secretaria_cobro en 360x640 texto ×1.3: sin overflow y alcanzable
+00:13 +105: test/accesibilidad/texto_ampliado_test.dart: QA-006 secretaria_cobro con texto ×2.0 sin overflow
+00:13 +106: test/accesibilidad/texto_ampliado_test.dart: QA-006 secretaria_cobro con texto ×2.0 sin overflow
+00:13 +107: test/accesibilidad/texto_ampliado_test.dart: QA-006 secretaria_cobro con texto ×2.0 sin overflow
+00:13 +108: test/accesibilidad/pantalla_pequena_test.dart: S8-03 secretaria_no_asistio en 360x640 texto ×1.3: sin overflow y alcanzable
+00:14 +109: test/accesibilidad/guias_android_test.dart: QA-006 guías Android · agendar_3 · 412x915 texto ×2.0
+00:14 +110: test/accesibilidad/guias_android_test.dart: QA-006 guías Android · agendar_3 · 412x915 texto ×2.0
+00:14 +111: test/accesibilidad/texto_ampliado_test.dart: QA-006 secretaria_no_asistio con texto ×2.0 sin overflow
+00:14 +112: test/accesibilidad/pantalla_pequena_test.dart: S8-03 reserva completa en 360x640 texto ×2.0
+00:14 +113: test/accesibilidad/pantalla_pequena_test.dart: S8-03 reserva completa en 360x640 texto ×2.0
+00:14 +114: test/accesibilidad/pantalla_pequena_test.dart: S8-03 reserva completa en 360x640 texto ×2.0
+00:14 +115: test/accesibilidad/pantalla_pequena_test.dart: S8-03 reserva completa en 360x640 texto ×2.0
+00:14 +116: test/accesibilidad/guias_android_test.dart: QA-006 guías Android · mis_citas · 412x915 texto ×2.0
+00:14 +117: test/accesibilidad/guias_android_test.dart: QA-006 guías Android · mis_citas · 412x915 texto ×2.0
+00:14 +118: test/accesibilidad/pantalla_pequena_test.dart: S8-03 registro en 360x640 texto ×2.0: sin overflow y alcanzable
+00:15 +119: test/accesibilidad/guias_android_test.dart: QA-006 guías Android · detalle_cita · 412x915 texto ×2.0
+00:15 +120: test/accesibilidad/pantalla_pequena_test.dart: S8-03 invitado en 360x640 texto ×2.0: sin overflow y alcanzable
+00:15 +121: test/accesibilidad/guias_android_test.dart: QA-006 guías Android · cancelar_cita · 412x915 texto ×2.0
+00:15 +122: test/accesibilidad/guias_android_test.dart: QA-006 guías Android · cancelar_cita · 412x915 texto ×2.0
+00:15 +123: test/accesibilidad/guias_android_test.dart: QA-006 guías Android · cancelar_cita · 412x915 texto ×2.0
+00:15 +124: test/accesibilidad/pantalla_pequena_test.dart: S8-03 agendar_2 en 360x640 texto ×2.0: sin overflow y alcanzable
+00:15 +125: test/accesibilidad/guias_android_test.dart: QA-006 guías Android · cliente_perfil · 412x915 texto ×2.0
+00:15 +126: test/accesibilidad/pantalla_pequena_test.dart: S8-03 agendar_3 en 360x640 texto ×2.0: sin overflow y alcanzable
+00:15 +127: test/accesibilidad/pantalla_pequena_test.dart: S8-03 agendar_3 en 360x640 texto ×2.0: sin overflow y alcanzable
+00:16 +128: test/accesibilidad/guias_android_test.dart: QA-006 guías Android · secretaria_detalle · 412x915 texto ×2.0
+00:16 +129: test/accesibilidad/pantalla_pequena_test.dart: S8-03 agendar_4 en 360x640 texto ×2.0: sin overflow y alcanzable
+00:16 +130: test/accesibilidad/guias_android_test.dart: QA-006 guías Android · secretaria_cobro · 412x915 texto ×2.0
+00:16 +131: test/accesibilidad/guias_android_test.dart: QA-006 guías Android · secretaria_cobro · 412x915 texto ×2.0
+00:16 +132: test/accesibilidad/pantalla_pequena_test.dart: S8-03 detalle_cita en 360x640 texto ×2.0: sin overflow y alcanzable
+00:16 +133: test/accesibilidad/guias_android_test.dart: QA-006 guías Android · secretaria_no_asistio · 412x915 texto ×2.0
+00:16 +134: test/accesibilidad/pantalla_pequena_test.dart: S8-03 cancelar_cita en 360x640 texto ×2.0: sin overflow y alcanzable
+00:17 +135: test/accesibilidad/guias_android_test.dart: QA-006 guías Android · barbero_agenda · 412x915 texto ×2.0
+00:17 +136: test/accesibilidad/pantalla_pequena_test.dart: S8-03 cliente_perfil en 360x640 texto ×2.0: sin overflow y alcanzable
+00:17 +137: test/accesibilidad/pantalla_pequena_test.dart: S8-03 cliente_perfil en 360x640 texto ×2.0: sin overflow y alcanzable
+00:17 +138: test/accesibilidad/guias_android_test.dart: QA-006 guías Android · registro · completa 360 de ancho
+00:17 +139: test/accesibilidad/pantalla_pequena_test.dart: S8-03 secretaria_hoy en 360x640 texto ×2.0: sin overflow y alcanzable
+00:17 +140: test/accesibilidad/guias_android_test.dart: QA-006 guías Android · invitado · completa 360 de ancho
+00:17 +141: test/accesibilidad/pantalla_pequena_test.dart: S8-03 secretaria_detalle en 360x640 texto ×2.0: sin overflow y alcanzable
+00:17 +142: test/accesibilidad/pantalla_pequena_test.dart: S8-03 secretaria_detalle en 360x640 texto ×2.0: sin overflow y alcanzable
+00:17 +143: test/accesibilidad/pantalla_pequena_test.dart: S8-03 secretaria_detalle en 360x640 texto ×2.0: sin overflow y alcanzable
+00:17 +144: test/accesibilidad/guias_android_test.dart: QA-006 guías Android · agendar_2 · completa 360 de ancho
+00:17 +145: test/accesibilidad/pantalla_pequena_test.dart: S8-03 secretaria_cobro en 360x640 texto ×2.0: sin overflow y alcanzable
+00:17 +146: test/accesibilidad/guias_android_test.dart: QA-006 guías Android · agendar_3 · completa 360 de ancho
+00:18 +147: test/accesibilidad/pantalla_pequena_test.dart: S8-03 secretaria_no_asistio en 360x640 texto ×2.0: sin overflow y alcanzable
+00:18 +148: test/accesibilidad/pantalla_pequena_test.dart: S8-03 secretaria_no_asistio en 360x640 texto ×2.0: sin overflow y alcanzable
+00:18 +149: test/accesibilidad/guias_android_test.dart: QA-006 guías Android · mis_citas · completa 360 de ancho
+00:18 +150: test/accesibilidad/guias_android_test.dart: QA-006 guías Android · mis_citas · completa 360 de ancho
+00:18 +151: test/accesibilidad/guias_android_test.dart: QA-006 guías Android · detalle_cita · completa 360 de ancho
+00:18 +152: test/accesibilidad/guias_android_test.dart: QA-006 guías Android · cancelar_cita · completa 360 de ancho
+00:18 +153: test/accesibilidad/guias_android_test.dart: QA-006 guías Android · cliente_perfil · completa 360 de ancho
+00:18 +154: test/accesibilidad/guias_android_test.dart: QA-006 guías Android · secretaria_hoy · completa 360 de ancho
+00:19 +155: test/accesibilidad/guias_android_test.dart: QA-006 guías Android · secretaria_detalle · completa 360 de ancho
+00:19 +156: test/accesibilidad/guias_android_test.dart: QA-006 guías Android · secretaria_cobro · completa 360 de ancho
+00:19 +157: test/accesibilidad/guias_android_test.dart: QA-006 guías Android · secretaria_no_asistio · completa 360 de ancho
+00:19 +158: test/accesibilidad/guias_android_test.dart: QA-006 guías Android · barbero_agenda · completa 360 de ancho
+00:19 +159: test/accesibilidad/guias_android_test.dart: QA-006 guías Android · login · completa 412 de ancho, texto ×2.0
+00:19 +160: test/accesibilidad/guias_android_test.dart: QA-006 guías Android · registro · completa 412 de ancho, texto ×2.0
+00:20 +161: test/accesibilidad/guias_android_test.dart: QA-006 guías Android · invitado · completa 412 de ancho, texto ×2.0
+00:20 +162: test/accesibilidad/guias_android_test.dart: QA-006 guías Android · cliente_inicio · completa 412 de ancho, texto ×2.0
+00:20 +163: test/accesibilidad/guias_android_test.dart: QA-006 guías Android · agendar_1 · completa 412 de ancho, texto ×2.0
+00:20 +164: test/accesibilidad/guias_android_test.dart: QA-006 guías Android · agendar_2 · completa 412 de ancho, texto ×2.0
+00:20 +165: test/accesibilidad/guias_android_test.dart: QA-006 guías Android · agendar_3 · completa 412 de ancho, texto ×2.0
+00:20 +166: test/accesibilidad/guias_android_test.dart: QA-006 guías Android · agendar_4 · completa 412 de ancho, texto ×2.0
+00:20 +167: test/accesibilidad/guias_android_test.dart: QA-006 guías Android · mis_citas · completa 412 de ancho, texto ×2.0
+00:21 +168: test/accesibilidad/guias_android_test.dart: QA-006 guías Android · detalle_cita · completa 412 de ancho, texto ×2.0
+00:21 +169: test/accesibilidad/guias_android_test.dart: QA-006 guías Android · cancelar_cita · completa 412 de ancho, texto ×2.0
+00:21 +170: test/accesibilidad/guias_android_test.dart: QA-006 guías Android · cliente_perfil · completa 412 de ancho, texto ×2.0
+00:21 +171: test/accesibilidad/guias_android_test.dart: QA-006 guías Android · secretaria_hoy · completa 412 de ancho, texto ×2.0
+00:21 +172: test/accesibilidad/guias_android_test.dart: QA-006 guías Android · secretaria_detalle · completa 412 de ancho, texto ×2.0
+00:21 +173: test/accesibilidad/guias_android_test.dart: QA-006 guías Android · secretaria_cobro · completa 412 de ancho, texto ×2.0
+00:22 +174: test/accesibilidad/guias_android_test.dart: QA-006 guías Android · secretaria_no_asistio · completa 412 de ancho, texto ×2.0
+00:22 +175: test/accesibilidad/guias_android_test.dart: QA-006 guías Android · barbero_agenda · completa 412 de ancho, texto ×2.0
+00:22 +176: All tests passed!

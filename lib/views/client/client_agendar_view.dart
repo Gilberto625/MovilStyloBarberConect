@@ -561,32 +561,36 @@ class SelectorHorario extends StatelessWidget {
       children: [
         Text(fechaLarga(isoFecha(fecha)), style: theme.titleLarge),
         const SizedBox(height: AppSpacing.md),
-        SizedBox(
-          height: 76,
-          child: ListView.separated(
-            scrollDirection: Axis.horizontal,
-            itemCount: dias.length + 1,
-            separatorBuilder: (_, _) => const SizedBox(width: AppSpacing.sm),
-            itemBuilder: (context, i) {
-              if (i == dias.length) {
-                return _DiaChip(
-                  key: Key('${keyPrefix}_otra_fecha'),
-                  arriba: 'Otra',
-                  abajo: 'fecha',
-                  selected: false,
-                  onTap: onOtraFecha,
-                  icon: Icons.calendar_month_outlined,
-                );
-              }
-              final d = dias[i];
-              return _DiaChip(
-                key: ValueKey('$keyPrefix-dia-${isoFecha(d)}'),
-                arriba: i == 0 ? 'Hoy' : diaSemanaCorto(d),
-                abajo: '${d.day}',
-                selected: isoFecha(d) == isoFecha(fecha),
-                onTap: () => onFecha(d),
-              );
-            },
+        // Fila de días: crece con el texto ampliado en lugar de fijar 76 dp
+        // (GH#19, QA-006). Son 15 chips, no hace falta construirla perezosa.
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: IntrinsicHeight(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                for (var i = 0; i <= dias.length; i++) ...[
+                  if (i > 0) const SizedBox(width: AppSpacing.sm),
+                  if (i == dias.length)
+                    _DiaChip(
+                      key: Key('${keyPrefix}_otra_fecha'),
+                      arriba: 'Otra',
+                      abajo: 'fecha',
+                      selected: false,
+                      onTap: onOtraFecha,
+                      icon: Icons.calendar_month_outlined,
+                    )
+                  else
+                    _DiaChip(
+                      key: ValueKey('$keyPrefix-dia-${isoFecha(dias[i])}'),
+                      arriba: i == 0 ? 'Hoy' : diaSemanaCorto(dias[i]),
+                      abajo: '${dias[i].day}',
+                      selected: isoFecha(dias[i]) == isoFecha(fecha),
+                      onTap: () => onFecha(dias[i]),
+                    ),
+                ],
+              ],
+            ),
           ),
         ),
         const SizedBox(height: AppSpacing.xl),
@@ -666,7 +670,7 @@ class _DiaChip extends StatelessWidget {
       child: AnimatedContainer(
         duration: dur,
         curve: AppMotion.ease,
-        width: 60,
+        constraints: const BoxConstraints(minWidth: 60, minHeight: 76),
         decoration: BoxDecoration(
           color: selected ? AppColors.gold : AppColors.surface,
           borderRadius: AppRadii.controlBorder,
@@ -680,28 +684,34 @@ class _DiaChip extends StatelessWidget {
             borderRadius: AppRadii.controlBorder,
             onTap: onTap,
             child: ExcludeSemantics(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    arriba,
-                    style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                      color: selected ? AppColors.onGold : AppColors.muted,
-                    ),
-                  ),
-                  const SizedBox(height: 2),
-                  if (icon != null)
-                    Icon(icon, size: 20, color: color)
-                  else
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppSpacing.xs,
+                  vertical: AppSpacing.sm,
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
                     Text(
-                      abajo,
-                      style: AppText.cifra(
-                        size: 20,
-                        color: color,
-                        weight: FontWeight.w800,
+                      arriba,
+                      style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                        color: selected ? AppColors.onGold : AppColors.muted,
                       ),
                     ),
-                ],
+                    const SizedBox(height: 2),
+                    if (icon != null)
+                      Icon(icon, size: 20, color: color)
+                    else
+                      Text(
+                        abajo,
+                        style: AppText.cifra(
+                          size: 20,
+                          color: color,
+                          weight: FontWeight.w800,
+                        ),
+                      ),
+                  ],
+                ),
               ),
             ),
           ),

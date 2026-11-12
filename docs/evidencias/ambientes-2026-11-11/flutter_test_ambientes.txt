@@ -1,0 +1,29 @@
+$ flutter test --reporter expanded test/ambientes
+00:00 +0: loading test/ambientes/app_config_ambiente_test.dart
+00:00 +0: test/ambientes/app_config_ambiente_test.dart: CORE-001 resolución por ambiente dev: valor por defecto, Django local del emulador
+00:00 +1: test/ambientes/app_config_ambiente_test.dart: CORE-001 resolución por ambiente dev acepta otra URL (dispositivo en LAN) y quita la barra final
+00:00 +2: test/ambientes/app_config_ambiente_test.dart: CORE-001 resolución por ambiente staging: exige API_BASE_URL porque no hay servidor propio
+00:00 +3: test/ambientes/app_config_ambiente_test.dart: CORE-001 resolución por ambiente prod: Render por HTTPS y sin etiqueta
+00:00 +4: test/ambientes/app_config_ambiente_test.dart: CORE-001 resolución por ambiente prod exige HTTPS
+00:00 +5: test/ambientes/app_config_ambiente_test.dart: CORE-001 resolución por ambiente APP_ENV desconocido es un error claro
+00:00 +6: test/ambientes/app_config_ambiente_test.dart: CORE-001 resolución por ambiente API_BASE_URL sin esquema http(s) o sin host es un error
+00:00 +7: test/ambientes/app_config_ambiente_test.dart: CORE-001 la app identifica el ambiente dev muestra DEV y el host de la API
+00:00 +8: test/ambientes/app_config_ambiente_test.dart: CORE-001 la app identifica el ambiente dev muestra DEV y el host de la API
+00:00 +9: test/ambientes/arranque_ambiente_test.dart: CORE-001 arranque en dev: etiqueta en el acceso
+00:00 +10: test/ambientes/arranque_ambiente_test.dart: CORE-001 arranque en dev: etiqueta en el acceso
+00:00 +11: test/ambientes/arranque_ambiente_test.dart: CORE-001 arranque en dev: etiqueta en el acceso
+00:00 +12: test/ambientes/arranque_ambiente_test.dart: CORE-001 arranque en dev: etiqueta en el acceso
+00:01 +13: All tests passed!
+
+$ flutter test --reporter expanded test/ambientes/arranque_ambiente_test.dart --dart-define=APP_ENV=staging --dart-define=API_BASE_URL=http://10.0.2.2:8000/api
+00:00 +0: loading test/ambientes/arranque_ambiente_test.dart
+00:00 +0: CORE-001 el build resuelve su ambiente (staging)
+00:00 +1: CORE-001 arranque en staging: etiqueta en el acceso
+00:01 +2: All tests passed!
+
+$ flutter test --reporter expanded test/ambientes/arranque_ambiente_test.dart --dart-define=APP_ENV=prod
+00:00 +0: loading test/ambientes/arranque_ambiente_test.dart
+00:00 +0: CORE-001 el build resuelve su ambiente (prod)
+00:00 +1: CORE-001 arranque en prod: etiqueta en el acceso
+00:01 +2: All tests passed!
+

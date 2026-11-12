@@ -31,20 +31,27 @@ lib/
 
 Flujo: **View → ViewModel → Repository → API Service → Django REST**
 
-## Configuración de API (`--dart-define`)
+## Ambientes y configuración de API (`--dart-define`)
+
+La app distingue tres ambientes con `APP_ENV` (`dev` por defecto, `staging`, `prod`). La tabla completa, las reglas y los comandos están en **[docs/AMBIENTES.md](docs/AMBIENTES.md)** (GH#68, CORE-001).
 
 ```bash
-# Emulador Android → Django local
-flutter run --dart-define=API_BASE_URL=http://10.0.2.2:8000/api
+# dev (por defecto): emulador Android → Django local
+flutter run
 
-# Dispositivo físico en LAN (HTTP solo en debug; ver network_security_config)
+# dev en dispositivo físico en LAN (HTTP solo en debug; ver network_security_config)
 flutter run --dart-define=API_BASE_URL=http://192.168.x.x:8000/api
 
-# Producción (default embebido, HTTPS)
-flutter run --dart-define=API_BASE_URL=https://backendstylobarberconect-lo71.onrender.com/api
+# staging: no hay servidor propio, la URL es obligatoria
+flutter run --dart-define=APP_ENV=staging --dart-define=API_BASE_URL=http://10.0.2.2:8000/api
+
+# prod: Render por HTTPS (lo que compila release.yml)
+flutter build appbundle --release --obfuscate --split-debug-info=build/symbols/<versión> --dart-define=APP_ENV=prod
 ```
 
-Cleartext HTTP está permitido **solo en el manifest debug** hacia `10.0.2.2`, `localhost` y `127.0.0.1`. Release no hereda esa configuración.
+- Fuera de `prod` la app muestra una etiqueta discreta (`DEV · host` o `STAGING · host`) al pie del inicio de sesión y en Perfil. En `prod` no se muestra nada.
+- `prod` exige HTTPS. Un `APP_ENV` desconocido o una URL inválida no arranca contra ningún backend: muestra "Configuración de ambiente no válida" con el motivo.
+- Cleartext HTTP está permitido **solo en el manifest debug** hacia `10.0.2.2`, `localhost` y `127.0.0.1`. Release no hereda esa configuración.
 
 ## Instalación y ejecución
 
@@ -149,6 +156,10 @@ Pruebas unitarias (Actividad 3):
 | `test/unit/` | `PM-U01` (validador de correo), `fromJson` con fixtures y ViewModels con Mockito (`verify`, errores HTTP, timeout, doble toque) |
 | `test/fixtures/` | JSON con la forma real de las respuestas de Django, con datos ficticios |
 | `test/mocks/` | `mocks.dart` declara los mocks; `mocks.mocks.dart` es generado y se versiona para que CI no necesite `build_runner` |
+
+Accesibilidad (GH#19 QA-006, PM10, S8-03) en `test/accesibilidad/`: guías de Android (etiquetas para TalkBack, objetivos de 48×48 dp, contraste), texto ×1.3 y ×2.0 y pantalla de 360×640 en las pantallas críticas. Evidencia y checklist en `docs/evidencias/accesibilidad-2026-11-11/`.
+
+Ambientes (GH#68) en `test/ambientes/`: resolución de `APP_ENV`/`API_BASE_URL` y etiqueta por ambiente.
 
 Si cambia la firma de un repository, regenera los mocks y súbelos en el mismo PR:
 
