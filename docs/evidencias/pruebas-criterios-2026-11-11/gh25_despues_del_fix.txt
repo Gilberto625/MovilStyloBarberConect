@@ -1,0 +1,6 @@
+00:00 +0: loading test/criterios/reserva_cliente_test.dart
+00:00 +0: GH#17 error de red al reservar GH#17 sin conexión: mensaje claro, cita no creada y el reintento sí la crea
+00:00 +1: GH#17 error de red al reservar GH#17 NetworkException desde el repositorio no marca la cita como creada
+00:00 +2: GH#25 / PM07-a doble envío al confirmar GH#25 PM07-a mientras se envía, "Confirmar reserva" queda deshabilitado y se crea una sola cita
+00:01 +3: GH#25 / PM07-a doble envío al confirmar GH#25 un segundo toque mientras se revisa la política no envía otra reserva
+00:01 +4: All tests passed!

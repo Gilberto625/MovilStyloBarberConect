@@ -575,6 +575,11 @@ class _SecretaryReprogramarViewState extends State<SecretaryReprogramarView> {
   final _notas = TextEditingController();
   SecretariaGestionViewModel? _gestion;
 
+  /// La cita se pide después del primer cuadro: pedirla aquí avisaba a los
+  /// oyentes en plena construcción ("markNeedsBuild() called during build").
+  /// Hasta entonces se muestra la carga, no lo que quedó de otra cita.
+  bool _pedida = false;
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -583,7 +588,12 @@ class _SecretaryReprogramarViewState extends State<SecretaryReprogramarView> {
       _gestion?.removeListener(_copiarNotas);
       _gestion = vm;
       vm.addListener(_copiarNotas);
-      vm.cargarEditable(widget.citaId);
+      _pedida = false;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted || !identical(_gestion, vm)) return;
+        _pedida = true;
+        vm.cargarEditable(widget.citaId);
+      });
     }
   }
 
@@ -704,7 +714,8 @@ class _SecretaryReprogramarViewState extends State<SecretaryReprogramarView> {
         body: SafeArea(
           child: Consumer<SecretariaGestionViewModel>(
             builder: (context, vm, _) {
-              if (vm.editableState == LoadState.loading ||
+              if (!_pedida ||
+                  vm.editableState == LoadState.loading ||
                   vm.editableState == LoadState.idle) {
                 return const LoadingView(label: 'Cargando cita…');
               }
