@@ -1,0 +1,19 @@
+# Batería de API contra Django local (127.0.0.1:8000, PostgreSQL local). 2026-11-11T21:35:54
+[datos] servicio "Barba" id=2 precio vigente=100.00 duración=30 min; barbero id=3; fecha=2026-11-14
+[PM08-2] precio_total=150.00 (mayor al vigente) -> HTTP 400: precio_total no puede exceder el total del servicio y complementos.
+[PM08-3] duracion_minutos=5 enviada por la app -> HTTP 201, cita #1579; el servidor guardó duracion_minutos=30 y precio_total=100.0 (vigentes: 30 min, 100.00)
+[PM08-1] servicio 2 desactivado en la base local (filas=['1'])
+[PM08-1] reserva con el servicio inactivo -> HTTP 400: Servicio principal no encontrado o inactivo.
+[PM08-1] servicio 2 reactivado (filas=['1'])
+[PM02] cliente A crea la cita #1580 -> HTTP 201
+[PM02] GET /mis-citas/ con el token de B: 2 citas; ¿incluye la #1580 de A? no
+[PM02] B intenta cancelar la cita #1580 de A -> HTTP 404: Cita no encontrada.
+[PM02] B intenta reprogramar la cita #1580 de A -> HTTP 404: Cita no encontrada.
+[PM02] la cita #1580 sigue "confirmada" para A
+[PM04] ronda 1 (13:00): 4 reservas simultáneas -> aceptadas 1, rechazadas [400, 400, 400]
+[PM04] ronda 2 (14:00): 4 reservas simultáneas -> aceptadas 1, rechazadas [400, 400, 400]
+[PM04] ronda 3 (15:00): 4 reservas simultáneas -> aceptadas 1, rechazadas [400, 400, 400]
+[PM04] ronda 4 (16:00): 4 reservas simultáneas -> aceptadas 1, rechazadas [400, 400, 400]
+[PM04] ronda 5 (17:00): 4 reservas simultáneas -> aceptadas 0, rechazadas [400, 400, 400, 400]
+[PM04] rondas: 5; con más de una aceptada: 0
+# Limpieza: 6 citas de prueba canceladas en la base local.

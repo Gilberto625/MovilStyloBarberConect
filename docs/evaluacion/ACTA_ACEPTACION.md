@@ -36,7 +36,7 @@ Detalle y evidencia de cada fila en `CATALOGO_PRUEBAS.md`.
 | Integración en emulador | PI-01 (reserva) y recorrido de tres roles, 1/1 cada uno (19 y 20-oct) |
 | Backend (Django) | 401 pruebas; los 5 fallos son previos y de módulos que la app no usa (ML y passkeys web) |
 | Seguridad | SAST, R8, ofuscación, secretos, pinning, almacenamiento cifrado, permisos y matriz Debug/Release aprobados. JADX, MobSF y DAST pendientes. Frida y Ghidra fuera de alcance |
-| No funcionales | Accesibilidad automatizada, pantalla pequeña y red aprobadas. Rendimiento, TalkBack y matriz de dispositivos en ejecución |
+| No funcionales | Accesibilidad automatizada, pantalla pequeña y red aprobadas. Rendimiento (100 % ≤ 3 s), matriz de dispositivos (API 24 y 37, 360 dp, texto 200 %) y TalkBack aprobados el 2026-11-11; el recorrido de TalkBack con gestos lo debe confirmar una persona |
 
 ### Casos críticos y altos
 
@@ -51,7 +51,7 @@ Detalle y evidencia de cada fila en `CATALOGO_PRUEBAS.md`.
 | PM07 Doble pulsación y pérdida de red | Alta | **Parcial**: doble pulsación y pérdida de red aprobadas; **pendiente** el reintento que verifica si la cita ya quedó (falta idempotencia en el backend) | `cliente_cambios_cita_test.dart`, `api_client_errores_red_test.dart` |
 | PM09 Cierre y cambio de sesión | Alta | Aprobado | Capturas del 20-oct y del 6-nov |
 
-Prioridad media: **PM08** pendiente (solo verificado leyendo el código del backend) y **PM10** pendiente (TalkBack en ejecución; ERR-17 cosmético).
+Prioridad media: **PM08** aprobado el 2026-11-11 por API y **PM10** aprobado con la limitación de TalkBack por gestos (ERR-17 cosmético). Ver `BATERIA_FINAL_PM.md`.
 
 ## 3. Defectos
 
