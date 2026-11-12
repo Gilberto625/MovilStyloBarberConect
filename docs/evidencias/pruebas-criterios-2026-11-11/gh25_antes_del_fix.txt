@@ -1,0 +1,36 @@
+00:00 +0: loading test/criterios/reserva_cliente_test.dart
+00:00 +0: GH#17 error de red al reservar GH#17 sin conexión: mensaje claro, cita no creada y el reintento sí la crea
+00:00 +1: GH#17 error de red al reservar GH#17 NetworkException desde el repositorio no marca la cita como creada
+00:00 +2: GH#25 / PM07-a doble envío al confirmar GH#25 PM07-a mientras se envía, "Confirmar reserva" queda deshabilitado y se crea una sola cita
+00:01 +3: GH#25 / PM07-a doble envío al confirmar GH#25 un segundo toque mientras se revisa la política no envía otra reserva
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: <1>
+  Actual: <2>
+Unexpected number of calls
+
+When the exception was thrown, this was the stack:
+#0      fail (package:matcher/src/expect/expect.dart:187:31)
+#1      _expect (package:matcher/src/expect/expect.dart:182:3)
+#2      expect (package:matcher/src/expect/expect.dart:65:3)
+#3      VerificationResult.called (package:mockito/src/mock.dart:1065:5)
+#4      main.<anonymous closure>.<anonymous closure> (test/criterios/reserva_cliente_test.dart:305:43)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+The test description was:
+  GH#25 un segundo toque mientras se revisa la política no envía otra reserva
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:01 +3 -1: GH#25 / PM07-a doble envío al confirmar GH#25 un segundo toque mientras se revisa la política no envía otra reserva [E]
+  Test failed. See exception logs above.
+  The test description was: GH#25 un segundo toque mientras se revisa la política no envía otra reserva
+  
+00:01 +3 -1: Some tests failed.
+
+Failing tests:
+  test/criterios/reserva_cliente_test.dart: GH#25 / PM07-a doble envío al confirmar GH#25 un segundo toque mientras se revisa la política no envía otra reserva

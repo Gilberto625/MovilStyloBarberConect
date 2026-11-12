@@ -1,0 +1,4 @@
+00:00 +0: loading test/criterios/secretaria_criterios_test.dart
+00:00 +0: US-SEC-EDITAR si el servidor rechaza el horario, se ve su mensaje y la cita no queda reprogramada
+00:01 +1: US-SEC-EDITAR abrir Reprogramar muestra la carga primero y no avisa a los oyentes durante la construcción
+00:01 +2: All tests passed!
