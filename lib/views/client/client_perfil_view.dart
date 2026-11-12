@@ -6,6 +6,7 @@ import '../../models/auth_models.dart';
 import '../../routes/app_routes.dart';
 import '../../viewmodels/auth_viewmodel.dart';
 import '../../widgets/common_widgets.dart';
+import '../../widgets/etiqueta_ambiente.dart';
 import 'client_tienda_view.dart';
 import 'client_widgets.dart';
 
@@ -148,6 +149,8 @@ class _ClientPerfilTabState extends State<ClientPerfilTab> {
                   icon: const Icon(Icons.logout_rounded),
                   label: const Text('Cerrar sesión'),
                 ),
+                // Solo fuera de producción (GH#68).
+                const EtiquetaAmbiente(),
               ],
             ),
           ),

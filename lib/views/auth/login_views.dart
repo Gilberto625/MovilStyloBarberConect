@@ -6,6 +6,7 @@ import '../../core/validation/validators.dart';
 import '../../models/auth_models.dart';
 import '../../routes/app_routes.dart';
 import '../../viewmodels/auth_viewmodel.dart';
+import '../../widgets/etiqueta_ambiente.dart';
 import 'auth_widgets.dart';
 
 /// Invitado › Pantalla 7: Inicia sesión (Actividad 3).
@@ -158,6 +159,8 @@ class _LoginViewState extends State<LoginView> {
                   ),
                 ],
               ),
+              // Solo fuera de producción (GH#68).
+              const EtiquetaAmbiente(),
             ],
           ),
         ),

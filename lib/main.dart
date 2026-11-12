@@ -17,6 +17,14 @@ import 'viewmodels/secretaria_hoy_viewmodel.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   AppFonts.configurar();
+  try {
+    AppConfig.ambiente;
+  } on AmbienteInvalido catch (e) {
+    // Build mal configurado: se dice qué corregir en vez de arrancar contra
+    // un backend equivocado.
+    runApp(AmbienteInvalidoApp(mensaje: e.mensaje));
+    return;
+  }
   final scope = AppScope.create();
   runApp(StyloBarberApp(scope: scope));
 }
@@ -57,6 +65,47 @@ class StyloBarberApp extends StatelessWidget {
         localizationsDelegates: AppLocale.delegates,
         initialRoute: AppRoutes.splash,
         onGenerateRoute: AppRoutes.onGenerateRoute,
+      ),
+    );
+  }
+}
+
+/// Pantalla única cuando `APP_ENV`/`API_BASE_URL` no son válidos.
+class AmbienteInvalidoApp extends StatelessWidget {
+  const AmbienteInvalidoApp({super.key, required this.mensaje});
+
+  final String mensaje;
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: AppConfig.appName,
+      debugShowCheckedModeBanner: false,
+      theme: AppTheme.panel(),
+      home: Scaffold(
+        body: SafeArea(
+          child: Center(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(Icons.settings_outlined, size: 40),
+                  const SizedBox(height: 16),
+                  Builder(
+                    builder: (context) => Text(
+                      'Configuración de ambiente no válida',
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Text(mensaje, textAlign: TextAlign.center),
+                ],
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }

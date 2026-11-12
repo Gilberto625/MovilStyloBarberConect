@@ -101,9 +101,11 @@ jobs:
         shell: bash
         env:
           FULL: ${{ steps.version.outputs.full }}
+        # APP_ENV=prod: sin etiqueta de ambiente y HTTPS obligatorio (docs/AMBIENTES.md).
+        # API_BASE_URL no se pasa: prod usa la URL de Render embebida en AppConfig.
         run: |
-          flutter build appbundle --release --obfuscate --split-debug-info="build/symbols/$FULL"
-          flutter build apk       --release --obfuscate --split-debug-info="build/symbols/$FULL"
+          flutter build appbundle --release --obfuscate --split-debug-info="build/symbols/$FULL" --dart-define=APP_ENV=prod
+          flutter build apk       --release --obfuscate --split-debug-info="build/symbols/$FULL" --dart-define=APP_ENV=prod
 
       - name: Verify signature is not debug
         shell: bash
