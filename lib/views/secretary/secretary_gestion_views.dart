@@ -9,6 +9,7 @@ import '../../viewmodels/secretaria_gestion_viewmodel.dart';
 import '../../viewmodels/secretaria_hoy_viewmodel.dart';
 import '../../widgets/common_widgets.dart';
 import '../../widgets/press_scale.dart';
+import 'secretary_home_view.dart' show SecretaryNav;
 
 class SecretaryNuevaCitaView extends StatefulWidget {
   const SecretaryNuevaCitaView({super.key});
@@ -116,7 +117,14 @@ class _SecretaryNuevaCitaViewState extends State<SecretaryNuevaCitaView> {
     if (id == null) return;
     await context.read<SecretariaHoyViewModel>().load(fecha: vm.fecha);
     if (!mounted) return;
-    Navigator.pop(context);
+    // Dentro del panel, "Nueva cita" es una pestaña y no una ruta: hacer pop
+    // sacaría el panel completo y dejaría la pantalla en negro (BUG-02).
+    final nav = SecretaryNav.maybeOf(context);
+    if (nav != null) {
+      nav.go(0);
+    } else {
+      Navigator.maybePop(context);
+    }
   }
 
   Future<bool> _confirmar(String title, String message) async {

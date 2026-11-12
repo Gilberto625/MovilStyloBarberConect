@@ -1,0 +1,8 @@
+[11/Nov/2026 21:17:56] "GET /api/mis-citas/ HTTP/1.1" 200 1203
+[11/Nov/2026 21:18:39] "GET /api/disponibilidad/?barbero_id=2&fecha=2026-11-13&duracion=30 HTTP/1.1" 200 1039
+[11/Nov/2026 21:18:59] "GET /api/disponibilidad/?barbero_id=2&fecha=2026-11-16&duracion=30 HTTP/1.1" 200 1039
+[11/Nov/2026 21:19:19] "GET /api/citas/politica-pago/?cliente_id=1 HTTP/1.1" 200 304
+[11/Nov/2026 21:19:32] "GET /api/citas/politica-pago/?cliente_id=1 HTTP/1.1" 200 304
+[11/Nov/2026 21:19:32] "GET /api/citas/politica-pago/?cliente_id=1 HTTP/1.1" 200 304
+[11/Nov/2026 21:19:32] "POST /api/citas/ HTTP/1.1" 201 235
+[11/Nov/2026 21:19:32] "GET /api/mis-citas/ HTTP/1.1" 200 1681

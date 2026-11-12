@@ -14,6 +14,8 @@ import 'package:stylo_barber_connect/viewmodels/home_guest_viewmodel.dart';
 import 'package:stylo_barber_connect/viewmodels/secretaria_gestion_viewmodel.dart';
 import 'package:stylo_barber_connect/viewmodels/secretaria_hoy_viewmodel.dart';
 import 'package:stylo_barber_connect/views/secretary/secretary_gestion_views.dart';
+import 'package:stylo_barber_connect/views/secretary/secretary_home_view.dart'
+    show SecretaryNav;
 
 void main() {
   test('a short client query does not call the server', () async {
@@ -123,6 +125,47 @@ void main() {
     expect(find.text('Selecciona un cliente.'), findsWidgets);
     expect(secretaria.creaciones, 0);
   });
+
+  testWidgets(
+    'BUG-02 al crear la cita desde la pestaña Nueva vuelve a Hoy y no cierra el panel',
+    (tester) async {
+      final secretaria = _Secretaria()
+        ..crearListo.complete({'ok': true, 'id': 51});
+      final gestion = _vm(secretaria);
+      final hoy = SecretariaHoyViewModel(secretaria);
+      addTearDown(gestion.dispose);
+      addTearDown(hoy.dispose);
+      _seleccionar(gestion);
+      int? pestana;
+      await tester.pumpWidget(
+        MultiProvider(
+          providers: [
+            ChangeNotifierProvider<SecretariaGestionViewModel>.value(
+              value: gestion,
+            ),
+            ChangeNotifierProvider<SecretariaHoyViewModel>.value(value: hoy),
+          ],
+          child: MaterialApp(
+            theme: AppTheme.guest(),
+            home: SecretaryNav(
+              go: (i) => pestana = i,
+              child: const SecretaryNuevaCitaView(),
+            ),
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      _seleccionar(gestion);
+      await tester.ensureVisible(find.text('Confirmar cita'));
+      await tester.tap(find.text('Confirmar cita'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.widgetWithText(ElevatedButton, 'Confirmar'));
+      await tester.pumpAndSettle();
+      expect(secretaria.creaciones, 1);
+      expect(pestana, 0);
+      expect(find.byType(SecretaryNuevaCitaView), findsOneWidget);
+    },
+  );
 }
 
 SecretariaGestionViewModel _vm(_Secretaria secretaria, {_Citas? citas}) {

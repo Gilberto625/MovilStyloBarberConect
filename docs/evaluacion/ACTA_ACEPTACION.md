@@ -35,8 +35,8 @@ Detalle y evidencia de cada fila en `CATALOGO_PRUEBAS.md`.
 | Flutter (unitarias, widget e integración HTTP) | **349 de 349** aprobadas el 2026-11-06; cobertura de líneas **79.51 %** en CI (run 42258784727) |
 | Integración en emulador | PI-01 (reserva) y recorrido de tres roles, 1/1 cada uno (19 y 20-oct) |
 | Backend (Django) | 401 pruebas; los 5 fallos son previos y de módulos que la app no usa (ML y passkeys web) |
-| Seguridad | SAST, R8, ofuscación, secretos, pinning, almacenamiento cifrado, permisos y matriz Debug/Release aprobados. JADX, MobSF y DAST pendientes. Frida y Ghidra fuera de alcance |
-| No funcionales | Accesibilidad automatizada, pantalla pequeña y red aprobadas. Rendimiento, TalkBack y matriz de dispositivos en ejecución |
+| Seguridad | SAST, R8, ofuscación, secretos, pinning, almacenamiento cifrado, permisos y matriz Debug/Release aprobados. JADX (`JADX_RESULTADOS.md`) y DAST con ZAP contra el backend local (`DAST_RESULTADOS.md`, sin críticos ni altos confirmados) aprobados el 2026-11-11. MobSF pendiente. Frida y Ghidra fuera de alcance |
+| No funcionales | Accesibilidad automatizada, pantalla pequeña y red aprobadas. Rendimiento (100 % ≤ 3 s), matriz de dispositivos (API 24 y 37, 360 dp, texto 200 %) y TalkBack aprobados el 2026-11-11; el recorrido de TalkBack con gestos lo debe confirmar una persona |
 
 ### Casos críticos y altos
 
@@ -51,7 +51,7 @@ Detalle y evidencia de cada fila en `CATALOGO_PRUEBAS.md`.
 | PM07 Doble pulsación y pérdida de red | Alta | **Parcial**: doble pulsación y pérdida de red aprobadas; **pendiente** el reintento que verifica si la cita ya quedó (falta idempotencia en el backend) | `cliente_cambios_cita_test.dart`, `api_client_errores_red_test.dart` |
 | PM09 Cierre y cambio de sesión | Alta | Aprobado | Capturas del 20-oct y del 6-nov |
 
-Prioridad media: **PM08** pendiente (solo verificado leyendo el código del backend) y **PM10** pendiente (TalkBack en ejecución; ERR-17 cosmético).
+Prioridad media: **PM08** aprobado el 2026-11-11 por API y **PM10** aprobado con la limitación de TalkBack por gestos (ERR-17 cosmético). Ver `BATERIA_FINAL_PM.md`.
 
 ## 3. Defectos
 
@@ -73,6 +73,8 @@ Fuente: `docs/evaluacion/REGISTRO_ERRORES.md`.
 | ERR-14 | Backend: reservas simultáneas duplicadas | Backend PR #6, en `main` con el #7 |
 | **ERR-15 (BUG-01)** | Secretaría: buscar clientes, cliente de paso y reprogramar fallaban con un error de tipo `Future` | **App PR #125**, fusionado en `develop` el 2026-11-12. Falta publicarlo en una versión |
 | **ERR-16** | Backend: el alta de cliente de paso respondía 500 | **Backend PR #11**, fusionado en `main` el 2026-11-06 |
+| ERR-18 | La CI de `develop` fallaba con Flutter 3.50.0 sin versión fija | App PR #127 (Flutter 3.47.9 fijo), fusionado el 2026-11-12 |
+| **ERR-19 (BUG-02)** | Secretaría: crear una cita desde la pestaña "Nueva" dejaba la pantalla en negro | Corregido en la rama del **PR #129** (en revisión), con prueba que falla antes y pasa después |
 
 ERR-08 (el release no permite HTTP sin cifrar) es un control esperado, no un defecto.
 
@@ -82,19 +84,18 @@ ERR-08 (el release no permite HTTP sin cifrar) es un control esperado, no un def
 |---|---|---|---|
 | ERR-05 | Backend: pruebas de ML que fallan desde antes (falta `matplotlib`; un mock de segmentación). En la corrida del 6-nov también fallan 3 de passkeys (web) | No afecta a la app | Corregir en el backend |
 | ERR-17 | "Productos" se parte en dos líneas en la barra del invitado con texto al 130 % | Cosmético | Ajuste de la etiqueta y prueba de widget |
-| ERR-18 | La CI de `develop` falla en `flutter analyze` con Flutter 3.50.0 (versión sin fijar) | Bloquea los checks de los PR hasta corregirlo | Fijar la versión de Flutter en los workflows y luego migrar a `material_ui` |
 
 ## 4. Limitaciones y bloqueos
 
 1. **Producción en Google Play.** La app está en prueba cerrada. Para pedir producción, Play exige **12 testers aceptados durante 14 días seguidos**. Hasta cumplirlo, no hay versión en producción.
 2. **Sin teléfono físico.** Todas las pruebas en dispositivo se hicieron en **emuladores** (Android 17, API 37). Falta repetir capturas y almacenamiento cifrado en un Android real.
-3. **Frida y Ghidra**, fuera de alcance por decisión del equipo (2026-11-11). Tampoco se hicieron JADX-GUI, MobSF ni DAST; lo equivalente se midió con las herramientas del SDK (`ANALISIS_ESTATICO.md`).
+3. **Frida y Ghidra**, fuera de alcance por decisión del equipo (2026-11-11). JADX (CLI 1.5.6) y DAST con ZAP 2.17.0 se ejecutaron el 2026-11-11 (`JADX_RESULTADOS.md`, `DAST_RESULTADOS.md`). MobSF no se ejecutó.
 4. **Historias del backlog no implementadas:**
    - Recuperar y cambiar la contraseña desde la app.
    - Recordatorios de citas por WhatsApp.
    - Cola sin conexión de la secretaría (necesita `client_event_id` e idempotencia en el backend; también resolvería PM07-c).
    - Cron de supresión ARCO: el comando `suprimir_cuentas_vencidas` existe y tiene pruebas, pero según la matriz de cumplimiento (revisión del 21-oct) no está programado como Cron Job en Render. Sin él, las cuentas canceladas quedan bloqueadas y no se suprimen solas a los 30 días.
-5. **Mediciones en curso:** rendimiento (30 mediciones), TalkBack y matriz de dispositivos se están ejecutando; sus resultados irán en `RENDIMIENTO.md` y `MATRIZ_DISPOSITIVOS.md`.
+5. **Mediciones del 2026-11-11:** rendimiento aprobado (`RENDIMIENTO.md`), matriz de dispositivos aprobada sin teléfono físico (`MATRIZ_DISPOSITIVOS.md`) y batería final PM01–PM10 aprobada (`BATERIA_FINAL_PM.md`). El recorrido de TalkBack con gestos lo debe confirmar una persona.
 6. **El PR #125 no está publicado.** La versión de Play (0.8.1+5) todavía tiene ERR-15 en la secretaría. Se corrige con la siguiente versión (1.0.0-rc.1).
 7. **Alcance de roles:** falta el visto bueno del docente a `DECISION_ALCANCE_ROLES.md`.
 8. **Dependencias:** hay tres majors pendientes (`flutter_secure_storage`, `google_fonts`, `cupertino_icons`) que requieren pruebas antes de actualizar (`AUDITORIA_DEPENDENCIAS.md`).

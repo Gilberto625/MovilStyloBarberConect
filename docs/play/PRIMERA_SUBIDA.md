@@ -2,13 +2,15 @@
 
 Para la versión **0.8.0-beta.1+4** (HITO 03 – Versión beta integrada). Se hace desde la cuenta de desarrollador ya pagada, después de **verificar la identidad** con el teléfono Android.
 
+> **Estado al 2026-11-11.** Esta guía se escribió para la 0.8.0-beta.1+4. Según `docs/evaluacion/ACTA_ACEPTACION.md`, la versión en la prueba cerrada (Alpha) es la **0.8.1+5** (release [v0.8.1](https://github.com/Gilberto625/MovilStyloBarberConect/releases/tag/v0.8.1)). Los pasos son los mismos con ese AAB. Ya están hechos: los marcadores de la política y el backend PR #8. La siguiente subida será la 1.0.0-rc.1, con las correcciones de ERR-15 y ERR-19.
+
 ## 0. Antes de empezar (una sola vez)
 | Qué | Quién | Para qué |
 |---|---|---|
 | Verificar identidad y domicilio en Play Console | El dueño de la cuenta, con su teléfono Android | Sin esto Play no deja crear versiones |
-| Llenar los 2 marcadores de la política de privacidad (responsable y correo ARCO) desde el panel admin de la web | Equipo | Play revisa que la política diga quién es el responsable |
-| Cuenta de revisor de **cliente** en producción, con el 2FA apagado desde el perfil web | Equipo | Los revisores no reciben códigos por correo |
-| Fusionar el backend PR #8 | Equipo | Mantiene despierto el backend durante la revisión |
+| ~~Llenar los 2 marcadores de la política de privacidad~~ Hecho: al 2026-11-11 la política publicada ya no los tiene | Equipo | Play revisa que la política diga quién es el responsable |
+| Cuenta de revisor de **cliente** en producción, con el código por correo apagado (viene apagado por defecto desde la 0.8.1) | Equipo | Los revisores no reciben códigos por correo |
+| ~~Fusionar el backend PR #8~~ Hecho el 2026-10-29 | Equipo | Mantiene despierto el backend durante la revisión |
 
 ## 1. Bajar el AAB firmado
 1. GitHub › **Actions** › workflow **Release build** › la ejecución de la rama `release` con versión `0.8.0-beta.1+4`.

@@ -20,7 +20,7 @@ Reúne todas las pruebas de la app móvil y de la API que usa, con su versión, 
 |---|---|
 | **V-F** | App: `main` 0.8.1+5 (`f16e65f`) más el PR #125 (`ad9afd6`). Es el contenido de `develop` en `b04e63c` |
 | **V-B** | Backend: `main` en `970e9ad` (incluye los PR #7 y #11) |
-| **E-T** | `flutter test` (VM de Dart, sin dispositivo). Corrida del 2026-11-06: **349 de 349 aprobadas** (`docs/evidencias/pruebas/2026-11-06/catalogo_flutter.txt`). La misma suite en CI del PR #125, run [42258784727](https://github.com/Gilberto625/MovilStyloBarberConect/actions/runs/42258784727) (Flutter 3.47.9): 349/349, **cobertura de líneas 79.51 %** (5537/6964), mínimo 55 % |
+| **E-T** | `flutter test` (VM de Dart, sin dispositivo). Corrida del 2026-11-06: **349 de 349 aprobadas** (`docs/evidencias/pruebas/2026-11-06/catalogo_flutter.txt`). Corrida final del 2026-11-11 sobre `develop` + PR #129: **539 de 539 aprobadas** (las 349 anteriores + 176 de accesibilidad, 13 de ambientes y la de BUG-02). La misma suite en CI del PR #125, run [42258784727](https://github.com/Gilberto625/MovilStyloBarberConect/actions/runs/42258784727) (Flutter 3.47.9): 349/349, **cobertura de líneas 79.51 %** (5537/6964), mínimo 55 % |
 | **E-D** | `python manage.py test core.tests` sobre V-B con PostgreSQL local, 2026-11-06: **401 pruebas**, 5 fallos previos ajenos a la app (`docs/evidencias/pruebas/2026-11-06/catalogo_backend.txt`; PR #11 del backend) |
 | **E-E** | Emulador Android `Medium_Phone_API_37.0` (Android 17, 1080 × 2400) contra Django local con PostgreSQL local. Nunca contra producción ni Neon |
 | **E-CI** | GitHub Actions (`ci.yml`, `release.yml`, `pinning.yml`) |
@@ -150,7 +150,7 @@ Versión **V-B**, entorno **E-D**, 2026-11-06. Esperado: todas en verde. Observa
 | ID | Prueba | Versión / entorno | Esperado | Observado | Estado | Evidencia |
 |---|---|---|---|---|---|---|
 | SEG-01 | SAST con Semgrep (`p/secrets`, `p/security-audit`, `p/owasp-top-ten` y reglas propias) | V-F, E-CI, 2026-11-06 | 0 hallazgos de severidad ERROR | Job "SAST Semgrep gate" en verde (también en el push del 12-nov) | Aprobado | Run [42258784727](https://github.com/Gilberto625/MovilStyloBarberConect/actions/runs/42258784727); `.semgrep.yml`; `docs/evaluacion/POLITICA_CI_SAST.md` |
-| SEG-02 | Análisis estático (`flutter analyze`) | V-F, E-CI | 0 incidencias | Con Flutter 3.47.9 (6-nov): limpio. Con Flutter 3.50.0 (12-nov): 58 avisos de deprecación y el job falla | Pendiente (ERR-18: fijar la versión de Flutter en CI) | Runs [42258784727](https://github.com/Gilberto625/MovilStyloBarberConect/actions/runs/42258784727) y [43135262264](https://github.com/Gilberto625/MovilStyloBarberConect/actions/runs/43135262264) |
+| SEG-02 | Análisis estático (`flutter analyze`) | V-F, E-CI | 0 incidencias | Con Flutter 3.47.9 (6-nov): limpio. Con Flutter 3.50.0 (12-nov): 58 avisos de deprecación y el job falla | Aprobado tras PR #127 (ERR-18 corregido: Flutter fijo en 3.47.9): fijar la versión de Flutter en CI) | Runs [42258784727](https://github.com/Gilberto625/MovilStyloBarberConect/actions/runs/42258784727) y [43135262264](https://github.com/Gilberto625/MovilStyloBarberConect/actions/runs/43135262264) |
 | SEG-03 | R8 / ProGuard | `develop` `67e04ab` (0.1.0+1), 2026-10-21 | Clases Java/Kotlin renombradas | 981 de 1 038 (95 %) | Aprobado | `docs/evidencias/estatico-2026-10-21/ANALISIS_ESTATICO.md` |
 | SEG-04 | Ofuscación Dart (`--obfuscate --split-debug-info`) | Ídem | Identificadores de la app ausentes en `libapp.so` | 14 identificadores pasan de 1–2 apariciones a 0; el APK ofuscado funciona en emulador | Aprobado | Ídem; el AAB de 0.8.1 lo generó `release.yml`, run [41021801630](https://github.com/Gilberto625/MovilStyloBarberConect/actions/runs/41021801630) (no se volvió a analizar) |
 | SEG-05 | Secretos en el APK | Ídem | Ninguna clave privada, API key ni token | Ninguno | Aprobado | Ídem |
@@ -160,22 +160,22 @@ Versión **V-B**, entorno **E-D**, 2026-11-06. Esperado: todas en verde. Observa
 | SEG-09 | Observación: "Nearby devices" en la pantalla de permisos | App 0.8.1 debug en emulador, 2026-11-06 | — | Android 17 lista "Nearby devices — Accessed in past 24 hours" bajo "Allowed to keep app working", aunque el manifiesto solo declara `INTERNET` | Pendiente: confirmar el origen (posiblemente el acceso a la red local `10.0.2.2` del build debug) y revisarlo en el AAB de Play | `docs/manual/img/perm_02_permisos.jpg` |
 | SEG-10 | Matriz Debug / Release | 3 APK del 19-oct | Controles distintos por build | Comprobado con `aapt2` y lectura de binarios | Aprobado | `docs/evidencias/seguridad/2026-10-19/README.md` |
 | SEG-11 | Aislamiento por rol en el servidor | V-B, E-D y recorridos | 403/404 para otros roles y citas ajenas | Así ocurre | Aprobado | Sección 4; `docs/evidencias/cierre-funcional-2026-10-23/` |
-| SEG-12 | JADX-GUI (antes y después de ofuscar) | — | Capturas de JADX | No se instaló; lo mismo se midió con `aapt2`, `apksigner` y `tool/analisis_apk.py` (SEG-03 a SEG-05) | Pendiente: decisión del equipo de bajar JADX | `ANALISIS_ESTATICO.md`, sección "Pendiente" |
+| SEG-12 | JADX (CLI 1.5.6): APK debug contra el release publicado | APK release 0.8.1+5 de GitHub (hash verificado) y debug de `develop`, 2026-11-11 | Clases renombradas en el release, sin secretos | 796 clases renombradas por R8; 0 nombres de clases Dart en `libapp.so`; URLs y rutas visibles (no son secretos); sin secretos | Aprobado | `JADX_RESULTADOS.md` |
 | SEG-13 | MobSF / mobsfscan | — | Reporte del APK release | No ejecutado | Pendiente | — |
-| SEG-14 | DAST | — | Escaneo autorizado contra un ambiente de pruebas | No ejecutado: no hay staging; nunca contra producción | Pendiente | `docs/evaluacion/DAST_PROCEDIMIENTO.md` |
+| SEG-14 | DAST con OWASP ZAP 2.17.0 | Backend local (staging de facto), con y sin sesión de cliente, 2026-11-11 | Sin hallazgos críticos ni altos | El único "alto" (SQLi en `/barberos/`) es un falso positivo verificado a mano; queda una alerta media (falta CSP) y una baja | Aprobado | `DAST_RESULTADOS.md`, `docs/evidencias/dast-zap-2026-11-11/` |
 | SEG-15 | Frida y Ghidra (instrumentación y desensamblado) | — | — | — | **Fuera de alcance** (decisión del equipo, 2026-11-11) | — |
 
 ## 6. No funcionales
 
 | ID | Prueba | Versión / entorno | Esperado | Observado | Estado | Evidencia |
 |---|---|---|---|---|---|---|
-| NF-01 | Rendimiento (30 mediciones) | — | — | — | **Pendiente – en ejecución** (ver `RENDIMIENTO.md`) | — |
+| NF-01 | Rendimiento (30 mediciones por consulta) | Laptop Windows 11, Wi‑Fi, 2026-11-11; backend local y producción (solo lectura pública) | ≥ 95 % de consultas en 3 s o menos | Local: p95 81–209 ms. Producción: p95 1096–1117 ms, máx. 1324 ms. 100 % en 3 s o menos | Aprobado | `RENDIMIENTO.md`, `docs/evidencias/rendimiento-2026-11-11/` |
 | NF-02 | Carga y estrés de la API (k6) | — | Latencias p95 y degradación medidas | No ejecutado. Solo contra backend local o staging, nunca producción | Pendiente | — |
 | NF-03 | Accesibilidad automatizada | V-F, E-T | Sin desbordes a 360 × 800 con texto 1.3; acciones con nombre accesible; teclado | Pruebas de widget en verde (`accesibilidad_guias_test`, `secretaria_rediseno_test`, `privacidad_views_test`, `arco_cancelacion_test`, `guest_premium_widgets_test`) | Aprobado | E-T |
 | NF-04 | Texto del sistema al 130 % en emulador | App 0.8.1, E-E, 2026-11-06 | Ningún texto recortado | Inicio y login se leen completos; la etiqueta "Productos" de la barra inferior se parte en dos líneas (ERR-17, cosmético) | Pendiente (ERR-17 abierto) | `docs/manual/img/acc_01_texto_130.jpg`, `acc_02_login_texto_130.jpg` |
-| NF-05 | Accesibilidad con TalkBack | — | — | — | **Pendiente – en ejecución** (ver `RENDIMIENTO.md` / `MATRIZ_DISPOSITIVOS.md`) | — |
+| NF-05 | Accesibilidad con TalkBack | Emulador API 37 con TalkBack activo, 2026-11-11 | Cada control con etiqueta identificable | El árbol de accesibilidad expone la etiqueta de cada control del flujo de reserva. La navegación con gestos reales no se puede simular con adb | Aprobado con limitación (falta recorrido por gestos hecho por una persona) | `BATERIA_FINAL_PM.md`, `docs/evidencias/bateria-final-2026-11-11/` |
 | NF-06 | Pantalla pequeña 720 × 1280 | App 0.8.1, emulador, 2026-11-06 | Inicio completo, sin desbordes | Inicio, CTA y barra inferior visibles y completos | Aprobado (una pantalla) | `docs/manual/img/resp_01_pantalla_pequena_720x1280.jpg` |
-| NF-07 | Matriz de dispositivos | — | — | — | **Pendiente – en ejecución** (ver `MATRIZ_DISPOSITIVOS.md`) | — |
+| NF-07 | Matriz de dispositivos | API 37 (411×914 y 360×640 dp, texto 200 %) y API 24 (versión mínima), 2026-11-11 | La reserva se completa en todos | Completa en los 4 casos, sin cierres | Aprobado (sin equipo físico) | `MATRIZ_DISPOSITIVOS.md` |
 | NF-08 | Red: sin conexión y regreso de la red | App 0.8.1, E-E, 2026-11-06 (y 21-oct) | Mensaje claro, sin datos técnicos; al volver la red se entra normal | "No hay conexión con el servidor. Revisa tu internet e intenta de nuevo."; con red, entra con su próxima cita | Aprobado | `docs/manual/img/red_01_sin_conexion.jpg` a `red_03_con_red_entra.jpg`; `docs/evidencias/red-2026-10-21/` |
 | NF-09 | Teléfono físico | — | Repetir capturas y almacenamiento cifrado en un Android real | No hubo teléfono físico: todo se probó en emuladores | Pendiente | — |
 
@@ -194,9 +194,9 @@ Casos críticos de la Actividad 1. Prioridad según la tarjeta de cada caso.
 | PM07-a Doble pulsación | Alta | V-F, E-T | Una sola petición de reserva | `crearCita` se llama 1 vez (ERR-06); secretaría bloquea el segundo envío | Aprobado | `test/cliente_cambios_cita_test.dart`; `test/unit/viewmodels_mockito_test.dart` |
 | PM07-b Pérdida de red al reservar | Alta | V-F, E-T | Sin éxito local ni cierre de sesión | Así ocurre (ERR-11, ERR-12) | Aprobado | `test/integration/api_client_errores_red_test.dart` |
 | PM07-c Reintento tras un corte, sin duplicar | Alta | — | Antes de reintentar, la app comprueba si la cita ya quedó | No implementado: depende de la idempotencia (`client_event_id`) que no existe en el backend | Pendiente | Criterio sin marcar en la tarjeta PM07 |
-| PM08 Servicio inactivo o cambio de precio | Media | — | El servidor rechaza servicio inactivo o precio desactualizado | Solo se verificó leyendo el código del backend (21-oct); no hay prueba ejecutada ni captura | Pendiente | Tarjeta PM08 |
+| PM08 Servicio inactivo o cambio de precio | Media | API local, 2026-11-11 | El servidor rechaza servicio inactivo o precio desactualizado y usa la duración vigente | 400 por servicio inactivo; 400 por precio mayor; duración 5 → 30 min del servidor | Aprobado | `BATERIA_FINAL_PM.md`, `docs/evidencias/bateria-final-2026-11-11/logs/api_pm02_pm04_pm08.log` |
 | PM09 Cierre y cambio de sesión | Alta | Emulador 20-oct; app 0.8.1 6-nov | No quedan datos de la cuenta anterior | Logout vuelve a invitado; secretaría y otro cliente no ven datos del anterior | Aprobado | `docs/evidencias/sprint-2026-10-20/capturas/12_*`, `13_*`; `docs/manual/img/cli_21_cerrar_sesion.jpg`, `cli2_01_mis_citas_aislado.jpg` |
-| PM10 Texto ampliado, TalkBack y pantalla pequeña | Media | V-F, E-T; emulador 6-nov | Controles identificables y operables, sin recortes que impidan reservar | Widget: en verde. Emulador: texto 130 % con ERR-17 cosmético; 720 × 1280 bien. TalkBack sin ejecutar | **Pendiente – en ejecución** (TalkBack y matriz de dispositivos) | NF-03 a NF-07 |
+| PM10 Texto ampliado, TalkBack y pantalla pequeña | Media | Emulador API 37, 2026-11-11; V-F, E-T (176 pruebas de accesibilidad) | Controles identificables y operables, sin recortes que impidan reservar | Reserva completa con texto al 200 % y en 360×640 dp; TalkBack activo con etiquetas en el árbol de accesibilidad; el recorrido por gestos lo debe confirmar una persona; ERR-17 cosmético | Aprobado con limitación | `BATERIA_FINAL_PM.md`, `docs/evidencias/bateria-final-2026-11-11/img/pm10_*` |
 
 ## 8. Recorrido manual de la versión 0.8.1 en emulador (2026-11-06)
 
@@ -239,9 +239,17 @@ App 0.8.1 en E-E. Las capturas `fix_*` son con V-F (PR #125). Todas las capturas
 | `docs/evidencias/encuadre-fotos-2026-10-21/` | ERR-13, fotos del catálogo | 2026-10-21 |
 | `docs/evidencias/marca-2026-10-21/` | Ícono y tipografías | 2026-10-21 |
 | `docs/evidencias/cierre-funcional-2026-10-23/` | PM05 y PM06: 27/27 casos de API y 11 capturas | 2026-10-23 |
-| `docs/evaluacion/REGISTRO_ERRORES.md` | ERR-01 a ERR-18 | Actualizado 2026-11-11 |
+| `docs/evidencias/accesibilidad-2026-11-11/` | 176 pruebas de accesibilidad, salida antes y después de la corrección (texto ×2.0) y checklist | 2026-11-11 |
+| `docs/evidencias/ambientes-2026-11-11/` | Arranque por ambiente dev, staging y prod (`APP_ENV`) | 2026-11-11 |
+| `docs/evidencias/rendimiento-2026-11-11/` | 30 mediciones por consulta (CSV y resumen), local y producción solo lectura | 2026-11-11 |
+| `docs/evidencias/dast-zap-2026-11-11/` | Plan y reportes de ZAP (local y autenticado) y verificación del falso positivo de SQLi | 2026-11-11 |
+| `docs/evidencias/bateria-final-2026-11-11/` | Batería final PM01–PM10: 53 capturas del emulador (API 37 y API 24) y logs de backend/API | 2026-11-11 |
+| `docs/evidencias/bug01-2026-11-11/` | BUG-01: la prueba falla con el código anterior (4938304) y pasa con el PR #125 | 2026-11-11 |
+| `docs/evidencias/bug02-2026-11-11/` | BUG-02: la prueba falla sin la corrección y pasa con ella; capturas antes y después | 2026-11-11 |
+| `docs/evaluacion/REGISTRO_ERRORES.md` | ERR-01 a ERR-19 con severidad, versión, entorno, responsable y regresión | Actualizado 2026-11-11 |
 | `docs/evaluacion/AUDITORIA_DEPENDENCIAS.md` | `pub outdated`, `pub deps` y decisión por dependencia | 2026-11-11 |
-| `docs/evaluacion/MATRIZ_CUMPLIMIENTO.md` | Criterios de las Actividades 4 a 7 | Revisión 2026-10-21 |
+| `docs/evaluacion/MATRIZ_CUMPLIMIENTO.md` | Criterios de las Actividades 4 a 7, con su Issue | Revisión 2026-11-11 |
+| `docs/evaluacion/CONTRATO_ERRORES_HTTP.md` | Código HTTP → excepción → mensaje → prueba (GH#69) | 2026-11-11 |
 
 ### En GitHub
 

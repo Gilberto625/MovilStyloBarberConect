@@ -2,7 +2,7 @@
 
 Aplicación Android Flutter/Dart para Tony Stylo Barbería.
 
-**Versión:** `0.1.0+1`  
+**Versión:** `0.8.1+5`  
 **Arquitectura:** Cliente-servidor · MVVM + Repository  
 **API:** Django REST existente bajo `/api/` (no `/api/v1/`)
 
@@ -139,6 +139,22 @@ flutter symbolize -i stacktrace.txt -d build/symbols/0.1.0+1/app.android-arm64.s
 - Roles: secretaría solo si el backend reporta `secretaria` o `admin`; el barbero entra a **Mi agenda**; los demás, al panel del cliente.
 - Guarda central de rutas (GH#70, `lib/routes/route_guard.dart`): cada panel revisa sesión y rol antes de dibujarse y, si no le toca, manda al acceso o al inicio de su rol.
 - El ocultar botones en UI no sustituye permisos del servidor.
+
+## Errores de red y del servidor
+
+Todo pasa por `lib/core/network/api_client.dart`. Las pantallas muestran el texto de la excepción en su estado de error, con "Reintentar" donde aplica. La matriz completa, con la prueba de cada caso, está en `docs/evaluacion/CONTRATO_ERRORES_HTTP.md`.
+
+| Situación | Qué hace la app |
+|---|---|
+| **Sin red** (sin internet, DNS, socket, TLS o pinning rechazado) | Lanza `NetworkException` con "No hay conexión con el servidor. Revisa tu internet e intenta de nuevo." Nunca muestra la IP, el puerto ni la URL. No cierra la sesión |
+| **Tiempo agotado** | Si el cliente HTTP lanza `TimeoutException`, llega como `NetworkException` con el mismo mensaje. La app **no fija un tiempo límite propio**: una petición que el servidor acepta y no contesta espera hasta que el sistema corte la conexión |
+| **401 con sesión** | Una sola vez: `POST /auth/token/refresh/` y reintento de la petición con el token nuevo. Si el refresh se rechaza, no hay refresh guardado o la respuesta no trae `access`, borra los tokens, cierra la sesión (`onSessionExpired`) y lanza `ApiException` 401. Si la red falla durante el refresh, lanza `NetworkException` y **conserva la sesión** |
+| **401 sin sesión** (login) | No intenta refresh. Muestra el mensaje del servidor, por ejemplo "Credenciales incorrectas." |
+| **4xx** (400, 403, 404, 409, 429…) | `ApiException` con el código. El mensaje sale de `error`, `detail`, `mensaje` o `message` del JSON de Django; si el cuerpo es un texto plano corto (≤ 200 caracteres, sin HTML), se muestra tal cual; si no, "Error del servidor (NNN)." Un 403 no cierra la sesión |
+| **5xx** | `ApiException` con el código. Si Django manda un mensaje en el JSON, se muestra; si responde HTML o texto, se muestra "El servidor no está disponible en este momento (NNN). Intenta de nuevo en unos minutos." |
+| **200 con `ok: false`** | El service lo convierte en `ApiException` con el `error` del servidor: no se toma como éxito |
+
+Pruebas: `test/integration/api_client_errores_red_test.dart` (sin red, socket, TLS, tiempo agotado, HTML de error, texto corto, corte al renovar) y `test/integration/api_client_refresh_test.dart` (refresh, sesión vencida, 401 en login, 400/403/500/502).
 
 ## Pruebas
 

@@ -6,9 +6,9 @@ Play Console › Política y programas › **Contenido de la app**.
 Casi toda la app exige sesión, así que se marca **"Todas o algunas funciones están restringidas"** y se dan instrucciones.
 
 1. El equipo crea en **producción** una cuenta de **cliente** solo para la revisión (por ejemplo `revisor.play`):
-   - Se registra desde la app o la web con un correo que el equipo controle, porque el registro manda un código de verificación.
-   - **Apagar el 2FA:** en la web, inicia sesión con esa cuenta › Perfil › seguridad › desactiva la verificación por correo (`PUT /api/perfil/2fa/` con `email_2fa: false`). Las cuentas de cliente lo traen **encendido** y los revisores no reciben los códigos.
-   - Comprobar en el APK release que entra directo, sin pedir código.
+   - Se registra desde la app con un correo que el equipo controle. Desde la 0.8.1 (app PR #120, backend PR #10) el registro desde la app no pide código: la cuenta queda verificada y entra directo.
+   - **Código por correo (2FA) apagado:** desde la 0.8.1 viene apagado por defecto. Confirmar en la app, en Perfil › Privacidad y mis datos › Seguridad de tu cuenta, que "Pedir código por correo al iniciar sesión" siga apagado (`GET /api/perfil/2fa/` → `email_2fa: false`). Los revisores no reciben los códigos. Si estuviera encendido, se apaga ahí mismo.
+   - Comprobar en la versión instalada desde Play que entra directo, sin pedir código.
    - La crea una persona del equipo; nadie más maneja su contraseña. Las credenciales se escriben **solo** en Play Console, nunca en el repo ni en issues.
    - Dejarle una cita futura agendada, para que el revisor vea "Mis citas" con contenido y pueda probar reprogramar y cancelar.
 2. Instrucciones para Play (copiar):
