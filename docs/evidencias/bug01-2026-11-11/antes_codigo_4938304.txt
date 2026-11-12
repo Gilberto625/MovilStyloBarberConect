@@ -34,7 +34,7 @@ Downloading packages...
 Got dependencies!
 29 packages have newer versions incompatible with dependency constraints.
 Try `flutter pub outdated` for more information.
-00:00 +0: loading C:/Users/yager/Documents/proyevto v2/Movil-wt-final/test/integration/secretaria_api_service_http_test.dart
+00:00 +0: loading test/integration/secretaria_api_service_http_test.dart
 00:00 +0: BUG-01 SecretariaApiService con ApiClient real buscarClientes devuelve los clientes del servidor
 00:00 +0 -1: BUG-01 SecretariaApiService con ApiClient real buscarClientes devuelve los clientes del servidor [E]
   type '_Map<String, dynamic>' is not a subtype of type 'Future<dynamic>'
@@ -75,8 +75,8 @@ Try `flutter pub outdated` for more information.
 00:00 +0 -5: Some tests failed.
 
 Failing tests:
-  C:/Users/yager/Documents/proyevto v2/Movil-wt-final/test/integration/secretaria_api_service_http_test.dart: BUG-01 SecretariaApiService con ApiClient real buscarClientes devuelve los clientes del servidor
-  C:/Users/yager/Documents/proyevto v2/Movil-wt-final/test/integration/secretaria_api_service_http_test.dart: BUG-01 SecretariaApiService con ApiClient real citaEditable abre la cita para reprogramar
-  C:/Users/yager/Documents/proyevto v2/Movil-wt-final/test/integration/secretaria_api_service_http_test.dart: BUG-01 SecretariaApiService con ApiClient real citasDeCliente devuelve las citas del cliente
-  C:/Users/yager/Documents/proyevto v2/Movil-wt-final/test/integration/secretaria_api_service_http_test.dart: BUG-01 SecretariaApiService con ApiClient real crearClientePaso devuelve el cliente creado
-  C:/Users/yager/Documents/proyevto v2/Movil-wt-final/test/integration/secretaria_api_service_http_test.dart: BUG-01 SecretariaApiService con ApiClient real un ok=false del servidor llega como ApiException
+  test/integration/secretaria_api_service_http_test.dart: BUG-01 SecretariaApiService con ApiClient real buscarClientes devuelve los clientes del servidor
+  test/integration/secretaria_api_service_http_test.dart: BUG-01 SecretariaApiService con ApiClient real citaEditable abre la cita para reprogramar
+  test/integration/secretaria_api_service_http_test.dart: BUG-01 SecretariaApiService con ApiClient real citasDeCliente devuelve las citas del cliente
+  test/integration/secretaria_api_service_http_test.dart: BUG-01 SecretariaApiService con ApiClient real crearClientePaso devuelve el cliente creado
+  test/integration/secretaria_api_service_http_test.dart: BUG-01 SecretariaApiService con ApiClient real un ok=false del servidor llega como ApiException
