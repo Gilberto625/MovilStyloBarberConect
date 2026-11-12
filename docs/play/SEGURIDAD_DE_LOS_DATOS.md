@@ -5,17 +5,16 @@ Play Console › Supervisar y mejorar › Política y programas › **Contenido 
 ## Política de privacidad
 - URL: `https://tonystylo.vercel.app/nosotros?tipo=privacidad`.
 - Es pública, no pide sesión y es la misma que muestra la app en "Aviso de privacidad".
-- **Antes de enviar a revisión (lo hace el equipo):** el texto publicado todavía tiene dos marcadores sin llenar (revisado en producción el 2026-10-29): `[NOMBRE O RAZÓN SOCIAL DE LA PERSONA RESPONSABLE]` y `[CORREO PARA PRIVACIDAD Y DERECHOS ARCO]`.
-  - Play pide que la política identifique al responsable y dé un contacto. Con marcadores, la revisión la puede rechazar.
-  - Se llenan desde el contenido legal del backend (panel de administración de la web), no en la app.
-  - El correo debe ser el mismo de la ficha.
+- **Marcadores llenos.** El 2026-10-29 el texto publicado tenía dos marcadores sin llenar (responsable y correo ARCO). Al 2026-11-11 ya no los tiene: identifica al responsable con su domicilio y da un correo de contacto para privacidad y derechos ARCO. Se comprobó en producción, solo lectura, con `GET /api/public/legal/?tipo=privacidad`.
+  - El correo que publica la política es una cuenta personal. Conviene que el de la ficha de Play (`FICHA.md`) sea el mismo, o cambiar los dos a un correo del negocio.
+  - Se editan desde el contenido legal del backend (panel de administración de la web), no en la app.
 
 ## Eliminación de la cuenta
 Play pide las dos vías porque la app permite crear cuenta:
 
 | Vía | Cómo | Estado |
 |---|---|---|
-| **Desde la app** | Perfil › Privacidad y mis datos › **Eliminar mi cuenta**. Se reautentica con la contraseña y la palabra ELIMINAR. | ✅ en producción (app PR #101, backend PR #5) |
+| **Desde la app** | Perfil › Privacidad y mis datos › **Eliminar mi cuenta**. Se reautentica con la contraseña y la palabra ELIMINAR. | ✅ en producción (app PR #101, backend PR #5); `POST /api/privacidad/cancelacion/` con sesión |
 | **Desde la web**, sin instalar la app | `https://tonystylo.vercel.app/eliminar-cuenta`: correo o usuario más contraseña, y responde con un folio | ✅ publicada (front PR #3); usa el mismo `POST /api/privacidad/cancelacion/` sin sesión |
 
 Respuestas del formulario "Eliminación de datos":
@@ -25,7 +24,10 @@ Respuestas del formulario "Eliminación de datos":
 - **Qué se borra y cuándo** (texto para la página web y para la revisión):
   > Al pedirlo, la cuenta se bloquea de inmediato. En 30 días se eliminan el nombre, el correo, el teléfono, la fecha de nacimiento, el usuario, la contraseña y las direcciones. Las citas, cobros y ventas se conservan sin datos que te identifiquen, porque la barbería debe guardar sus registros contables.
 
-**Requisito del backend:** programar en Render un **Cron Job diario** con `python manage.py suprimir_cuentas_vencidas` (se puede probar antes con `--dry-run`). Como respaldo, el backend PR #8 lo corre en cada arranque del servicio; pero con el ping cada 10 minutos el servicio casi no reinicia, así que el Cron diario sigue siendo necesario.
+**Pendiente del backend: Cron Job diario en Render** con `python manage.py suprimir_cuentas_vencidas` (se puede probar antes con `--dry-run`).
+- Como respaldo, el backend la corre en cada arranque (`start.sh`, backend PR #8).
+- Pero `mantener-activo.yml` del backend hace ping cada 5 minutos, así que el servicio casi no reinicia.
+- Al 2026-11-11 no hay evidencia de que el Cron exista: la configuración de Render no está versionada y no hay captura del panel. Hasta tenerla, la supresión a los 30 días no está garantizada.
 
 ## Formulario "Seguridad de los datos"
 
@@ -40,7 +42,7 @@ Respuestas del formulario "Eliminación de datos":
 | Categoría › tipo | Obligatorio u opcional | Finalidades que se marcan |
 |---|---|---|
 | Información personal › **Nombre** | Obligatorio (registro) | Funcionalidad de la app; Administración de la cuenta |
-| Información personal › **Dirección de correo electrónico** | Obligatorio | Funcionalidad de la app; Administración de la cuenta; Prevención de fraudes, seguridad y cumplimiento (códigos 2FA) |
+| Información personal › **Dirección de correo electrónico** | Obligatorio | Funcionalidad de la app; Administración de la cuenta; Prevención de fraudes, seguridad y cumplimiento (código por correo opcional, apagado por defecto desde la 0.8.1) |
 | Información personal › **ID de usuario** (nombre de usuario) | Obligatorio | Administración de la cuenta |
 | Información personal › **Número de teléfono** | Obligatorio (registro) | Funcionalidad de la app (contacto por la cita) |
 | Información personal › **Dirección** | Opcional ("Corregir mis datos") | Funcionalidad de la app |
