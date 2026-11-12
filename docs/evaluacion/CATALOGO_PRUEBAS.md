@@ -20,7 +20,7 @@ Reúne todas las pruebas de la app móvil y de la API que usa, con su versión, 
 |---|---|
 | **V-F** | App: `main` 0.8.1+5 (`f16e65f`) más el PR #125 (`ad9afd6`). Es el contenido de `develop` en `b04e63c` |
 | **V-B** | Backend: `main` en `970e9ad` (incluye los PR #7 y #11) |
-| **E-T** | `flutter test` (VM de Dart, sin dispositivo). Corrida del 2026-11-06: **349 de 349 aprobadas** (`docs/evidencias/pruebas/2026-11-06/catalogo_flutter.txt`). La misma suite en CI del PR #125, run [42258784727](https://github.com/Gilberto625/MovilStyloBarberConect/actions/runs/42258784727) (Flutter 3.47.9): 349/349, **cobertura de líneas 79.51 %** (5537/6964), mínimo 55 % |
+| **E-T** | `flutter test` (VM de Dart, sin dispositivo). Corrida del 2026-11-06: **349 de 349 aprobadas** (`docs/evidencias/pruebas/2026-11-06/catalogo_flutter.txt`). Corrida final del 2026-11-11 sobre `develop` + PR #129: **539 de 539 aprobadas** (las 349 anteriores + 176 de accesibilidad, 13 de ambientes y la de BUG-02). La misma suite en CI del PR #125, run [42258784727](https://github.com/Gilberto625/MovilStyloBarberConect/actions/runs/42258784727) (Flutter 3.47.9): 349/349, **cobertura de líneas 79.51 %** (5537/6964), mínimo 55 % |
 | **E-D** | `python manage.py test core.tests` sobre V-B con PostgreSQL local, 2026-11-06: **401 pruebas**, 5 fallos previos ajenos a la app (`docs/evidencias/pruebas/2026-11-06/catalogo_backend.txt`; PR #11 del backend) |
 | **E-E** | Emulador Android `Medium_Phone_API_37.0` (Android 17, 1080 × 2400) contra Django local con PostgreSQL local. Nunca contra producción ni Neon |
 | **E-CI** | GitHub Actions (`ci.yml`, `release.yml`, `pinning.yml`) |
@@ -239,6 +239,13 @@ App 0.8.1 en E-E. Las capturas `fix_*` son con V-F (PR #125). Todas las capturas
 | `docs/evidencias/encuadre-fotos-2026-10-21/` | ERR-13, fotos del catálogo | 2026-10-21 |
 | `docs/evidencias/marca-2026-10-21/` | Ícono y tipografías | 2026-10-21 |
 | `docs/evidencias/cierre-funcional-2026-10-23/` | PM05 y PM06: 27/27 casos de API y 11 capturas | 2026-10-23 |
+| `docs/evidencias/accesibilidad-2026-11-11/` | 176 pruebas de accesibilidad, salida antes y después de la corrección (texto ×2.0) y checklist | 2026-11-11 |
+| `docs/evidencias/ambientes-2026-11-11/` | Arranque por ambiente dev, staging y prod (`APP_ENV`) | 2026-11-11 |
+| `docs/evidencias/rendimiento-2026-11-11/` | 30 mediciones por consulta (CSV y resumen), local y producción solo lectura | 2026-11-11 |
+| `docs/evidencias/dast-zap-2026-11-11/` | Plan y reportes de ZAP (local y autenticado) y verificación del falso positivo de SQLi | 2026-11-11 |
+| `docs/evidencias/bateria-final-2026-11-11/` | Batería final PM01–PM10: 53 capturas del emulador (API 37 y API 24) y logs de backend/API | 2026-11-11 |
+| `docs/evidencias/bug01-2026-11-11/` | BUG-01: la prueba falla con el código anterior (4938304) y pasa con el PR #125 | 2026-11-11 |
+| `docs/evidencias/bug02-2026-11-11/` | BUG-02: la prueba falla sin la corrección y pasa con ella; capturas antes y después | 2026-11-11 |
 | `docs/evaluacion/REGISTRO_ERRORES.md` | ERR-01 a ERR-18 | Actualizado 2026-11-11 |
 | `docs/evaluacion/AUDITORIA_DEPENDENCIAS.md` | `pub outdated`, `pub deps` y decisión por dependencia | 2026-11-11 |
 | `docs/evaluacion/MATRIZ_CUMPLIMIENTO.md` | Criterios de las Actividades 4 a 7 | Revisión 2026-10-21 |
