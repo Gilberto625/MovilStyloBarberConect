@@ -2,7 +2,7 @@
 
 Aplicación Android Flutter/Dart para Tony Stylo Barbería.
 
-**Versión:** `0.1.0+1`  
+**Versión:** `0.8.1+5`  
 **Arquitectura:** Cliente-servidor · MVVM + Repository  
 **API:** Django REST existente bajo `/api/` (no `/api/v1/`)
 
