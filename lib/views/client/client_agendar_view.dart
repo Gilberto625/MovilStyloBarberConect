@@ -46,6 +46,10 @@ class _ClientAgendarTabState extends State<ClientAgendarTab> {
   late DateTime _fecha;
   String? _hora;
 
+  /// GH#25: confirmar empieza por revisar la política; desde ese primer
+  /// toque, y hasta que termina la reserva, un segundo toque no cuenta.
+  var _confirmando = false;
+
   DateTime get _hoy {
     final h = widget.hoy ?? DateTime.now();
     return DateTime(h.year, h.month, h.day);
@@ -129,24 +133,31 @@ class _ClientAgendarTabState extends State<ClientAgendarTab> {
   }
 
   Future<void> _confirmar() async {
+    if (_confirmando) return;
     final user = context.read<AuthViewModel>().user;
     final s = _servicio;
     final b = _barbero;
     final h = _hora;
     if (user == null || s == null || b == null || h == null) return;
     final vm = context.read<ClientCitasViewModel>();
-    await vm.loadPolitica(user.id);
-    if (vm.politica?.requiereAnticipo == true) return;
+    setState(() => _confirmando = true);
+    final bool ok;
+    try {
+      await vm.loadPolitica(user.id);
+      if (vm.politica?.requiereAnticipo == true) return;
 
-    final ok = await vm.reservar(
-      user: user,
-      barberoId: b.id,
-      servicioId: s.id,
-      duracionMinutos: s.duracionMinutos,
-      fecha: isoFecha(_fecha),
-      hora: h,
-      precioTotal: s.precio,
-    );
+      ok = await vm.reservar(
+        user: user,
+        barberoId: b.id,
+        servicioId: s.id,
+        duracionMinutos: s.duracionMinutos,
+        fecha: isoFecha(_fecha),
+        hora: h,
+        precioTotal: s.precio,
+      );
+    } finally {
+      if (mounted) setState(() => _confirmando = false);
+    }
     if (!mounted || !ok) return;
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(vm.bookingMessage ?? 'Cita creada.')),
@@ -183,7 +194,9 @@ class _ClientAgendarTabState extends State<ClientAgendarTab> {
                   ? IconButton(
                       key: const Key('agendar_atras'),
                       tooltip: 'Paso anterior',
-                      onPressed: vm.bookingBusy ? null : () => _ir(_paso - 1),
+                      onPressed: vm.bookingBusy || _confirmando
+                          ? null
+                          : () => _ir(_paso - 1),
                       icon: const Icon(Icons.arrow_back_rounded),
                     )
                   : null,
@@ -251,7 +264,7 @@ class _ClientAgendarTabState extends State<ClientAgendarTab> {
               BarraAccion(
                 key: const Key('agendar_confirmar'),
                 label: 'Confirmar reserva',
-                busy: vm.bookingBusy,
+                busy: vm.bookingBusy || _confirmando,
                 onPressed: vm.politica?.requiereAnticipo == true
                     ? null
                     : _confirmar,

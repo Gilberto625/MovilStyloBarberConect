@@ -1,0 +1,153 @@
+00:00 +0: loading test/criterios/secretaria_criterios_test.dart
+00:00 +0: US-SEC-EDITAR si el servidor rechaza el horario, se ve su mensaje y la cita no queda reprogramada
+══╡ EXCEPTION CAUGHT BY FOUNDATION LIBRARY ╞════════════════════════════════════════════════════════
+The following assertion was thrown while dispatching notifications for SecretariaGestionViewModel:
+setState() or markNeedsBuild() called during build.
+This _InheritedProviderScope<SecretariaGestionViewModel?> widget cannot be marked as needing to
+build because the framework is already in the process of building widgets. A widget can be marked as
+needing to be built during the build phase only if one of its ancestors is currently building. This
+exception is allowed because the framework builds parent widgets before children, which means a
+dirty descendant will always be built. Otherwise, the framework might not visit this widget during
+this build phase.
+The widget on which setState() or markNeedsBuild() was called was:
+  _InheritedProviderScope<SecretariaGestionViewModel?>
+The widget which was currently being built when the offending call was made was:
+  Builder
+
+When the exception was thrown, this was the stack:
+#0      Element.markNeedsBuild.<anonymous closure> (package:flutter/src/widgets/framework.dart:5386:9)
+#1      Element.markNeedsBuild (package:flutter/src/widgets/framework.dart:5398:6)
+#2      _InheritedProviderScopeElement.markNeedsNotifyDependents (package:provider/src/inherited_provider.dart:590:5)
+#3      ChangeNotifier.notifyListeners (package:flutter/src/foundation/change_notifier.dart:435:24)
+#4      SecretariaGestionViewModel.cargarEditable (package:stylo_barber_connect/viewmodels/secretaria_gestion_viewmodel.dart:299:5)
+#5      _SecretaryReprogramarViewState.didChangeDependencies (package:stylo_barber_connect/views/secretary/secretary_gestion_views.dart:578:10)
+#6      StatefulElement._firstBuild (package:flutter/src/widgets/framework.dart:5981:11)
+#7      ComponentElement.mount (package:flutter/src/widgets/framework.dart:5806:5)
+...     Normal element mounting (260 frames)
+#267    Element.inflateWidget (package:flutter/src/widgets/framework.dart:4600:20)
+#268    MultiChildRenderObjectElement.inflateWidget (package:flutter/src/widgets/framework.dart:7277:36)
+#269    Element.updateChild (package:flutter/src/widgets/framework.dart:4072:18)
+#270    Element.updateChildren (package:flutter/src/widgets/framework.dart:4268:32)
+#271    MultiChildRenderObjectElement.update (package:flutter/src/widgets/framework.dart:7308:17)
+#272    Element.updateChild (package:flutter/src/widgets/framework.dart:4050:15)
+#273    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5854:16)
+#274    StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5995:11)
+#275    Element.rebuild (package:flutter/src/widgets/framework.dart:5542:7)
+#276    StatefulElement.update (package:flutter/src/widgets/framework.dart:6020:5)
+#277    Element.updateChild (package:flutter/src/widgets/framework.dart:4050:15)
+#278    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5854:16)
+#279    Element.rebuild (package:flutter/src/widgets/framework.dart:5542:7)
+#280    ProxyElement.update (package:flutter/src/widgets/framework.dart:6162:5)
+#281    Element.updateChild (package:flutter/src/widgets/framework.dart:4050:15)
+#282    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5854:16)
+#283    Element.rebuild (package:flutter/src/widgets/framework.dart:5542:7)
+#284    ProxyElement.update (package:flutter/src/widgets/framework.dart:6162:5)
+#285    _InheritedNotifierElement.update (package:flutter/src/widgets/inherited_notifier.dart:108:11)
+#286    Element.updateChild (package:flutter/src/widgets/framework.dart:4050:15)
+#287    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5854:16)
+#288    StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5995:11)
+#289    Element.rebuild (package:flutter/src/widgets/framework.dart:5542:7)
+#290    StatefulElement.update (package:flutter/src/widgets/framework.dart:6020:5)
+#291    Element.updateChild (package:flutter/src/widgets/framework.dart:4050:15)
+#292    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5854:16)
+#293    Element.rebuild (package:flutter/src/widgets/framework.dart:5542:7)
+#294    ProxyElement.update (package:flutter/src/widgets/framework.dart:6162:5)
+#295    _InheritedNotifierElement.update (package:flutter/src/widgets/inherited_notifier.dart:108:11)
+#296    Element.updateChild (package:flutter/src/widgets/framework.dart:4050:15)
+#297    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5854:16)
+#298    StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5995:11)
+#299    Element.rebuild (package:flutter/src/widgets/framework.dart:5542:7)
+#300    StatefulElement.update (package:flutter/src/widgets/framework.dart:6020:5)
+#301    Element.updateChild (package:flutter/src/widgets/framework.dart:4050:15)
+#302    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5854:16)
+#303    StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5995:11)
+#304    Element.rebuild (package:flutter/src/widgets/framework.dart:5542:7)
+#305    StatefulElement.update (package:flutter/src/widgets/framework.dart:6020:5)
+#306    Element.updateChild (package:flutter/src/widgets/framework.dart:4050:15)
+#307    SingleChildRenderObjectElement.update (package:flutter/src/widgets/framework.dart:7135:14)
+#308    Element.updateChild (package:flutter/src/widgets/framework.dart:4050:15)
+#309    SingleChildRenderObjectElement.update (package:flutter/src/widgets/framework.dart:7135:14)
+#310    Element.updateChild (package:flutter/src/widgets/framework.dart:4050:15)
+#311    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5854:16)
+#312    Element.rebuild (package:flutter/src/widgets/framework.dart:5542:7)
+#313    ProxyElement.update (package:flutter/src/widgets/framework.dart:6162:5)
+#314    Element.updateChild (package:flutter/src/widgets/framework.dart:4050:15)
+#315    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5854:16)
+#316    Element.rebuild (package:flutter/src/widgets/framework.dart:5542:7)
+#317    ProxyElement.update (package:flutter/src/widgets/framework.dart:6162:5)
+#318    Element.updateChild (package:flutter/src/widgets/framework.dart:4050:15)
+#319    ComponentElement.performRebuild (package:flutter/src/widgets/framework.dart:5854:16)
+#320    StatefulElement.performRebuild (package:flutter/src/widgets/framework.dart:5995:11)
+#321    Element.rebuild (package:flutter/src/widgets/framework.dart:5542:7)
+#322    BuildScope._tryRebuild (package:flutter/src/widgets/framework.dart:2763:15)
+#323    BuildScope._flushDirtyElements (package:flutter/src/widgets/framework.dart:2820:11)
+#324    BuildOwner.buildScope (package:flutter/src/widgets/framework.dart:3124:18)
+#325    AutomatedTestWidgetsFlutterBinding.drawFrame (package:flutter_test/src/binding.dart:2432:19)
+#326    RendererBinding._handlePersistentFrameCallback (package:flutter/src/rendering/binding.dart:558:5)
+#327    SchedulerBinding._invokeFrameCallback (package:flutter/src/scheduler/binding.dart:1430:15)
+#328    SchedulerBinding.handleDrawFrame (package:flutter/src/scheduler/binding.dart:1345:9)
+#329    AutomatedTestWidgetsFlutterBinding.pump.<anonymous closure> (package:flutter_test/src/binding.dart:2261:9)
+#332    TestAsyncUtils.guard (package:flutter_test/src/test_async_utils.dart:74:41)
+#333    AutomatedTestWidgetsFlutterBinding.pump (package:flutter_test/src/binding.dart:2250:27)
+#334    WidgetTester.pumpAndSettle.<anonymous closure> (package:flutter_test/src/widget_tester.dart:719:23)
+#337    TestAsyncUtils.guard (package:flutter_test/src/test_async_utils.dart:74:41)
+#338    WidgetTester.pumpAndSettle (package:flutter_test/src/widget_tester.dart:712:27)
+#339    _abrir (test/criterios/secretaria_criterios_test.dart:145:18)
+<asynchronous suspension>
+#340    main.<anonymous closure> (test/criterios/secretaria_criterios_test.dart:305:5)
+<asynchronous suspension>
+#341    testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#342    TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided 5 frames from dart:async and package:stack_trace)
+
+The SecretariaGestionViewModel sending notification was:
+  Instance of 'SecretariaGestionViewModel'
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:01 +0 -1: US-SEC-EDITAR si el servidor rechaza el horario, se ve su mensaje y la cita no queda reprogramada [E]
+  Test failed. See exception logs above.
+  The test description was: US-SEC-EDITAR si el servidor rechaza el horario, se ve su mensaje y la cita no queda reprogramada
+  
+00:01 +0 -1: US-SEC-EDITAR abrir Reprogramar muestra la carga primero y no avisa a los oyentes durante la construcción
+══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
+The following TestFailure was thrown running a test:
+Expected: null
+  Actual: FlutterError:<setState() or markNeedsBuild() called during build.
+          This _InheritedProviderScope<SecretariaGestionViewModel?> widget cannot be marked as
+needing to build because the framework is already in the process of building widgets. A widget can
+be marked as needing to be built during the build phase only if one of its ancestors is currently
+building. This exception is allowed because the framework builds parent widgets before children,
+which means a dirty descendant will always be built. Otherwise, the framework might not visit this
+widget during this build phase.
+          The widget on which setState() or markNeedsBuild() was called was:
+            _InheritedProviderScope<SecretariaGestionViewModel?>
+          The widget which was currently being built when the offending call was made was:
+            Builder>
+
+When the exception was thrown, this was the stack:
+#4      main.<anonymous closure> (test/criterios/secretaria_criterios_test.dart:352:5)
+<asynchronous suspension>
+#5      testWidgets.<anonymous closure>.<anonymous closure> (package:flutter_test/src/widget_tester.dart:192:15)
+<asynchronous suspension>
+#6      TestWidgetsFlutterBinding._runTestBody (package:flutter_test/src/binding.dart:1953:5)
+<asynchronous suspension>
+<asynchronous suspension>
+(elided one frame from package:stack_trace)
+
+This was caught by the test expectation on the following line:
+  test/criterios/secretaria_criterios_test.dart line 352
+The test description was:
+  US-SEC-EDITAR abrir Reprogramar muestra la carga primero y no avisa a los oyentes durante la
+  construcción
+════════════════════════════════════════════════════════════════════════════════════════════════════
+00:01 +0 -2: US-SEC-EDITAR abrir Reprogramar muestra la carga primero y no avisa a los oyentes durante la construcción [E]
+  Test failed. See exception logs above.
+  The test description was: US-SEC-EDITAR abrir Reprogramar muestra la carga primero y no avisa a los oyentes durante la construcción
+  
+00:02 +0 -2: Some tests failed.
+
+Failing tests:
+  test/criterios/secretaria_criterios_test.dart: US-SEC-EDITAR abrir Reprogramar muestra la carga primero y no avisa a los oyentes durante la construcción
+  test/criterios/secretaria_criterios_test.dart: US-SEC-EDITAR si el servidor rechaza el horario, se ve su mensaje y la cita no queda reprogramada

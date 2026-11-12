@@ -1,0 +1,23 @@
+00:00 +0: loading test/criterios/barbero_agenda_estados_test.dart
+00:00 +0: test/criterios/barbero_agenda_estados_test.dart: S7-01 muestra la carga al abrir y al reintentar, luego error y vacío
+00:00 +1: loading test/criterios/cita_ajena_test.dart
+00:01 +1: test/criterios/cita_ajena_test.dart: GH#23 / PM02 cita ajena GH#23 PM02 cancelar una cita ajena: 404 como ApiException con el mensaje del servidor
+00:01 +2: test/criterios/cita_ajena_test.dart: GH#23 / PM02 cita ajena GH#23 PM02 reprogramar una cita ajena: 404 como ApiException con el mensaje del servidor
+00:01 +3: test/criterios/cita_ajena_test.dart: GH#23 / PM02 cita ajena GH#23 el ViewModel no da la cita ajena por cancelada ni reprogramada
+00:01 +4: loading test/criterios/login_2fa_test.dart
+00:02 +4: test/criterios/login_2fa_test.dart: (setUpAll)
+00:02 +4: test/criterios/login_2fa_test.dart: GH#11 / GH#20 acceso GH#11 doble toque en "Entrar" llama una sola vez al repositorio de auth
+00:03 +5: test/criterios/login_2fa_test.dart: GH#11 / GH#20 acceso GH#20 si el servidor pide 2FA, el login abre la verificación y no guarda tokens
+00:04 +6: test/criterios/login_2fa_test.dart: GH#11 / GH#20 acceso GH#20 un login normal va al panel y nunca abre la verificación 2FA
+00:04 +7: test/criterios/login_2fa_test.dart: GH#11 / GH#20 acceso GH#20 OTP inválido muestra el mensaje del servidor sin exponer el código ni los tokens
+00:04 +8: test/criterios/login_2fa_test.dart: (tearDownAll)
+00:04 +8: loading test/criterios/reserva_cliente_test.dart
+00:05 +8: test/criterios/reserva_cliente_test.dart: GH#17 error de red al reservar GH#17 sin conexión: mensaje claro, cita no creada y el reintento sí la crea
+00:05 +9: test/criterios/reserva_cliente_test.dart: GH#17 error de red al reservar GH#17 NetworkException desde el repositorio no marca la cita como creada
+00:05 +10: test/criterios/reserva_cliente_test.dart: GH#25 / PM07-a doble envío al confirmar GH#25 PM07-a mientras se envía, "Confirmar reserva" queda deshabilitado y se crea una sola cita
+00:06 +11: test/criterios/reserva_cliente_test.dart: GH#25 / PM07-a doble envío al confirmar GH#25 un segundo toque mientras se revisa la política no envía otra reserva
+00:06 +12: loading test/criterios/secretaria_criterios_test.dart
+00:07 +12: test/criterios/secretaria_criterios_test.dart: US-SEC-ALTA el cliente de paso queda seleccionado y Nueva cita solo ofrece horarios libres
+00:09 +13: test/criterios/secretaria_criterios_test.dart: US-SEC-EDITAR si el servidor rechaza el horario, se ve su mensaje y la cita no queda reprogramada
+00:09 +14: test/criterios/secretaria_criterios_test.dart: US-SEC-EDITAR abrir Reprogramar muestra la carga primero y no avisa a los oyentes durante la construcción
+00:10 +15: All tests passed!
