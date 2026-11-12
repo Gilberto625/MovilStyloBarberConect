@@ -1,0 +1,10 @@
+# Verificación manual del hallazgo "SQL Injection" de ZAP en GET /api/barberos/?servicio_id=
+# Backend local (127.0.0.1:8000, PostgreSQL local), sesión del cliente de prueba. 2026-11-11T21:12:41
+servicio_id="'"                      -> HTTP 400 (51 ms): servicio_id inválido.
+servicio_id="1'"                     -> HTTP 400 (50 ms): servicio_id inválido.
+servicio_id='1 OR 1=1'               -> HTTP 400 (52 ms): servicio_id inválido.
+servicio_id='1;SELECT pg_sleep(5)'   -> HTTP 400 (150 ms): servicio_id inválido.
+servicio_id='0'                      -> HTTP 400 (48 ms): servicio_id inválido.
+servicio_id='1'                      -> HTTP 200 (50 ms): ok, 2 barberos
+# Conclusión: falso positivo. La vista convierte servicio_id a int y responde 400 antes de llegar a SQL;
+# la consulta usa parámetros (%s). El 500 que vio ZAP coincidió con "demasiados clientes" en el PostgreSQL local.

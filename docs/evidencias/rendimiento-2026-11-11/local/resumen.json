@@ -1,0 +1,51 @@
+{
+ "base": "http://127.0.0.1:8000/api",
+ "fecha": "2026-11-11T19:37:52",
+ "n_por_consulta": 30,
+ "equipo": "Windows 11 · Python 3.13.0",
+ "cache": "conexion nueva por consulta y Cache-Control: no-cache; 1 consulta de calentamiento no contada",
+ "contexto": {
+  "servicio_id": 1,
+  "duracion": 45,
+  "barbero_id": 3,
+  "fecha": "2026-11-12"
+ },
+ "resumen": [
+  {
+   "consulta": "catalogo_servicios",
+   "n": 30,
+   "http_200": 30,
+   "p50_ms": 68.8,
+   "p95_ms": 208.8,
+   "max_ms": 254.9,
+   "min_ms": 57.9,
+   "promedio_ms": 92.3,
+   "pct_<=3s": 100.0,
+   "cumple_95pct_<=3s": true
+  },
+  {
+   "consulta": "catalogo_productos",
+   "n": 30,
+   "http_200": 30,
+   "p50_ms": 66.9,
+   "p95_ms": 173.4,
+   "max_ms": 179.9,
+   "min_ms": 52.7,
+   "promedio_ms": 81.5,
+   "pct_<=3s": 100.0,
+   "cumple_95pct_<=3s": true
+  },
+  {
+   "consulta": "disponibilidad",
+   "n": 30,
+   "http_200": 30,
+   "p50_ms": 62.9,
+   "p95_ms": 80.6,
+   "max_ms": 159.2,
+   "min_ms": 50.6,
+   "promedio_ms": 67.3,
+   "pct_<=3s": 100.0,
+   "cumple_95pct_<=3s": true
+  }
+ ]
+}

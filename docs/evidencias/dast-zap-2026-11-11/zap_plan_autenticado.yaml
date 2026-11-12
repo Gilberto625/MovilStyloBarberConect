@@ -1,0 +1,50 @@
+# Plan de ZAP (automation framework) usado el 2026-11-11 contra el backend LOCAL.
+# El token del cliente de prueba se pasa por la variable de entorno ZAP_AUTH_HEADER_VALUE
+# (no se guarda en este archivo). Nunca se apunta a producción.
+env:
+  contexts:
+    - name: stylo-local
+      urls:
+        - http://127.0.0.1:8000/api/
+      includePaths:
+        - http://127.0.0.1:8000/api/.*
+  parameters:
+    failOnError: false
+    progressToStdout: true
+jobs:
+  - type: requestor
+    requests:
+      - url: http://127.0.0.1:8000/api/public/servicios/
+      - url: http://127.0.0.1:8000/api/public/productos/
+      - url: http://127.0.0.1:8000/api/public/contacto/
+      - url: http://127.0.0.1:8000/api/public/legal/?tipo=terminos
+      - url: http://127.0.0.1:8000/api/auth/me/
+      - url: http://127.0.0.1:8000/api/perfil/
+      - url: http://127.0.0.1:8000/api/barberos/?servicio_id=1
+      - url: http://127.0.0.1:8000/api/disponibilidad/?barbero_id=3&fecha=2026-11-12&duracion=45
+      - url: http://127.0.0.1:8000/api/citas/politica-pago/
+      - url: http://127.0.0.1:8000/api/mis-citas/
+      - url: http://127.0.0.1:8000/api/secretaria/citas/dia/
+      - url: http://127.0.0.1:8000/api/secretaria/clientes/?q=a
+  - type: spider
+    parameters:
+      context: stylo-local
+      maxDuration: 2
+  - type: passiveScan-wait
+    parameters:
+      maxDuration: 2
+  - type: activeScan
+    parameters:
+      context: stylo-local
+      maxScanDurationInMins: 15
+  - type: report
+    parameters:
+      template: traditional-html
+      reportDir: .
+      reportFile: zap_reporte_autenticado
+    risks: [high, medium, low, info]
+  - type: report
+    parameters:
+      template: traditional-json
+      reportDir: .
+      reportFile: zap_reporte_autenticado
