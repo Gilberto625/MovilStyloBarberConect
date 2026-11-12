@@ -246,9 +246,10 @@ App 0.8.1 en E-E. Las capturas `fix_*` son con V-F (PR #125). Todas las capturas
 | `docs/evidencias/bateria-final-2026-11-11/` | Batería final PM01–PM10: 53 capturas del emulador (API 37 y API 24) y logs de backend/API | 2026-11-11 |
 | `docs/evidencias/bug01-2026-11-11/` | BUG-01: la prueba falla con el código anterior (4938304) y pasa con el PR #125 | 2026-11-11 |
 | `docs/evidencias/bug02-2026-11-11/` | BUG-02: la prueba falla sin la corrección y pasa con ella; capturas antes y después | 2026-11-11 |
-| `docs/evaluacion/REGISTRO_ERRORES.md` | ERR-01 a ERR-18 | Actualizado 2026-11-11 |
+| `docs/evaluacion/REGISTRO_ERRORES.md` | ERR-01 a ERR-19 con severidad, versión, entorno, responsable y regresión | Actualizado 2026-11-11 |
 | `docs/evaluacion/AUDITORIA_DEPENDENCIAS.md` | `pub outdated`, `pub deps` y decisión por dependencia | 2026-11-11 |
-| `docs/evaluacion/MATRIZ_CUMPLIMIENTO.md` | Criterios de las Actividades 4 a 7 | Revisión 2026-10-21 |
+| `docs/evaluacion/MATRIZ_CUMPLIMIENTO.md` | Criterios de las Actividades 4 a 7, con su Issue | Revisión 2026-11-11 |
+| `docs/evaluacion/CONTRATO_ERRORES_HTTP.md` | Código HTTP → excepción → mensaje → prueba (GH#69) | 2026-11-11 |
 
 ### En GitHub
 
